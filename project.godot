@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="weevil way"
-run/main_scene="res://world.tscn"
+run/main_scene="res://Scenes/world.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://Images/icon.svg"
 
 [autoload]
 
-PlayerStats="*res://PlayerStats.tscn"
+PlayerStats="*res://Player/PlayerStats.tscn"
 State="*res://state.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 

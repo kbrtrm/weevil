@@ -1,10 +1,10 @@
 [gd_scene load_steps=83 format=3 uid="uid://bd8hnf38x5qp6"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_py2js"]
-[ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://terb-shadow.png" id="2_h3gym"]
-[ext_resource type="Texture2D" uid="uid://c8yvaw2ccxt3j" path="res://terb-FULL-20x25.png" id="2_u1eel"]
-[ext_resource type="Shader" path="res://whitecolor.gdshader" id="3_sycai"]
+[ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_1i6o0"]
+[ext_resource type="Shader" path="res://Shaders/whitecolor.gdshader" id="3_kb55j"]
 [ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="4_53t58"]
+[ext_resource type="Texture2D" uid="uid://c8yvaw2ccxt3j" path="res://Images/terb-FULL-20x25.png" id="4_pxf10"]
 [ext_resource type="AudioStream" uid="uid://dv0t4yo0ie0ig" path="res://Music and Sounds/Evade.wav" id="5_p8fkc"]
 [ext_resource type="Script" path="res://Player/SwordHitbox.gd" id="5_uh2di"]
 [ext_resource type="PackedScene" uid="uid://cp2owch1u80fw" path="res://Overlap/hurtbox.tscn" id="6_tlwiw"]
@@ -26,7 +26,7 @@ offsets = PackedFloat32Array(0.581395, 1)
 colors = PackedColorArray(1, 1, 1, 0.741176, 1, 1, 1, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g2217"]
-shader = ExtResource("3_sycai")
+shader = ExtResource("3_kb55j")
 shader_parameter/active = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qtdko"]
@@ -1521,7 +1521,7 @@ texture = SubResource("GradientTexture2D_al68s")
 
 [node name="Terb-shadow" type="Sprite2D" parent="."]
 position = Vector2(-2.08165e-12, 4)
-texture = ExtResource("2_h3gym")
+texture = ExtResource("2_1i6o0")
 
 [node name="MovementParticles" type="CPUParticles2D" parent="."]
 y_sort_enabled = true
@@ -1542,7 +1542,7 @@ color_ramp = SubResource("Gradient_1ac5w")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_g2217")
 position = Vector2(0, -5.5)
-texture = ExtResource("2_u1eel")
+texture = ExtResource("4_pxf10")
 hframes = 94
 frame = 24
 

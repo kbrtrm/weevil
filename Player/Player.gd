@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const PlayerHurtSound = preload("res://PlayerHurtSound.tscn")
+const PlayerHurtSound = preload("res://Player/PlayerHurtSound.tscn")
 
 @export var MAX_SPEED = 88
 @export var ACCEL = 10
