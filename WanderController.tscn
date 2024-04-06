@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://fn8ny30lak10"]
+
+[ext_resource type="Script" path="res://WanderController.gd" id="1_ykksy"]
+
+[node name="WanderController" type="Node2D"]
+script = ExtResource("1_ykksy")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

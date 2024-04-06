@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_11"
+type="Resource"
+uid="uid://d1p0s300k2skb"
+path="res://.godot/imported/ciggy.dialogue-005425147aead1c97951aae09c9db375.tres"
+
+[deps]
+
+source_file="res://Dialogue/ciggy.dialogue"
+dest_files=["res://.godot/imported/ciggy.dialogue-005425147aead1c97951aae09c9db375.tres"]
+
+[params]
+
+defaults=true
