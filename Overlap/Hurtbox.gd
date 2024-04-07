@@ -1,6 +1,6 @@
 extends Area2D
 
-const HitEffect = preload("res://HitEffect.tscn")
+const HitEffect = preload("res://Effects/HitEffect.tscn")
 @onready var timer = $Timer
 @onready var collisionshape = $CollisionShape2D			
 		

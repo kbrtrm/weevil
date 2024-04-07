@@ -1,47 +1,47 @@
 [gd_scene load_steps=15 format=3 uid="uid://dc3swvbq3482r"]
 
-[ext_resource type="Texture2D" uid="uid://cevkep1m6jknc" path="res://Images/EnemyDeathEffect.png" id="1_pkwg2"]
-[ext_resource type="Script" path="res://Effect.gd" id="2_lim0l"]
-[ext_resource type="AudioStream" uid="uid://dstpr3wra7y78" path="res://Music and Sounds/EnemyDie.wav" id="3_s4c0p"]
+[ext_resource type="Texture2D" uid="uid://cevkep1m6jknc" path="res://Images/EnemyDeathEffect.png" id="1_4p7lf"]
+[ext_resource type="Script" path="res://Effects/Effect.gd" id="2_dqe84"]
+[ext_resource type="AudioStream" uid="uid://dstpr3wra7y78" path="res://Music and Sounds/EnemyDie.wav" id="3_opl4l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l2beo"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7n7j7"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n1a5h"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ia2k8"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0nia2"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wrsa4"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0crik"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2karb"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nokl7"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(256, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vg4v2"]
-atlas = ExtResource("1_pkwg2")
+atlas = ExtResource("1_4p7lf")
 region = Rect2(288, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_n127a"]
@@ -85,9 +85,9 @@ animations = [{
 [node name="EnemyDeathEffect" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_n127a")
 animation = &"animate"
-script = ExtResource("2_lim0l")
+script = ExtResource("2_dqe84")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_s4c0p")
+stream = ExtResource("3_opl4l")
 volume_db = -7.702
 autoplay = true
