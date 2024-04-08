@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const PlayerHurtSound = preload("res://Player/PlayerHurtSound.tscn")
+#const PlayerHurtSound = preload("res://Player/PlayerHurtSound.tscn")
 
 @export var MAX_SPEED = 88
 @export var ACCEL = 10
@@ -112,8 +112,8 @@ func _on_hurtbox_area_entered(area):
 	stats.health -= area.damage
 	hurtbox.start_invincibility(0.6)
 	hurtbox.create_hit_effect()
-	var playerHurtSound = PlayerHurtSound.instantiate()
-	get_tree().current_scene.add_child(playerHurtSound)
+#	var playerHurtSound = PlayerHurtSound.instantiate()
+#	get_tree().current_scene.add_child(playerHurtSound)
 	
 func _on_hurtbox_invincibility_started():
 	blinkAnimation.play("Start")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=39 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
+[ext_resource type="Script" path="res://Scenes/world.gd" id="1_nwgro"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="2_bhbb1"]
 [ext_resource type="PackedScene" uid="uid://did8gsi1equgt" path="res://Objects/Grass.tscn" id="2_nvow3"]
 [ext_resource type="Texture2D" uid="uid://cf8lk5738a1g1" path="res://Images/PathTileset.png" id="3_q1bir"]
@@ -15,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://dllanpf0a4ihd" path="res://Dialogue/main.dialogue" id="9_e7wnm"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="15_vcxm7"]
+[ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_m4ggl"]
 tile_data = PackedInt32Array(131072, 0, 0, 196608, 0, 2, 65537, 589824, 4, 131073, 589824, 1, 196609, 655360, 5, 2, 589824, 4, 65538, 589824, 1, 131074, 655360, 5, 3, 655360, 4, 65539, 655360, 5)
@@ -2946,9 +2948,12 @@ radius = 16.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sfdp3"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_s5esn"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_8s6nn"]
 
 [node name="World" type="Node2D"]
+script = ExtResource("1_nwgro")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 640.0
@@ -3002,6 +3007,9 @@ cell_quadrant_size = 32
 format = 2
 layer_0/y_sort_enabled = true
 layer_0/tile_data = PackedInt32Array(262147, 0, 3, 262148, 393216, 0, 327684, 0, 1, 393220, 0, 2, 393221, 131072, 2, 327685, 327680, 1, 327686, 131072, 2, 262149, 65536, 0, 262150, 458752, 2, 196614, 262144, 0, 196615, 458752, 3, 131079, 262144, 0, 131080, 131072, 3, 458764, 0, 0, 524300, 589824, 1, 589836, 131072, 2, 589835, 0, 2, 524299, 0, 0, 524301, 131072, 2, 458765, 327680, 0, 458766, 65536, 3, 458767, 458752, 3, 393231, 196608, 0, 262156, 196608, 3, 524295, 196608, 0, 589833, 131072, 3, 589832, 327680, 0, 589831, 589824, 2, 589830, 65536, 3, 589829, 0, 3, 655368, 131072, 2, 655367, 0, 2, 131088, 196608, 0, 196624, 196608, 2, 393225, 196608, 3)
+
+[node name="Pot" parent="YSort" instance=ExtResource("16_d4k56")]
+position = Vector2(384, 32)
 
 [node name="Player" parent="YSort" instance=ExtResource("1_c3ret")]
 position = Vector2(344, 112)
@@ -3111,6 +3119,14 @@ height = 0.85
 
 [node name="HealthUI" parent="CanvasLayer" instance=ExtResource("8_entl1")]
 
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(384, 40)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_s5esn")
+
 [node name="ZoomArea" type="Area2D" parent="."]
 position = Vector2(325, 63)
 collision_layer = 3
@@ -3118,15 +3134,6 @@ collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ZoomArea"]
 position = Vector2(9, 1)
-shape = SubResource("CircleShape2D_8s6nn")
-
-[node name="ZoomArea2" type="Area2D" parent="."]
-position = Vector2(344, 64)
-collision_layer = 3
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ZoomArea2"]
-position = Vector2(37, -5)
 shape = SubResource("CircleShape2D_8s6nn")
 
 [node name="Cig" parent="." instance=ExtResource("15_vcxm7")]
@@ -3139,7 +3146,6 @@ position = Vector2(447, 188)
 [connection signal="area_exited" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_exited"]
 [connection signal="body_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_body_entered"]
 [connection signal="body_exited" from="ZoomArea" to="Camera2D" method="_on_zoom_area_body_exited"]
-[connection signal="body_entered" from="ZoomArea2" to="Camera2D" method="_on_zoom_area_2_body_entered"]
-[connection signal="body_exited" from="ZoomArea2" to="Camera2D" method="_on_zoom_area_2_body_exited"]
 
 [editable path="Camera2D"]
+[editable path="YSort/Pot"]

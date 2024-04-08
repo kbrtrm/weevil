@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cmsgl025o0h6t" path="res://Stats.tscn" id="6_ux6dl"]
 [ext_resource type="PackedScene" uid="uid://ohip8s50m1p4" path="res://Enemies/PlayerDetectionZone.tscn" id="7_yox6j"]
 [ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="8_rpx36"]
-[ext_resource type="PackedScene" uid="uid://cl1dof02i12ey" path="res://CombatInitiationZone.tscn" id="9_arc6d"]
+[ext_resource type="PackedScene" uid="uid://cl1dof02i12ey" path="res://Enemies/CombatInitiationZone.tscn" id="9_arc6d"]
 [ext_resource type="PackedScene" uid="uid://d1roke5pysj1u" path="res://Overlap/SoftCollision.tscn" id="10_hx5s6"]
 [ext_resource type="PackedScene" uid="uid://fn8ny30lak10" path="res://Enemies/WanderController.tscn" id="11_ujcee"]
 
