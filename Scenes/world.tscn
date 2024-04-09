@@ -2949,6 +2949,7 @@ radius = 16.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_sfdp3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5esn"]
+radius = 8.06226
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8s6nn"]
 
@@ -3121,7 +3122,8 @@ height = 0.85
 
 [node name="Door" type="Area2D" parent="."]
 position = Vector2(384, 40)
-collision_layer = 2
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
 position = Vector2(0, 1)
@@ -3142,6 +3144,7 @@ position = Vector2(246, 184)
 [node name="Cig2" parent="." instance=ExtResource("15_vcxm7")]
 position = Vector2(447, 188)
 
+[connection signal="body_entered" from="Door" to="." method="_on_door_body_entered"]
 [connection signal="area_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_entered"]
 [connection signal="area_exited" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_exited"]
 [connection signal="body_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_body_entered"]

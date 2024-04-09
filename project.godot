@@ -20,6 +20,7 @@ config/icon="res://Images/icon.svg"
 PlayerStats="*res://Player/PlayerStats.tscn"
 State="*res://state.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+SceneManager="*res://addons/scene_manager/SceneManager.tscn"
 
 [dialogue_manager]
 
@@ -44,7 +45,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg", "res://addons/scene_manager/plugin.cfg")
 
 [importer_defaults]
 

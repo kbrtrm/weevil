@@ -1,25 +1,31 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbuacxq0f485t"]
+[gd_scene load_steps=11 format=3 uid="uid://bbuacxq0f485t"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_c54q7"]
+[ext_resource type="Script" path="res://Scenes/InsidePot.gd" id="1_f6gun"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_yqswm"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="2_mmt7l"]
-[ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="6_hcc8r"]
 [ext_resource type="PackedScene" uid="uid://i7bo54ykex0x" path="res://Dialogue/actionable.tscn" id="10_5vtxd"]
 [ext_resource type="Resource" uid="uid://dllanpf0a4ihd" path="res://Dialogue/main.dialogue" id="13_m3h1m"]
 [ext_resource type="PackedScene" uid="uid://do3g2siu7cy0f" path="res://Objects/Moss.tscn" id="14_sx16l"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="15_mtxy8"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wrinl"]
+radius = 8.06226
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_sfdp3"]
 
 [node name="World" type="Node2D"]
+script = ExtResource("1_f6gun")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 offset_right = 640.0
 offset_bottom = 360.0
 texture = ExtResource("1_c54q7")
 stretch_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="."]
+visible = false
 offset_left = -148.0
 offset_top = -156.0
 offset_right = 796.0
@@ -28,7 +34,7 @@ texture = ExtResource("1_c54q7")
 stretch_mode = 1
 
 [node name="Camera2D" parent="." instance=ExtResource("2_mmt7l")]
-position = Vector2(352, 128)
+position = Vector2(352, 96)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
@@ -40,11 +46,17 @@ position = Vector2(792, 424)
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="Pot" parent="YSort" instance=ExtResource("6_hcc8r")]
-position = Vector2(352, 96)
+[node name="Door" type="Area2D" parent="YSort"]
+position = Vector2(352, 128)
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Door"]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_wrinl")
 
 [node name="Player" parent="YSort" instance=ExtResource("1_yqswm")]
-position = Vector2(352, 128)
+position = Vector2(352, 96)
 MAX_SPEED = 88
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Player"]
@@ -115,5 +127,9 @@ height = 0.85
 
 [node name="HealthUI" parent="CanvasLayer" instance=ExtResource("15_mtxy8")]
 
+[connection signal="body_entered" from="YSort/Door" to="." method="_on_door_body_entered"]
+
 [editable path="Camera2D"]
-[editable path="YSort/Pot"]
+[editable path="YSort/Player"]
+[editable path="YSort/Player/HitboxPivot/SwordHitbox"]
+[editable path="YSort/Player/Hurtbox"]
