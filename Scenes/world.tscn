@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://did8gsi1equgt" path="res://Objects/Grass.tscn" id="2_nvow3"]
 [ext_resource type="Texture2D" uid="uid://cf8lk5738a1g1" path="res://Images/PathTileset.png" id="3_q1bir"]
 [ext_resource type="Texture2D" uid="uid://47mrx0k4e88g" path="res://Images/diagonal-tilemap-DIRTPATHex.png" id="4_84in7"]
+[ext_resource type="Shader" path="res://Scenes/polyshader.gdshader" id="4_s2kjb"]
 [ext_resource type="Texture2D" uid="uid://dhr6ohdgl8l7k" path="res://Images/CliffTileset.png" id="5_jafpb"]
 [ext_resource type="PackedScene" uid="uid://do3g2siu7cy0f" path="res://Objects/Moss.tscn" id="6_wval3"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="7_a1hen"]
@@ -17,7 +18,13 @@
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="15_vcxm7"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
-[ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="18_75gmg"]
+[ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="16_py4mx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qk8xt"]
+shader = ExtResource("4_s2kjb")
+shader_parameter/color = Color(0, 0, 0, 0.247059)
+shader_parameter/angle = 270.0
+shader_parameter/max_dist = 10.0
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_m4ggl"]
 tile_data = PackedInt32Array(131072, 0, 0, 196608, 0, 2, 65537, 589824, 4, 131073, 589824, 1, 196609, 655360, 5, 2, 589824, 4, 65538, 589824, 1, 131074, 655360, 5, 3, 655360, 4, 65539, 655360, 5)
@@ -2981,6 +2988,13 @@ position = Vector2(-128, -144)
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
 position = Vector2(792, 424)
 
+[node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_qk8xt")
+position = Vector2(-4, -124)
+scale = Vector2(25.1368, 67.65)
+polygon = PackedVector2Array(0, 0, 31.6667, 0, 31.6667, 7.80488, 0, 7.80488)
+
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -3035,6 +3049,7 @@ remote_path = NodePath("../../../Camera2D")
 metadata/_edit_group_ = true
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
+visible = false
 y_sort_enabled = true
 position = Vector2(388, 104)
 
@@ -3058,6 +3073,139 @@ dialogue_resource = ExtResource("9_u1dq1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy/Actionable"]
 shape = SubResource("CircleShape2D_g38ux")
 
+[node name="Mosses" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+position = Vector2(408, 44)
+
+[node name="MossClump4" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(0, 0)
+
+[node name="MossClump5" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(-48, 2)
+
+[node name="MossClump6" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(-56, 0)
+
+[node name="MossClump7" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 28)
+
+[node name="MossClump8" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 28)
+
+[node name="MossClump9" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 28)
+
+[node name="MossClump10" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 28)
+
+[node name="MossClump11" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 28)
+
+[node name="MossClump37" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 24)
+
+[node name="MossClump38" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(39, 20)
+
+[node name="MossClump39" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 49)
+
+[node name="MossClump40" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(39, 52)
+
+[node name="MossClump46" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(12, 41)
+
+[node name="MossClump47" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(8, 46)
+
+[node name="MossClump41" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 49)
+
+[node name="MossClump42" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 49)
+
+[node name="MossClump43" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 54)
+
+[node name="MossClump44" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(46, 60)
+
+[node name="MossClump12" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 28)
+
+[node name="MossClump13" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(20, 32)
+
+[node name="MossClump14" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 32)
+
+[node name="MossClump15" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(36, 32)
+
+[node name="MossClump16" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(44, 32)
+
+[node name="MossClump17" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 32)
+
+[node name="MossClump18" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 32)
+
+[node name="MossClump19" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 36)
+
+[node name="MossClump20" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 36)
+
+[node name="MossClump21" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 36)
+
+[node name="MossClump22" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 36)
+
+[node name="MossClump23" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 36)
+
+[node name="MossClump24" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 36)
+
+[node name="MossClump25" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(20, 40)
+
+[node name="MossClump26" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 40)
+
+[node name="MossClump27" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(36, 40)
+
+[node name="MossClump28" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(44, 40)
+
+[node name="MossClump29" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 40)
+
+[node name="MossClump30" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 40)
+
+[node name="MossClump31" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 44)
+
+[node name="MossClump32" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 44)
+
+[node name="MossClump33" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 44)
+
+[node name="MossClump34" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 44)
+
+[node name="MossClump35" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 44)
+
+[node name="MossClump36" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 44)
+
 [node name="Bushes" type="Node2D" parent="YSort"]
 y_sort_enabled = true
 
@@ -3071,75 +3219,7 @@ dialogue_start = "pick_apple"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Bushes/Bush/Actionable"]
 shape = SubResource("CircleShape2D_pce0v")
 
-[node name="MossClump4" type="Node2D" parent="YSort"]
-position = Vector2(408, 44)
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/MossClump4"]
-position = Vector2(2.08165e-12, 3)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/MossClump4"]
-texture = ExtResource("18_75gmg")
-
-[node name="MossClump5" type="Node2D" parent="YSort"]
-position = Vector2(416, 40)
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/MossClump5"]
-position = Vector2(2.08165e-12, 3)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/MossClump5"]
-texture = ExtResource("18_75gmg")
-
-[node name="MossClump6" type="Node2D" parent="YSort"]
-position = Vector2(356, 44)
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/MossClump6"]
-position = Vector2(2.08165e-12, 3)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/MossClump6"]
-texture = ExtResource("18_75gmg")
-
 [node name="Moss" type="Node2D" parent="YSort"]
-
-[node name="MossClump3" type="Node2D" parent="YSort/Moss"]
-position = Vector2(4, -4)
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/Moss/MossClump3"]
-position = Vector2(292, 135)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/Moss/MossClump3"]
-position = Vector2(292, 132)
-texture = ExtResource("18_75gmg")
-
-[node name="MossClump" type="Node2D" parent="YSort/Moss"]
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/Moss/MossClump"]
-position = Vector2(292, 135)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/Moss/MossClump"]
-position = Vector2(292, 132)
-texture = ExtResource("18_75gmg")
-
-[node name="MossClump2" type="Node2D" parent="YSort/Moss"]
-position = Vector2(8, 0)
-
-[node name="MossClumpShadow" type="Sprite2D" parent="YSort/Moss/MossClump2"]
-position = Vector2(292, 135)
-scale = Vector2(0.571429, 1)
-texture = ExtResource("7_a1hen")
-
-[node name="MossClumpMaterial" type="Sprite2D" parent="YSort/Moss/MossClump2"]
-position = Vector2(292, 132)
-texture = ExtResource("18_75gmg")
 
 [node name="Moss" parent="YSort/Moss" instance=ExtResource("6_wval3")]
 position = Vector2(296, 184)
@@ -3197,7 +3277,6 @@ color = Color(0.67451, 0.67451, 0.67451, 1)
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
 blend_mode = 2
 shadow_color = Color(0.396889, 0.396889, 0.396889, 0)
-height = 0.85
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

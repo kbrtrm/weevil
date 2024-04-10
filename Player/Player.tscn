@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://Player/FootstepSound.gd" id="12_cdcbo"]
 
 [sub_resource type="Gradient" id="Gradient_3ggjc"]
-colors = PackedColorArray(0.709804, 1, 1, 1, 0, 0, 0, 1)
+colors = PackedColorArray(1, 1, 1, 0.282353, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_al68s"]
 gradient = SubResource("Gradient_3ggjc")

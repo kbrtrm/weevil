@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://csfacg47xmu02"]
+
+[ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="1_nloke"]
+[ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="2_1rjnq"]
+
+[node name="MossClump4" type="Node2D"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+
+[node name="MossClumpShadow" type="Sprite2D" parent="."]
+position = Vector2(2.08165e-12, 3)
+scale = Vector2(0.571429, 1)
+texture = ExtResource("1_nloke")
+
+[node name="MossClumpMaterial" type="Sprite2D" parent="."]
+texture = ExtResource("2_1rjnq")
