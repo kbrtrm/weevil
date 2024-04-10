@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=43 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://i7bo54ykex0x" path="res://Dialogue/actionable.tscn" id="8_nepb0"]
 [ext_resource type="Resource" uid="uid://dllanpf0a4ihd" path="res://Dialogue/main.dialogue" id="9_e7wnm"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
+[ext_resource type="PackedScene" uid="uid://d11lfh5drqr6f" path="res://Objects/MossClumpLarge.tscn" id="15_ibyli"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="15_vcxm7"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="16_py4mx"]
@@ -2965,6 +2966,7 @@ radius = 16.0
 script = ExtResource("1_nwgro")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 offset_right = 640.0
 offset_bottom = 360.0
 texture = ExtResource("1_6ee3a")
@@ -3330,6 +3332,27 @@ position = Vector2(56, 44)
 [node name="MossClump36" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
 position = Vector2(64, 44)
 
+[node name="MossClumpLarge" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(28, 24)
+
+[node name="MossClumpLarge2" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(50, 16)
+
+[node name="MossClumpLarge3" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(46, 48)
+
+[node name="MossClumpLarge4" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(68, 32)
+
+[node name="MossClumpLarge5" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(36, 23)
+
+[node name="MossClumpLarge6" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(79, 3)
+
+[node name="MossClumpLarge7" parent="YSort/Mosses2" instance=ExtResource("15_ibyli")]
+position = Vector2(73, 27)
+
 [node name="Bushes" type="Node2D" parent="YSort"]
 y_sort_enabled = true
 
@@ -3416,6 +3439,7 @@ position = Vector2(9, 1)
 shape = SubResource("CircleShape2D_8s6nn")
 
 [node name="Cig2" parent="." instance=ExtResource("15_vcxm7")]
+visible = false
 position = Vector2(447, 188)
 
 [connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]

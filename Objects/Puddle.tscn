@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwysr5oq4lovg"]
+
+[ext_resource type="Shader" uid="uid://cijx26xdixf02" path="res://Objects/PuddleVis.tres" id="1_1128n"]
+[ext_resource type="Texture2D" uid="uid://dj364juhuvd42" path="res://Images/icon.svg" id="1_tahit"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ronan"]
+shader = ExtResource("1_1128n")
+
+[node name="Puddle" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_ronan")
+offset_right = 64.0
+offset_bottom = 48.0
+texture = ExtResource("1_tahit")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
