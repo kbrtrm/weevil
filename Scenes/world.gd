@@ -10,4 +10,4 @@ func _process(delta):
 
 func _on_door_body_entered(player):
 #	load_scene()
-	SceneManager.change_scene("res://Scenes/InsidePot.tscn", { "pattern": "fade"})
+	SceneManager.change_scene("res://Scenes/InsidePot.tscn", { "pattern": "fade", "speed": 4})

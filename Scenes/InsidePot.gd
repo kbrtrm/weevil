@@ -17,4 +17,4 @@ func _process(delta):
 	pass
 
 func _on_door_body_entered(player):
-	SceneManager.change_scene("res://Scenes/world.tscn", { "pattern": "fade"})
+	SceneManager.change_scene("res://Scenes/world.tscn", { "pattern": "fade", "speed": 4})

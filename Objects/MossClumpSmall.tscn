@@ -1,10 +1,76 @@
-[gd_scene load_steps=3 format=3 uid="uid://csfacg47xmu02"]
+[gd_scene load_steps=8 format=3 uid="uid://csfacg47xmu02"]
 
+[ext_resource type="Script" path="res://Objects/MossClumpSmall.gd" id="1_1eun0"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="1_nloke"]
 [ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="2_1rjnq"]
 
-[node name="MossClump4" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v2d4m"]
+size = Vector2(4, 4)
+
+[sub_resource type="Animation" id="Animation_ef8o6"]
+resource_name = "wiggle"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MossClumpMaterial:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.101229, 0.101229, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MossClumpMaterial:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.95), Vector2(1, 0.95), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ahw8b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MossClumpMaterial:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MossClumpMaterial:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lb3dm"]
+_data = {
+"RESET": SubResource("Animation_ahw8b"),
+"wiggle": SubResource("Animation_ef8o6")
+}
+
+[node name="MossClumpSmall" type="Node2D"]
 position = Vector2(2.08165e-12, 2.08165e-12)
+script = ExtResource("1_1eun0")
 
 [node name="MossClumpShadow" type="Sprite2D" parent="."]
 position = Vector2(2.08165e-12, 3)
@@ -12,4 +78,19 @@ scale = Vector2(0.571429, 1)
 texture = ExtResource("1_nloke")
 
 [node name="MossClumpMaterial" type="Sprite2D" parent="."]
+position = Vector2(-2.08165e-12, 2)
 texture = ExtResource("2_1rjnq")
+offset = Vector2(2.08165e-12, -2)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(2.08165e-12, 2)
+shape = SubResource("RectangleShape2D_v2d4m")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lb3dm")
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

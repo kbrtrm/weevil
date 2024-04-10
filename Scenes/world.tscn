@@ -2983,10 +2983,10 @@ position = Vector2(381, 56)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(-128, -144)
+position = Vector2(180, -52)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(792, 424)
+position = Vector2(580, 164)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false
@@ -3051,7 +3051,7 @@ metadata/_edit_group_ = true
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 visible = false
 y_sort_enabled = true
-position = Vector2(388, 104)
+position = Vector2(284, 47)
 
 [node name="Sprite2D" type="Sprite2D" parent="YSort/Ciggy"]
 y_sort_enabled = true
@@ -3073,18 +3073,18 @@ dialogue_resource = ExtResource("9_u1dq1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy/Actionable"]
 shape = SubResource("CircleShape2D_g38ux")
 
+[node name="MossClump4" parent="YSort" instance=ExtResource("16_py4mx")]
+position = Vector2(408, 44)
+
+[node name="MossClump5" parent="YSort" instance=ExtResource("16_py4mx")]
+position = Vector2(360, 46)
+
+[node name="MossClump6" parent="YSort" instance=ExtResource("16_py4mx")]
+position = Vector2(352, 44)
+
 [node name="Mosses" type="Node2D" parent="YSort"]
 y_sort_enabled = true
 position = Vector2(408, 44)
-
-[node name="MossClump4" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
-position = Vector2(0, 0)
-
-[node name="MossClump5" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
-position = Vector2(-48, 2)
-
-[node name="MossClump6" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
-position = Vector2(-56, 0)
 
 [node name="MossClump7" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(24, 28)
@@ -3204,6 +3204,130 @@ position = Vector2(48, 44)
 position = Vector2(56, 44)
 
 [node name="MossClump36" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 44)
+
+[node name="Mosses2" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+position = Vector2(372, 65)
+
+[node name="MossClump7" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 28)
+
+[node name="MossClump8" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 28)
+
+[node name="MossClump9" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 28)
+
+[node name="MossClump10" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 28)
+
+[node name="MossClump11" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 28)
+
+[node name="MossClump37" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 24)
+
+[node name="MossClump38" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(39, 20)
+
+[node name="MossClump39" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 49)
+
+[node name="MossClump40" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(39, 52)
+
+[node name="MossClump46" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(12, 41)
+
+[node name="MossClump47" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(8, 46)
+
+[node name="MossClump41" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 49)
+
+[node name="MossClump42" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 49)
+
+[node name="MossClump43" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 54)
+
+[node name="MossClump44" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(46, 60)
+
+[node name="MossClump12" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 28)
+
+[node name="MossClump13" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(20, 32)
+
+[node name="MossClump14" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 32)
+
+[node name="MossClump15" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(36, 32)
+
+[node name="MossClump16" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(44, 32)
+
+[node name="MossClump17" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 32)
+
+[node name="MossClump18" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 32)
+
+[node name="MossClump19" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 36)
+
+[node name="MossClump20" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 36)
+
+[node name="MossClump21" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 36)
+
+[node name="MossClump22" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 36)
+
+[node name="MossClump23" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 36)
+
+[node name="MossClump24" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(64, 36)
+
+[node name="MossClump25" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(20, 40)
+
+[node name="MossClump26" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 40)
+
+[node name="MossClump27" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(36, 40)
+
+[node name="MossClump28" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(44, 40)
+
+[node name="MossClump29" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(52, 40)
+
+[node name="MossClump30" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(60, 40)
+
+[node name="MossClump31" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(24, 44)
+
+[node name="MossClump32" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(32, 44)
+
+[node name="MossClump33" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(40, 44)
+
+[node name="MossClump34" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(48, 44)
+
+[node name="MossClump35" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
+position = Vector2(56, 44)
+
+[node name="MossClump36" parent="YSort/Mosses2" instance=ExtResource("16_py4mx")]
 position = Vector2(64, 44)
 
 [node name="Bushes" type="Node2D" parent="YSort"]
