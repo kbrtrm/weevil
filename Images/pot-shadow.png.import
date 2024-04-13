@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5ckvfse4i5do"
-path="res://.godot/imported/logo.png-cca8726399059c8d4f806e28e356b14d.ctex"
+uid="uid://di3ejaetx2im0"
+path="res://.godot/imported/pot-shadow.png-e5ee89e196e96a38c2dd2d06af068478.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://logo.png"
-dest_files=["res://.godot/imported/logo.png-cca8726399059c8d4f806e28e356b14d.ctex"]
+source_file="res://Images/pot-shadow.png"
+dest_files=["res://.godot/imported/pot-shadow.png-e5ee89e196e96a38c2dd2d06af068478.ctex"]
 
 [params]
 

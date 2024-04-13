@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
@@ -17,7 +17,6 @@
 [ext_resource type="Resource" uid="uid://dllanpf0a4ihd" path="res://Dialogue/main.dialogue" id="9_e7wnm"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
 [ext_resource type="PackedScene" uid="uid://d11lfh5drqr6f" path="res://Objects/MossClumpLarge.tscn" id="15_ibyli"]
-[ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="15_vcxm7"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="16_py4mx"]
 
@@ -2985,10 +2984,10 @@ position = Vector2(381, 56)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(180, -52)
+position = Vector2(156, -76)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(580, 164)
+position = Vector2(604, 184)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false
@@ -3001,7 +3000,6 @@ polygon = PackedVector2Array(0, 0, 31.6667, 0, 31.6667, 7.80488, 0, 7.80488)
 y_sort_enabled = true
 
 [node name="PathTileMap" type="TileMap" parent="YSort"]
-visible = false
 tile_set = SubResource("TileSet_avqbg")
 format = 2
 layer_0/tile_data = PackedInt32Array(851989, 196608, 0, 917525, 196608, 1, 983061, 196608, 1, 1048597, 458752, 3, 1048596, 65536, 3, 1048595, 65536, 3, 1048594, 262144, 3, 983057, 65536, 3, 983056, 65536, 3, 983055, 65536, 3, 983054, 65536, 3, 983058, 458752, 0, 983053, 65536, 3, 983052, 262144, 3, 917516, 196608, 1, 851980, 196608, 1, 786444, 196608, 1, 720908, 262144, 0, 720909, 131072, 3, 327696, 0, 0, 327697, 65536, 0, 196625, 0, 3, 196626, 393216, 0, 196627, 131072, 0, 262163, 65536, 1, 262164, 65536, 0, 262165, 589824, 1, 196629, 0, 0, 196630, 327680, 0, 196631, 65536, 3, 196632, 65536, 3, 196633, 65536, 3, 196634, 458752, 0, 262170, 262144, 3, 262171, 458752, 0, 327707, 262144, 3, 327708, 458752, 0, 393244, 196608, 1, 458780, 196608, 1, 524316, 262144, 3, 524317, 458752, 0, 589853, 196608, 1, 655389, 196608, 1, 720925, 196608, 1, 786461, 196608, 1, 851997, 196608, 2, 983069, 131072, 3, 983068, 0, 3, 262162, 0, 1, 327698, 393216, 2, 327699, 327680, 1, 327700, 65536, 2, 327701, 131072, 2, 262166, 131072, 2, 393233, 65536, 2, 393234, 65536, 2, 393235, 131072, 2, 393232, 0, 2)
@@ -3033,7 +3031,7 @@ position = Vector2(380, 32)
 collision_mask = 3
 
 [node name="Door" type="Area2D" parent="YSort/Pot"]
-position = Vector2(0, 4)
+position = Vector2(0, -3)
 collision_layer = 3
 collision_mask = 3
 
@@ -3042,13 +3040,7 @@ position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_s5esn")
 
 [node name="Player" parent="YSort" instance=ExtResource("1_c3ret")]
-position = Vector2(381, 56)
-collision_layer = 1
-MAX_SPEED = 88
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Player"]
-remote_path = NodePath("../../../Camera2D")
-metadata/_edit_group_ = true
+position = Vector2(376, 68)
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 visible = false
@@ -3075,14 +3067,57 @@ dialogue_resource = ExtResource("9_u1dq1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy/Actionable"]
 shape = SubResource("CircleShape2D_g38ux")
 
-[node name="MossClump4" parent="YSort" instance=ExtResource("16_py4mx")]
-position = Vector2(408, 44)
+[node name="MossesPot" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+position = Vector2(384, 42)
 
-[node name="MossClump5" parent="YSort" instance=ExtResource("16_py4mx")]
-position = Vector2(360, 46)
+[node name="MossClumpSmall" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-44, 46)
 
-[node name="MossClump6" parent="YSort" instance=ExtResource("16_py4mx")]
-position = Vector2(352, 44)
+[node name="MossClump4" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(20, 2)
+
+[node name="MossClump7" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(4, 5)
+
+[node name="MossClump8" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-17, 4)
+
+[node name="MossClump9" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-21, 7)
+
+[node name="MossClump10" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-28, 8)
+
+[node name="MossClump11" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-24, 11)
+
+[node name="MossClump12" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(11, 6)
+
+[node name="MossClump13" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(8, 9)
+
+[node name="MossClump14" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(19, 6)
+
+[node name="MossClump15" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(15, 10)
+
+[node name="MossClump16" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(28, 8)
+
+[node name="MossClump17" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-36, 13)
+
+[node name="MossClump18" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(0, 17)
+
+[node name="MossClump5" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-28, 4)
+
+[node name="MossClump6" parent="YSort/MossesPot" instance=ExtResource("16_py4mx")]
+position = Vector2(-36, 2)
 
 [node name="Mosses" type="Node2D" parent="YSort"]
 y_sort_enabled = true
@@ -3428,19 +3463,16 @@ shadow_color = Color(0.396889, 0.396889, 0.396889, 0)
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HealthUI" parent="CanvasLayer" instance=ExtResource("8_entl1")]
+visible = false
 
 [node name="ZoomArea" type="Area2D" parent="."]
-position = Vector2(325, 63)
+position = Vector2(216, 28)
 collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ZoomArea"]
 position = Vector2(9, 1)
 shape = SubResource("CircleShape2D_8s6nn")
-
-[node name="Cig2" parent="." instance=ExtResource("15_vcxm7")]
-visible = false
-position = Vector2(447, 188)
 
 [connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
 [connection signal="area_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_entered"]

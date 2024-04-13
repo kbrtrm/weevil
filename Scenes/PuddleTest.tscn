@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3 uid="uid://b0fjp33hw1uow"]
+
+[ext_resource type="Script" path="res://Scenes/world.gd" id="1_gxdmj"]
+[ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="2_cbutl"]
+[ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="3_kvjxh"]
+[ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="4_4r84c"]
+[ext_resource type="Shader" path="res://Scenes/PuddleTest.gdshader" id="5_1yj8s"]
+[ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="11_cfycr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q3mhw"]
+shader = ExtResource("5_1yj8s")
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_gxdmj")
+
+[node name="SoilBG" type="TextureRect" parent="."]
+offset_left = -148.0
+offset_top = -156.0
+offset_right = 796.0
+offset_bottom = 436.0
+texture = ExtResource("2_cbutl")
+stretch_mode = 1
+
+[node name="Camera2D" parent="." instance=ExtResource("3_kvjxh")]
+position = Vector2(381, 56)
+zoom = Vector2(1.5, 1.5)
+
+[node name="TopLeft" parent="Camera2D/Limits" index="0"]
+position = Vector2(156, -76)
+
+[node name="BottomRight" parent="Camera2D/Limits" index="1"]
+position = Vector2(604, 184)
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="YSort" instance=ExtResource("4_4r84c")]
+position = Vector2(376, 61)
+
+[node name="Reflection2" parent="YSort/Player" index="3"]
+visibility_layer = 2
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+material = SubResource("ShaderMaterial_q3mhw")
+color = Color(0.67451, 0.67451, 0.67451, 1)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
+blend_mode = 2
+shadow_color = Color(0.396889, 0.396889, 0.396889, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthUI" parent="CanvasLayer" instance=ExtResource("11_cfycr")]
+visible = false
+
+[editable path="Camera2D"]
+[editable path="YSort/Player"]
+[editable path="YSort/Player/HitboxPivot/SwordHitbox"]
+[editable path="YSort/Player/Hurtbox"]

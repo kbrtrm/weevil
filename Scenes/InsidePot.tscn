@@ -25,7 +25,6 @@ texture = ExtResource("1_c54q7")
 stretch_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="."]
-visible = false
 offset_left = -148.0
 offset_top = -156.0
 offset_right = 796.0
@@ -34,14 +33,14 @@ texture = ExtResource("1_c54q7")
 stretch_mode = 1
 
 [node name="Camera2D" parent="." instance=ExtResource("2_mmt7l")]
-position = Vector2(352, 96)
+position = Vector2(352, 104)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(-128, -144)
+position = Vector2(144, -24)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(792, 424)
+position = Vector2(560, 216)
 
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -56,7 +55,7 @@ position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_wrinl")
 
 [node name="Player" parent="YSort" instance=ExtResource("1_yqswm")]
-position = Vector2(352, 96)
+position = Vector2(352, 104)
 MAX_SPEED = 88
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Player"]
@@ -126,6 +125,10 @@ height = 0.85
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HealthUI" parent="CanvasLayer" instance=ExtResource("15_mtxy8")]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(136, -32, 568, -32, 568, 224, 368, 224, 360, 128, 416, 112, 424, 72, 400, 40, 352, 32, 296, 40, 280, 80, 288, 112, 320, 128, 336, 128, 344, 128, 336, 224, 136, 224)
 
 [connection signal="body_entered" from="YSort/Door" to="." method="_on_door_body_entered"]
 

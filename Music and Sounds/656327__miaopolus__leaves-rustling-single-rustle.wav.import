@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bhtu70ahmsbim"
+path="res://.godot/imported/656327__miaopolus__leaves-rustling-single-rustle.wav-e5845dc7266b0c9c19fb38a2cf0501d0.sample"
+
+[deps]
+
+source_file="res://Music and Sounds/656327__miaopolus__leaves-rustling-single-rustle.wav"
+dest_files=["res://.godot/imported/656327__miaopolus__leaves-rustling-single-rustle.wav-e5845dc7266b0c9c19fb38a2cf0501d0.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

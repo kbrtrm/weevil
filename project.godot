@@ -31,8 +31,8 @@ general/balloon_path="res://Dialogue/balloon.tscn"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/initial_position_type=2
-window/size/initial_screen=1
+window/size/initial_position_type=0
+window/size/initial_position=Vector2i(600, 0)
 window/size/always_on_top=true
 window/size/window_width_override=1280
 window/size/window_height_override=720

@@ -1,4 +1,6 @@
 extends Node2D
+
+@onready var player = $YSort/Player
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -8,6 +10,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func _on_door_body_entered(player):
+func _on_door_body_entered(body):
 #	load_scene()
-	SceneManager.change_scene("res://Scenes/InsidePot.tscn", { "pattern": "fade", "speed": 4})
+	if body == player: 
+		SceneManager.change_scene("res://Scenes/InsidePot.tscn", { "pattern": "fade", "speed": 4})
