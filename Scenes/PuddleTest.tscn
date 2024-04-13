@@ -22,14 +22,14 @@ texture = ExtResource("2_cbutl")
 stretch_mode = 1
 
 [node name="Camera2D" parent="." instance=ExtResource("3_kvjxh")]
-position = Vector2(381, 56)
+position = Vector2(136, 16)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(156, -76)
+position = Vector2(-104, -76)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(604, 184)
+position = Vector2(428, 184)
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 layer = 2
@@ -38,10 +38,10 @@ layer = 2
 y_sort_enabled = true
 
 [node name="Player" parent="YSort" instance=ExtResource("4_4r84c")]
-position = Vector2(376, 61)
+position = Vector2(136, 16)
 
-[node name="Reflection2" parent="YSort/Player" index="3"]
-visibility_layer = 2
+[node name="RemoteTransform2D" parent="YSort/Player" index="14"]
+remote_path = NodePath("../../../Camera2D")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 material = SubResource("ShaderMaterial_q3mhw")

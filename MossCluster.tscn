@@ -1,0 +1,598 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxwxd68mb4yx1"]
+
+[ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="1_4a6vy"]
+
+[node name="MossCluster" type="Node2D"]
+
+[node name="MossClumpSmall" parent="." instance=ExtResource("1_4a6vy")]
+
+[node name="MossClumpSmall2" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 2.08165e-12)
+
+[node name="MossClumpSmall3" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 2.08165e-12)
+
+[node name="MossClumpSmall4" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 2.08165e-12)
+
+[node name="MossClumpSmall5" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 2.08165e-12)
+
+[node name="MossClumpSmall6" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 2.08165e-12)
+
+[node name="MossClumpSmall7" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 2.08165e-12)
+
+[node name="MossClumpSmall8" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 2.08165e-12)
+
+[node name="MossClumpSmall9" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 2.08165e-12)
+
+[node name="MossClumpSmall10" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 2.08165e-12)
+
+[node name="MossClumpSmall11" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 2.08165e-12)
+
+[node name="MossClumpSmall12" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 3)
+
+[node name="MossClumpSmall13" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 3)
+
+[node name="MossClumpSmall14" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 3)
+
+[node name="MossClumpSmall15" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 3)
+
+[node name="MossClumpSmall16" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 3)
+
+[node name="MossClumpSmall17" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 3)
+
+[node name="MossClumpSmall18" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 3)
+
+[node name="MossClumpSmall19" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 3)
+
+[node name="MossClumpSmall20" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 3)
+
+[node name="MossClumpSmall21" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 3)
+
+[node name="MossClumpSmall22" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 3)
+
+[node name="MossClumpSmall23" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 6)
+
+[node name="MossClumpSmall24" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 6)
+
+[node name="MossClumpSmall25" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 6)
+
+[node name="MossClumpSmall26" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 6)
+
+[node name="MossClumpSmall27" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 6)
+
+[node name="MossClumpSmall28" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 6)
+
+[node name="MossClumpSmall29" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 6)
+
+[node name="MossClumpSmall30" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 6)
+
+[node name="MossClumpSmall31" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 6)
+
+[node name="MossClumpSmall32" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 6)
+
+[node name="MossClumpSmall33" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 6)
+
+[node name="MossClumpSmall34" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 8)
+
+[node name="MossClumpSmall35" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 8)
+
+[node name="MossClumpSmall36" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 8)
+
+[node name="MossClumpSmall37" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 8)
+
+[node name="MossClumpSmall38" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 8)
+
+[node name="MossClumpSmall39" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 8)
+
+[node name="MossClumpSmall40" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 8)
+
+[node name="MossClumpSmall41" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 8)
+
+[node name="MossClumpSmall42" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 8)
+
+[node name="MossClumpSmall43" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 8)
+
+[node name="MossClumpSmall44" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 8)
+
+[node name="MossClumpSmall45" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 11)
+
+[node name="MossClumpSmall46" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 11)
+
+[node name="MossClumpSmall47" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 11)
+
+[node name="MossClumpSmall48" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 11)
+
+[node name="MossClumpSmall49" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 11)
+
+[node name="MossClumpSmall50" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 11)
+
+[node name="MossClumpSmall51" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 11)
+
+[node name="MossClumpSmall52" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 11)
+
+[node name="MossClumpSmall53" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 11)
+
+[node name="MossClumpSmall54" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 11)
+
+[node name="MossClumpSmall55" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 11)
+
+[node name="MossClumpSmall56" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 14)
+
+[node name="MossClumpSmall57" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 14)
+
+[node name="MossClumpSmall58" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 14)
+
+[node name="MossClumpSmall59" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 14)
+
+[node name="MossClumpSmall60" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 14)
+
+[node name="MossClumpSmall61" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 14)
+
+[node name="MossClumpSmall62" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 14)
+
+[node name="MossClumpSmall63" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 14)
+
+[node name="MossClumpSmall64" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 14)
+
+[node name="MossClumpSmall65" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 14)
+
+[node name="MossClumpSmall66" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 14)
+
+[node name="MossClumpSmall67" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 16)
+
+[node name="MossClumpSmall68" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 16)
+
+[node name="MossClumpSmall69" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 16)
+
+[node name="MossClumpSmall70" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 16)
+
+[node name="MossClumpSmall71" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 16)
+
+[node name="MossClumpSmall72" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 16)
+
+[node name="MossClumpSmall73" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 16)
+
+[node name="MossClumpSmall74" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 16)
+
+[node name="MossClumpSmall75" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 16)
+
+[node name="MossClumpSmall76" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 16)
+
+[node name="MossClumpSmall77" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 16)
+
+[node name="MossClumpSmall78" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 19)
+
+[node name="MossClumpSmall79" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 19)
+
+[node name="MossClumpSmall80" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 19)
+
+[node name="MossClumpSmall81" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 19)
+
+[node name="MossClumpSmall82" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 19)
+
+[node name="MossClumpSmall83" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 19)
+
+[node name="MossClumpSmall84" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 19)
+
+[node name="MossClumpSmall85" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 19)
+
+[node name="MossClumpSmall86" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 19)
+
+[node name="MossClumpSmall87" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 19)
+
+[node name="MossClumpSmall88" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 19)
+
+[node name="MossClumpSmall89" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 22)
+
+[node name="MossClumpSmall90" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 22)
+
+[node name="MossClumpSmall91" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 22)
+
+[node name="MossClumpSmall92" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 22)
+
+[node name="MossClumpSmall93" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 22)
+
+[node name="MossClumpSmall94" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 22)
+
+[node name="MossClumpSmall95" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 22)
+
+[node name="MossClumpSmall96" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 22)
+
+[node name="MossClumpSmall97" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 22)
+
+[node name="MossClumpSmall98" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 22)
+
+[node name="MossClumpSmall99" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 22)
+
+[node name="MossClumpSmall100" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 24)
+
+[node name="MossClumpSmall101" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 24)
+
+[node name="MossClumpSmall102" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 24)
+
+[node name="MossClumpSmall103" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 24)
+
+[node name="MossClumpSmall104" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 24)
+
+[node name="MossClumpSmall105" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 24)
+
+[node name="MossClumpSmall106" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 24)
+
+[node name="MossClumpSmall107" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 24)
+
+[node name="MossClumpSmall108" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 24)
+
+[node name="MossClumpSmall109" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 24)
+
+[node name="MossClumpSmall110" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 24)
+
+[node name="MossClumpSmall111" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 27)
+
+[node name="MossClumpSmall112" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 27)
+
+[node name="MossClumpSmall113" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 27)
+
+[node name="MossClumpSmall114" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 27)
+
+[node name="MossClumpSmall115" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 27)
+
+[node name="MossClumpSmall116" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 27)
+
+[node name="MossClumpSmall117" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 27)
+
+[node name="MossClumpSmall118" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 27)
+
+[node name="MossClumpSmall119" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 27)
+
+[node name="MossClumpSmall120" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 27)
+
+[node name="MossClumpSmall121" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 27)
+
+[node name="MossClumpSmall122" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 30)
+
+[node name="MossClumpSmall123" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 30)
+
+[node name="MossClumpSmall124" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 30)
+
+[node name="MossClumpSmall125" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 30)
+
+[node name="MossClumpSmall126" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 30)
+
+[node name="MossClumpSmall127" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 30)
+
+[node name="MossClumpSmall128" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 30)
+
+[node name="MossClumpSmall129" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 30)
+
+[node name="MossClumpSmall130" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 30)
+
+[node name="MossClumpSmall131" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 30)
+
+[node name="MossClumpSmall132" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 30)
+
+[node name="MossClumpSmall133" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 32)
+
+[node name="MossClumpSmall134" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 32)
+
+[node name="MossClumpSmall135" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 32)
+
+[node name="MossClumpSmall136" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 32)
+
+[node name="MossClumpSmall137" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 32)
+
+[node name="MossClumpSmall138" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 32)
+
+[node name="MossClumpSmall139" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 32)
+
+[node name="MossClumpSmall140" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 32)
+
+[node name="MossClumpSmall141" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 32)
+
+[node name="MossClumpSmall142" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 32)
+
+[node name="MossClumpSmall143" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 32)
+
+[node name="MossClumpSmall144" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 35)
+
+[node name="MossClumpSmall145" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 35)
+
+[node name="MossClumpSmall146" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 35)
+
+[node name="MossClumpSmall147" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 35)
+
+[node name="MossClumpSmall148" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 35)
+
+[node name="MossClumpSmall149" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 35)
+
+[node name="MossClumpSmall150" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 35)
+
+[node name="MossClumpSmall151" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 35)
+
+[node name="MossClumpSmall152" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 35)
+
+[node name="MossClumpSmall153" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 35)
+
+[node name="MossClumpSmall154" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 35)
+
+[node name="MossClumpSmall155" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 38)
+
+[node name="MossClumpSmall156" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 38)
+
+[node name="MossClumpSmall157" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 38)
+
+[node name="MossClumpSmall158" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 38)
+
+[node name="MossClumpSmall159" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 38)
+
+[node name="MossClumpSmall160" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 38)
+
+[node name="MossClumpSmall161" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 38)
+
+[node name="MossClumpSmall162" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 38)
+
+[node name="MossClumpSmall163" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 38)
+
+[node name="MossClumpSmall164" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 38)
+
+[node name="MossClumpSmall165" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 38)
+
+[node name="MossClumpSmall166" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 40)
+
+[node name="MossClumpSmall167" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 40)
+
+[node name="MossClumpSmall168" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 40)
+
+[node name="MossClumpSmall169" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 40)
+
+[node name="MossClumpSmall170" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 40)
+
+[node name="MossClumpSmall171" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 40)
+
+[node name="MossClumpSmall172" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 40)
+
+[node name="MossClumpSmall173" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 40)
+
+[node name="MossClumpSmall174" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 40)
+
+[node name="MossClumpSmall175" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 40)
+
+[node name="MossClumpSmall176" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 40)
+
+[node name="MossClumpSmall177" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(4, 43)
+
+[node name="MossClumpSmall178" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(12, 43)
+
+[node name="MossClumpSmall179" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-4, 43)
+
+[node name="MossClumpSmall180" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(20, 43)
+
+[node name="MossClumpSmall181" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-12, 43)
+
+[node name="MossClumpSmall182" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(28, 43)
+
+[node name="MossClumpSmall183" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-20, 43)
+
+[node name="MossClumpSmall184" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-28, 43)
+
+[node name="MossClumpSmall185" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(36, 43)
+
+[node name="MossClumpSmall186" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-36, 43)
+
+[node name="MossClumpSmall187" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(44, 43)
+
+[node name="MossClumpSmall188" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(0, 46)
+
+[node name="MossClumpSmall189" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(8, 46)
+
+[node name="MossClumpSmall190" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-8, 46)
+
+[node name="MossClumpSmall191" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(16, 46)
+
+[node name="MossClumpSmall192" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-16, 46)
+
+[node name="MossClumpSmall193" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(24, 46)
+
+[node name="MossClumpSmall194" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-24, 46)
+
+[node name="MossClumpSmall195" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-32, 46)
+
+[node name="MossClumpSmall196" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(32, 46)
+
+[node name="MossClumpSmall197" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(-40, 46)
+
+[node name="MossClumpSmall198" parent="." instance=ExtResource("1_4a6vy")]
+position = Vector2(40, 46)

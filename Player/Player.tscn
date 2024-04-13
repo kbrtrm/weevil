@@ -295,6 +295,7 @@ initial_velocity_max = 25.0
 color_ramp = SubResource("Gradient_1ac5w")
 
 [node name="Reflection2" type="Sprite2D" parent="."]
+visible = false
 show_behind_parent = true
 material = SubResource("ShaderMaterial_g2217")
 position = Vector2(0, 15)
@@ -373,6 +374,8 @@ collision_mask = 64
 position = Vector2(-2.08165e-12, 5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_of1wa")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_hurtbox_invincibility_ended"]

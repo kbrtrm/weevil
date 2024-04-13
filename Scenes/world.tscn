@@ -2980,14 +2980,14 @@ texture = ExtResource("1_6ee3a")
 stretch_mode = 1
 
 [node name="Camera2D" parent="." instance=ExtResource("2_bhbb1")]
-position = Vector2(381, 56)
+position = Vector2(376, 68)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(156, -76)
+position = Vector2(116, -100)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(604, 184)
+position = Vector2(632, 216)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false
@@ -3041,6 +3041,9 @@ shape = SubResource("CircleShape2D_s5esn")
 
 [node name="Player" parent="YSort" instance=ExtResource("1_c3ret")]
 position = Vector2(376, 68)
+
+[node name="RemoteTransform2D" parent="YSort/Player" index="14"]
+remote_path = NodePath("../../../Camera2D")
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 visible = false
@@ -3482,3 +3485,6 @@ shape = SubResource("CircleShape2D_8s6nn")
 
 [editable path="Camera2D"]
 [editable path="YSort/Pot"]
+[editable path="YSort/Player"]
+[editable path="YSort/Player/HitboxPivot/SwordHitbox"]
+[editable path="YSort/Player/Hurtbox"]
