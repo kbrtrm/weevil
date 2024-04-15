@@ -1,10 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://nrmlki51us40"]
+[gd_scene load_steps=11 format=3 uid="uid://nrmlki51us40"]
 
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_2djru"]
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="2_cnl5a"]
 [ext_resource type="Shader" path="res://Scenes/pooddles.gdshader" id="2_fm3uo"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="3_as8lo"]
-[ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_85tqc"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="6_dygx3"]
 [ext_resource type="PackedScene" uid="uid://bxwxd68mb4yx1" path="res://MossCluster.tscn" id="8_0njsb"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="18_wl05n"]
@@ -13,23 +12,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j8bpx"]
 shader = ExtResource("2_fm3uo")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6y08t"]
-texture = ExtResource("2_cnl5a")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mi7f8"]
-texture = ExtResource("4_85tqc")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-
 [sub_resource type="TileSet" id="TileSet_0cxhj"]
-sources/0 = SubResource("TileSetAtlasSource_6y08t")
-sources/1 = SubResource("TileSetAtlasSource_mi7f8")
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_2djru")
