@@ -5,7 +5,7 @@
 [ext_resource type="Shader" path="res://Scenes/pooddles.gdshader" id="2_fm3uo"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="3_as8lo"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="6_dygx3"]
-[ext_resource type="PackedScene" uid="uid://bxwxd68mb4yx1" path="res://MossCluster.tscn" id="8_0njsb"]
+[ext_resource type="PackedScene" uid="uid://bxwxd68mb4yx1" path="res://Objects/MossCluster.tscn" id="8_0njsb"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="18_wl05n"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="28_5cxjs"]
 
