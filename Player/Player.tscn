@@ -29,8 +29,8 @@ shader = ExtResource("3_kb55j")
 shader_parameter/active = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qtdko"]
-radius = 4.0
-height = 12.9032
+radius = 3.0
+height = 13.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uk6ns"]
 animation = &"attack_left"
@@ -264,6 +264,8 @@ height = 20.0
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 collision_layer = 2
+platform_floor_layers = 4294967292
+safe_margin = 1.0
 script = ExtResource("1_py2js")
 MAX_SPEED = 60
 
@@ -312,9 +314,8 @@ hframes = 94
 frame = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2.08165e-12, 1)
+position = Vector2(2.08165e-12, 2)
 rotation = -1.5708
-scale = Vector2(1.027, 1.1)
 shape = SubResource("CapsuleShape2D_qtdko")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
