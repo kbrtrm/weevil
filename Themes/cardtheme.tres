@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=3 format=3 uid="uid://32orfni31l7w"]
 
-[ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="1_flyg7"]
+[ext_resource type="FontFile" uid="uid://ciocjsl7wxrkb" path="res://Themes/TerbAlpha.ttf" id="1_hteqo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k63ac"]
 bg_color = Color(0.905882, 0.882353, 0.909804, 1)
@@ -12,6 +12,6 @@ anti_aliasing = false
 
 [resource]
 Label/colors/font_color = Color(0, 0, 0, 1)
-Label/font_sizes/font_size = 12
-Label/fonts/font = ExtResource("1_flyg7")
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1_hteqo")
 Panel/styles/panel = SubResource("StyleBoxFlat_k63ac")

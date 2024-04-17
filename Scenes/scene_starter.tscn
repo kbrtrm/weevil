@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://nrmlki51us40"]
+[gd_scene load_steps=16 format=3 uid="uid://nrmlki51us40"]
 
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_2djru"]
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="2_cnl5a"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="6_dygx3"]
 [ext_resource type="PackedScene" uid="uid://bxwxd68mb4yx1" path="res://Objects/MossCluster.tscn" id="8_0njsb"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_bpjlg"]
+[ext_resource type="Texture2D" uid="uid://cy3oiiy76sykn" path="res://Images/ground-bits.png" id="10_lchgv"]
+[ext_resource type="PackedScene" uid="uid://1fcpi2rqusxk" path="res://Objects/MushroomTall.tscn" id="11_x2r2h"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="18_wl05n"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="28_5cxjs"]
 
@@ -70,6 +72,26 @@ z_index = -2
 
 [node name="RemoteTransform2D" parent="YSort/Player" index="14"]
 remote_path = NodePath("../../../Camera2D")
+
+[node name="CliffTileMap2" type="TileMap" parent="YSort"]
+y_sort_enabled = true
+position = Vector2(0, -128)
+tile_set = ExtResource("9_bpjlg")
+cell_quadrant_size = 32
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(131076, 196608, 3, 131078, 0, 3, 131079, 131072, 3, 262148, 0, 0, 262149, 131072, 0, 327685, 131072, 2, 327684, 0, 2, 262154, 0, 3, 262155, 458752, 0, 327691, 458752, 3, 131081, 0, 3, 131082, 65536, 3, 131083, 131072, 3, 262157, 196608, 0, 327693, 262144, 3, 327694, 131072, 3, 327696, 0, 3, 327697, 458752, 3, 262161, 196608, 0, 196623, 458752, 3, 131087, 524288, 0, 131086, 0, 3, 131088, 131072, 3, 458756, 262144, 0, 458757, 65536, 3, 458758, 458752, 0, 524294, 196608, 1, 589830, 458752, 3, 589829, 65536, 3, 589828, 262144, 3, 524292, 196608, 1, 458760, 0, 0, 524296, 393216, 4, 589832, 0, 2, 589834, 131072, 2, 524298, 131072, 1, 458762, 131072, 0, 458761, 65536, 0, 524297, 65536, 1, 458764, 196608, 0, 524300, 262144, 3, 524301, 458752, 0, 589837, 262144, 3, 589838, 65536, 3, 589839, 458752, 3, 524303, 262144, 0, 524304, 458752, 3, 458768, 196608, 0, 589833, 65536, 2, 262152, 131072, 3, 262151, 262144, 0, 327687, 196608, 1)
+
+[node name="CliffTileMap3" type="TileMap" parent="YSort"]
+visible = false
+z_index = 1
+y_sort_enabled = true
+position = Vector2(0, -139)
+tile_set = ExtResource("9_bpjlg")
+cell_quadrant_size = 32
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(131076, 196608, 3, 131078, 0, 3, 131079, 131072, 3, 262148, 0, 0, 262149, 131072, 0, 327685, 131072, 2, 327684, 0, 2, 262151, 262144, 0, 327687, 458752, 3, 262152, 131072, 3, 262154, 0, 3, 262155, 458752, 0, 327691, 458752, 3, 131081, 0, 3, 131082, 65536, 3, 131083, 131072, 3, 262157, 196608, 0, 327693, 262144, 3, 327694, 131072, 3, 327696, 0, 3, 327697, 458752, 3, 262161, 196608, 0, 196623, 458752, 3, 131087, 524288, 0, 131086, 0, 3, 131088, 131072, 3, 458756, 262144, 0, 458757, 65536, 3, 458758, 458752, 0, 524294, 196608, 1, 589830, 458752, 3, 589829, 65536, 3, 589828, 262144, 3, 524292, 196608, 1, 458760, 0, 0, 524296, 0, 1, 589832, 0, 2, 589833, 65536, 2, 589834, 131072, 2, 524298, 131072, 1, 458762, 131072, 0, 458761, 65536, 0, 524297, 65536, 1, 458764, 196608, 0, 524300, 262144, 3, 524301, 458752, 0, 589837, 262144, 3, 589838, 65536, 3, 589839, 458752, 3, 524303, 262144, 0, 524304, 458752, 3, 458768, 196608, 0)
 
 [node name="mosses" type="Node2D" parent="YSort"]
 visible = false
@@ -512,14 +534,92 @@ position = Vector2(44, 12)
 y_sort_enabled = true
 position = Vector2(148, -8)
 
-[node name="CliffTileMap2" type="TileMap" parent="YSort"]
-y_sort_enabled = true
-position = Vector2(0, -128)
-tile_set = ExtResource("9_bpjlg")
-cell_quadrant_size = 32
-format = 2
-layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(131076, 196608, 3, 131078, 0, 3, 131079, 131072, 3, 262148, 0, 0, 262149, 131072, 0, 327685, 131072, 2, 327684, 0, 2, 262151, 262144, 0, 327687, 458752, 3, 262152, 131072, 3, 262154, 0, 3, 262155, 458752, 0, 327691, 458752, 3, 131081, 0, 3, 131082, 65536, 3, 131083, 131072, 3, 262157, 196608, 0, 327693, 262144, 3, 327694, 131072, 3, 327696, 0, 3, 327697, 458752, 3, 262161, 196608, 0, 196623, 458752, 3, 131087, 524288, 0, 131086, 0, 3, 131088, 131072, 3, 458756, 262144, 0, 458757, 65536, 3, 458758, 458752, 0, 524294, 196608, 1, 589830, 458752, 3, 589829, 65536, 3, 589828, 262144, 3, 524292, 196608, 1, 458760, 0, 0, 524296, 0, 1, 589832, 0, 2, 589833, 65536, 2, 589834, 131072, 2, 524298, 131072, 1, 458762, 131072, 0, 458761, 65536, 0, 524297, 65536, 1, 458764, 196608, 0, 524300, 262144, 3, 524301, 458752, 0, 589837, 262144, 3, 589838, 65536, 3, 589839, 458752, 3, 524303, 262144, 0, 524304, 458752, 3, 458768, 196608, 0)
+[node name="Ground-bits" type="Sprite2D" parent="YSort"]
+position = Vector2(160, -33)
+texture = ExtResource("10_lchgv")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="MossClumpSmall" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(150, -34)
+
+[node name="MossClumpSmall5" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(312, 147)
+
+[node name="MossClumpSmall7" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(314, 143)
+
+[node name="MossClumpSmall8" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(320, 146)
+
+[node name="MossClumpSmall9" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(323, 140)
+
+[node name="MossClumpSmall10" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(315, 139)
+
+[node name="MossClumpSmall11" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(319, 142)
+
+[node name="MossClumpSmall12" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(325, 153)
+
+[node name="MossClumpSmall13" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(331, 153)
+
+[node name="MossClumpSmall14" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(329, 149)
+
+[node name="MossClumpSmall15" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(325, 149)
+
+[node name="MossClumpSmall16" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(318, 150)
+
+[node name="MossClumpSmall17" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(311, 152)
+
+[node name="MossClumpSmall18" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(327, 144)
+
+[node name="MossClumpSmall19" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(334, 146)
+
+[node name="MossClumpSmall20" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(336, 150)
+
+[node name="MossClumpSmall21" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(316, 155)
+
+[node name="MossClumpSmall22" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(308, 156)
+
+[node name="MossClumpSmall23" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(302, 148)
+
+[node name="MossClumpSmall6" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(307, 145)
+
+[node name="MossClumpSmall2" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(154, -30)
+
+[node name="MossClumpSmall3" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(163, -41)
+
+[node name="MossClumpSmall4" parent="YSort" instance=ExtResource("6_dygx3")]
+position = Vector2(144, -32)
+
+[node name="MushroomTall" parent="YSort" instance=ExtResource("11_x2r2h")]
+position = Vector2(163, -36)
+
+[node name="MushroomTall2" parent="YSort" instance=ExtResource("11_x2r2h")]
+position = Vector2(309, 143)
+
+[node name="MushroomTall3" parent="YSort" instance=ExtResource("11_x2r2h")]
+position = Vector2(319, 138)
+
+[node name="MushroomTall4" parent="YSort" instance=ExtResource("11_x2r2h")]
+position = Vector2(327, 152)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.67451, 0.67451, 0.67451, 1)

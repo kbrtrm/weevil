@@ -2518,11 +2518,6 @@ remote_path = NodePath("../../../Camera2D")
 position = Vector2(416, 99)
 texture = ExtResource("20_et0j6")
 
-[node name="Stone2" type="Sprite2D" parent="YSort"]
-position = Vector2(404, 50)
-scale = Vector2(-1, 1)
-texture = ExtResource("20_et0j6")
-
 [node name="Stones2" type="Sprite2D" parent="YSort"]
 position = Vector2(416, 110)
 texture = ExtResource("20_f1fvu")
@@ -2540,6 +2535,12 @@ y_sort_enabled = true
 
 [node name="Ground-bits" type="Sprite2D" parent="YSort/GroundBits"]
 position = Vector2(412, 81)
+texture = ExtResource("22_70771")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="Ground-bits9" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(404, 48)
 texture = ExtResource("22_70771")
 region_enabled = true
 region_rect = Rect2(96, 0, 16, 16)
@@ -2590,6 +2591,50 @@ scale = Vector2(1, -1)
 texture = ExtResource("22_70771")
 region_enabled = true
 region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Ground-bits13" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(446, 109)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits14" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(449, 113)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits15" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(458, 109)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits16" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(457, 120)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits17" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(466, 114)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits18" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(438, 121)
+texture = ExtResource("22_70771")
+offset = Vector2(0, -11)
+region_enabled = true
+region_rect = Rect2(16, 32, 32, 32)
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 visible = false
