@@ -30,7 +30,7 @@ shader_parameter/active = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qtdko"]
 radius = 3.0
-height = 13.0
+height = 16.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uk6ns"]
 animation = &"attack_left"

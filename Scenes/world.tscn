@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="8_entl1"]
 [ext_resource type="Texture2D" uid="uid://dov8l1r1ie1dw" path="res://Images/cig.png" id="8_krn53"]
 [ext_resource type="PackedScene" uid="uid://i7bo54ykex0x" path="res://Dialogue/actionable.tscn" id="8_nepb0"]
+[ext_resource type="TileSet" uid="uid://d0ugsh4q0nbit" path="res://Scenes/WallShadows.tres" id="9_fn36g"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_hqgvk"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
@@ -2374,15 +2375,6 @@ sources/0 = SubResource("TileSetAtlasSource_pd4ve")
 sources/1 = SubResource("TileSetAtlasSource_uqw4q")
 pattern_0 = SubResource("TileMapPattern_m4ggl")
 
-[sub_resource type="TileSet" id="TileSet_fx7w2"]
-tile_size = Vector2i(32, 32)
-occlusion_layer_0/light_mask = 1
-physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 0
-terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "Terrain 0"
-terrain_set_0/terrain_0/color = Color(0.501961, 0.823529, 0.25098, 1)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7tg8"]
 texture = ExtResource("20_f1fvu")
 0:0/0 = 0
@@ -2464,6 +2456,12 @@ tile_set = SubResource("TileSet_avqbg")
 format = 2
 layer_0/tile_data = PackedInt32Array(851989, 196608, 0, 917525, 196608, 1, 983061, 196608, 1, 1048597, 458752, 3, 1048596, 65536, 3, 1048595, 65536, 3, 1048594, 262144, 3, 983057, 65536, 3, 983056, 65536, 3, 983055, 65536, 3, 983054, 65536, 3, 983058, 458752, 0, 983053, 65536, 3, 983052, 262144, 3, 917516, 196608, 1, 851980, 196608, 1, 786444, 196608, 1, 720908, 262144, 0, 720909, 131072, 3, 327696, 0, 0, 327697, 65536, 0, 196625, 0, 3, 196626, 393216, 0, 196627, 131072, 0, 262163, 65536, 1, 262164, 65536, 0, 262165, 589824, 1, 196629, 0, 0, 196630, 327680, 0, 196631, 65536, 3, 196632, 65536, 3, 196633, 65536, 3, 196634, 1572865, 27, 262170, 1572865, 28, 262171, 786433, 33, 327707, 1572865, 25, 327708, 786433, 33, 393244, 262145, 6, 458780, 196608, 1, 524316, 262145, 6, 524317, 458752, 0, 589853, 196608, 1, 655389, 196608, 1, 720925, 196608, 1, 786461, 196608, 1, 851997, 196608, 2, 983069, 131072, 3, 983068, 0, 3, 262162, 0, 1, 327698, 393216, 2, 327699, 327680, 1, 327700, 65536, 2, 327701, 131072, 2, 262166, 131072, 2, 393233, 65536, 2, 393234, 65536, 2, 393235, 131072, 2, 393232, 0, 2, 196635, 1638401, 27, 196636, 1703937, 27, 262172, 1703937, 28)
 
+[node name="CliffShadows" type="TileMap" parent="YSort"]
+position = Vector2(2.08165e-12, -12)
+tile_set = ExtResource("9_fn36g")
+format = 2
+layer_0/tile_data = PackedInt32Array(524295, 0, 0, 393224, 0, 0, 786438, 0, 0, 917509, 0, 0, 917508, 0, 0, 655363, 0, 0, 655372, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 917513, 0, 0, 786450, 0, 0, 786451, 0, 0)
+
 [node name="CliffTileMap2" type="TileMap" parent="YSort"]
 y_sort_enabled = true
 tile_set = ExtResource("9_hqgvk")
@@ -2471,14 +2469,6 @@ cell_quadrant_size = 32
 format = 2
 layer_0/y_sort_enabled = true
 layer_0/tile_data = PackedInt32Array(262147, 0, 3, 262148, 393216, 0, 327684, 0, 1, 393220, 0, 2, 393221, 131072, 2, 327685, 327680, 1, 327686, 131072, 2, 262149, 65536, 0, 262150, 458752, 2, 196614, 262144, 0, 196615, 458752, 3, 131079, 262144, 0, 131080, 131072, 3, 458764, 0, 0, 524300, 589824, 1, 589836, 131072, 2, 589835, 0, 2, 524299, 0, 0, 524301, 131072, 2, 458765, 327680, 0, 458766, 65536, 3, 458767, 458752, 3, 393231, 196608, 0, 262156, 196608, 3, 524295, 196608, 0, 589833, 131072, 3, 589832, 327680, 0, 589831, 589824, 2, 589830, 65536, 3, 589829, 0, 3, 655368, 131072, 2, 655367, 0, 2, 131088, 65536, 0, 196624, 65536, 1, 393225, 196608, 3, 196623, 0, 1, 262160, 65536, 2, 262159, 0, 2, 262161, 65536, 2, 196625, 327680, 2, 131089, 131072, 0, 131087, 0, 0, 262162, 458752, 1, 196626, 131072, 0, 327699, 131072, 3, 327698, 262144, 3)
-
-[node name="CliffTileMap" type="TileMap" parent="YSort"]
-y_sort_enabled = true
-tile_set = SubResource("TileSet_fx7w2")
-cell_quadrant_size = 32
-format = 2
-layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(262147, 0, 3, 262148, 393216, 0, 327684, 0, 1, 393220, 0, 2, 393221, 131072, 2, 327685, 327680, 1, 327686, 131072, 2, 262149, 65536, 0, 262150, 458752, 2, 196614, 262144, 0, 196615, 458752, 3, 131079, 262144, 0, 131080, 131072, 3, 458764, 0, 0, 524300, 589824, 1, 589836, 131072, 2, 589835, 0, 2, 524299, 0, 0, 524301, 131072, 2, 458765, 327680, 0, 458766, 65536, 3, 458767, 458752, 3, 393231, 196608, 0, 262156, 196608, 3, 524295, 196608, 0, 589833, 131072, 3, 589832, 327680, 0, 589831, 589824, 2, 589830, 65536, 3, 589829, 0, 3, 655368, 131072, 2, 655367, 0, 2, 131088, 196608, 0, 196624, 196608, 2, 393225, 196608, 3)
 
 [node name="Stones" type="TileMap" parent="YSort"]
 visible = false

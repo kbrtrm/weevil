@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://d0ugsh4q0nbit"]
+
+[ext_resource type="Texture2D" uid="uid://y8oe14sx07yg" path="res://Images/wallshadow.png" id="1_6f7wf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6v2b6"]
+texture = ExtResource("1_6f7wf")
+texture_region_size = Vector2i(32, 16)
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/terrains_peering_bit/bottom_right_corner = 0
+0:0/0/terrains_peering_bit/bottom_side = 0
+0:0/0/terrains_peering_bit/bottom_left_corner = 0
+0:0/0/terrains_peering_bit/left_side = 0
+0:0/0/terrains_peering_bit/top_left_corner = 0
+0:0/0/terrains_peering_bit/top_side = 0
+0:0/0/terrains_peering_bit/top_right_corner = 0
+
+[resource]
+tile_size = Vector2i(32, 16)
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "WallShadows"
+terrain_set_0/terrain_0/color = Color(0.141176, 0.447059, 0.329412, 1)
+sources/0 = SubResource("TileSetAtlasSource_6v2b6")
