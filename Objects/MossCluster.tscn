@@ -5,6 +5,7 @@
 [node name="MossCluster" type="Node2D"]
 
 [node name="MossClumpSmall" parent="." instance=ExtResource("1_4a6vy")]
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall2" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(8, 2.08165e-12)
@@ -26,6 +27,7 @@ position = Vector2(-24, 2.08165e-12)
 
 [node name="MossClumpSmall8" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-32, 2.08165e-12)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall9" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(32, 2.08165e-12)
@@ -47,6 +49,7 @@ position = Vector2(-4, 3)
 
 [node name="MossClumpSmall15" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(20, 3)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall16" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-12, 3)
@@ -83,6 +86,7 @@ position = Vector2(16, 6)
 
 [node name="MossClumpSmall27" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-16, 6)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall28" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(24, 6)
@@ -173,6 +177,7 @@ position = Vector2(0, 14)
 
 [node name="MossClumpSmall57" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(8, 14)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall58" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-8, 14)
@@ -218,9 +223,11 @@ position = Vector2(-16, 16)
 
 [node name="MossClumpSmall72" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(24, 16)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall73" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-24, 16)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall74" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-32, 16)
@@ -242,6 +249,7 @@ position = Vector2(12, 19)
 
 [node name="MossClumpSmall80" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-4, 19)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall81" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(20, 19)
@@ -299,12 +307,14 @@ position = Vector2(-40, 22)
 
 [node name="MossClumpSmall99" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(40, 22)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall100" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(0, 24)
 
 [node name="MossClumpSmall101" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(8, 24)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall102" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-8, 24)
@@ -323,6 +333,7 @@ position = Vector2(-24, 24)
 
 [node name="MossClumpSmall107" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-32, 24)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall108" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(32, 24)
@@ -353,6 +364,7 @@ position = Vector2(28, 27)
 
 [node name="MossClumpSmall117" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-20, 27)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall118" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-28, 27)
@@ -440,9 +452,11 @@ position = Vector2(12, 35)
 
 [node name="MossClumpSmall146" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-4, 35)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall147" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(20, 35)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall148" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-12, 35)
@@ -479,6 +493,7 @@ position = Vector2(16, 38)
 
 [node name="MossClumpSmall159" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-16, 38)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall160" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(24, 38)
@@ -488,6 +503,7 @@ position = Vector2(-24, 38)
 
 [node name="MossClumpSmall162" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-32, 38)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall163" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(32, 38)
@@ -524,6 +540,7 @@ position = Vector2(-32, 40)
 
 [node name="MossClumpSmall174" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(32, 40)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall175" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-40, 40)
@@ -566,6 +583,7 @@ position = Vector2(44, 43)
 
 [node name="MossClumpSmall188" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(0, 46)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall189" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(8, 46)
@@ -578,6 +596,7 @@ position = Vector2(16, 46)
 
 [node name="MossClumpSmall192" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-16, 46)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall193" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(24, 46)
@@ -587,6 +606,7 @@ position = Vector2(-24, 46)
 
 [node name="MossClumpSmall195" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(-32, 46)
+scale = Vector2(-1, 1)
 
 [node name="MossClumpSmall196" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(32, 46)
@@ -596,3 +616,4 @@ position = Vector2(-40, 46)
 
 [node name="MossClumpSmall198" parent="." instance=ExtResource("1_4a6vy")]
 position = Vector2(40, 46)
+scale = Vector2(-1, 1)

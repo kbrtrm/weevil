@@ -4,8 +4,10 @@ extends Node2D
 @onready var mossMaterial = $MossClumpMaterial
 # Called when the node enters the scene tree for the first time.
 
+
 func _ready():
-	choose_random_flip(mossMaterial)
+	pass
+#	choose_random_flip(mossMaterial)
 
 
 func _on_area_2d_body_entered(body):

@@ -521,7 +521,7 @@ visible = true
 self_modulate = Color(1, 1, 1, 0.337255)
 z_index = -2
 
-[node name="RemoteTransform2D" parent="YSort/Player" index="14"]
+[node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")
 
 [node name="MushroomTall5" parent="YSort" instance=ExtResource("11_x2r2h")]

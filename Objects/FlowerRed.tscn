@@ -1,0 +1,142 @@
+[gd_scene load_steps=8 format=3 uid="uid://bn8sqnfqbho6t"]
+
+[ext_resource type="Script" path="res://Objects/MossClumpSmall.gd" id="1_h74np"]
+[ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_eivsv"]
+[ext_resource type="Texture2D" uid="uid://cy3oiiy76sykn" path="res://Images/ground-bits.png" id="3_key40"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v2d4m"]
+size = Vector2(4, 4)
+
+[sub_resource type="Animation" id="Animation_ahw8b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MossClumpMaterial:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MossClumpMaterial:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GPUParticles2D:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ef8o6"]
+resource_name = "wiggle"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MossClumpMaterial:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.0872665, -0.0174533, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("MossClumpMaterial:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.95), Vector2(1, 0.95), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/path = NodePath("GPUParticles2D:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [false, true, true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lb3dm"]
+_data = {
+"RESET": SubResource("Animation_ahw8b"),
+"wiggle": SubResource("Animation_ef8o6")
+}
+
+[node name="MushroomTall" type="Node2D"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+script = ExtResource("1_h74np")
+
+[node name="MushroomShadow" type="Sprite2D" parent="."]
+position = Vector2(-2.08165e-12, 3)
+scale = Vector2(0.571429, 1)
+texture = ExtResource("2_eivsv")
+
+[node name="MossClumpMaterial" type="Sprite2D" parent="."]
+position = Vector2(-2.08165e-12, 2)
+texture = ExtResource("3_key40")
+offset = Vector2(4.1633e-12, -23)
+region_enabled = true
+region_rect = Rect2(96, 80, 16, 48)
+
+[node name="Sprite2D" type="Sprite2D" parent="MossClumpMaterial"]
+position = Vector2(3, -50)
+texture = ExtResource("3_key40")
+region_enabled = true
+region_rect = Rect2(0, 64, 32, 32)
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(2.08165e-12, 2)
+shape = SubResource("RectangleShape2D_v2d4m")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lb3dm")
+}
+
+[node name="GPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(-2.08165e-12, -16)
+emitting = false
+amount = 6
+lifetime = 0.65
+explosiveness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(4, 1)
+particle_flag_align_y = true
+gravity = Vector2(2.08165e-12, 100)
+color = Color(0.854902, 0.831373, 0.658824, 0.466667)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

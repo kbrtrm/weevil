@@ -10,7 +10,8 @@ extends CharacterBody2D
 enum {
 	MOVE,
 	ROLL,
-	ATTACK
+	ATTACK,
+	JUMP
 }
 
 var state = MOVE
@@ -18,6 +19,7 @@ var roll_vector = Vector2.DOWN
 var stats = PlayerStats
 
 @onready var animationPlayer = $AnimationPlayer
+@onready var animationJump = $AnimationJump
 @onready var animtree = $AnimationTree
 @onready var animstate = animtree.get("parameters/playback")
 @onready var swordhitbox = $HitboxPivot/SwordHitbox
@@ -27,6 +29,7 @@ var stats = PlayerStats
 @onready var audioPlayer = $AudioStreamPlayer
 @onready var footstepSound = $FootstepSound
 @onready var actionable_finder = $Direction/ActionableFinder
+@onready var sprite = $Sprite2D
 
 func _ready():
 	stats.no_health.connect(queue_free)
@@ -43,6 +46,9 @@ func _process(delta):
 			
 		ATTACK:
 			attack_state()
+			
+		JUMP:
+			jump_state()
 			
 			
 func _unhandled_input(_event: InputEvent):
@@ -83,6 +89,9 @@ func move_state():
 	if Input.is_action_just_pressed("attack"):
 		state = ATTACK
 		
+	if Input.is_action_just_pressed("jump"):
+		state = JUMP
+		
 func roll_state():
 	#control movement during roll
 #	var input_vector = Vector2.ZERO
@@ -101,6 +110,10 @@ func attack_state():
 	
 func move():
 	move_and_slide()
+	
+func jump_state():
+	animationJump.play("jump")
+	state = MOVE
 	
 func roll_animation_finished():
 	state = MOVE

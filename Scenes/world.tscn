@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
@@ -15,12 +15,18 @@
 [ext_resource type="TileSet" uid="uid://d0ugsh4q0nbit" path="res://Scenes/WallShadows.tres" id="9_fn36g"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_hqgvk"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
+[ext_resource type="PackedScene" uid="uid://bn8sqnfqbho6t" path="res://Objects/FlowerRed.tscn" id="16_a4syf"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="16_py4mx"]
 [ext_resource type="Texture2D" uid="uid://baeg1m4v5ywwq" path="res://Images/stone1.png" id="20_et0j6"]
 [ext_resource type="Texture2D" uid="uid://b3g241ww8p3l" path="res://Images/stones.png" id="20_f1fvu"]
 [ext_resource type="Texture2D" uid="uid://cy3oiiy76sykn" path="res://Images/ground-bits.png" id="22_70771"]
+[ext_resource type="PackedScene" uid="uid://crlh8610o7141" path="res://Objects/FlowerVioletBell.tscn" id="22_d686i"]
+[ext_resource type="PackedScene" uid="uid://bjp6gsoust7s6" path="res://Objects/FlowerAvalancheLily.tscn" id="22_mdlq6"]
 [ext_resource type="PackedScene" uid="uid://1fcpi2rqusxk" path="res://Objects/MushroomTall.tscn" id="22_qn5d2"]
+[ext_resource type="PackedScene" uid="uid://hn1rpa1uhpa6" path="res://Objects/FlowerBlueBell.tscn" id="23_e8ppn"]
+[ext_resource type="PackedScene" uid="uid://bqmmr6bnmif1p" path="res://Objects/FlowerPink.tscn" id="25_sm30s"]
+[ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yw28x"]
 shader = ExtResource("3_mp063")
@@ -2401,9 +2407,9 @@ script = ExtResource("1_nwgro")
 [node name="PuddleBG" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_yw28x")
 offset_left = 108.0
-offset_top = -100.0
+offset_top = -96.0
 offset_right = 596.0
-offset_bottom = 216.0
+offset_bottom = 220.0
 texture = ExtResource("1_6ee3a")
 stretch_mode = 1
 
@@ -2416,7 +2422,7 @@ layer_0/tile_data = PackedInt32Array(-393211, 196611, 0, -327675, 3, 0, -262139,
 
 [node name="Ground-bits10" type="Sprite2D" parent="."]
 z_index = 2
-position = Vector2(312, 64)
+position = Vector2(352, 68)
 texture = ExtResource("22_70771")
 offset = Vector2(0, -8)
 region_enabled = true
@@ -2431,7 +2437,7 @@ region_enabled = true
 region_rect = Rect2(112, 16, 16, 16)
 
 [node name="Camera2D" parent="." instance=ExtResource("2_bhbb1")]
-position = Vector2(376, 68)
+position = Vector2(308, 68)
 zoom = Vector2(1.5, 1.5)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
@@ -2439,6 +2445,14 @@ position = Vector2(168, -48)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
 position = Vector2(580, 180)
+
+[node name="CliffShadows" type="TileMap" parent="."]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(2.08165e-12, -12)
+tile_set = ExtResource("9_fn36g")
+format = 2
+layer_0/tile_data = PackedInt32Array(393224, 0, 0, 393223, 0, 0, 262153, 0, 0, 262158, 0, 0, 393231, 0, 0, 393232, 0, 0, 10, 0, 0, 13, 0, 0, 262150, 0, 0, 5, 0, 0, 4, 0, 0, 18, 0, 0, 131089, 0, 0)
 
 [node name="YSort" type="Node2D" parent="."]
 z_index = 3
@@ -2456,19 +2470,13 @@ tile_set = SubResource("TileSet_avqbg")
 format = 2
 layer_0/tile_data = PackedInt32Array(851989, 196608, 0, 917525, 196608, 1, 983061, 196608, 1, 1048597, 458752, 3, 1048596, 65536, 3, 1048595, 65536, 3, 1048594, 262144, 3, 983057, 65536, 3, 983056, 65536, 3, 983055, 65536, 3, 983054, 65536, 3, 983058, 458752, 0, 983053, 65536, 3, 983052, 262144, 3, 917516, 196608, 1, 851980, 196608, 1, 786444, 196608, 1, 720908, 262144, 0, 720909, 131072, 3, 327696, 0, 0, 327697, 65536, 0, 196625, 0, 3, 196626, 393216, 0, 196627, 131072, 0, 262163, 65536, 1, 262164, 65536, 0, 262165, 589824, 1, 196629, 0, 0, 196630, 327680, 0, 196631, 65536, 3, 196632, 65536, 3, 196633, 65536, 3, 196634, 1572865, 27, 262170, 1572865, 28, 262171, 786433, 33, 327707, 1572865, 25, 327708, 786433, 33, 393244, 262145, 6, 458780, 196608, 1, 524316, 262145, 6, 524317, 458752, 0, 589853, 196608, 1, 655389, 196608, 1, 720925, 196608, 1, 786461, 196608, 1, 851997, 196608, 2, 983069, 131072, 3, 983068, 0, 3, 262162, 0, 1, 327698, 393216, 2, 327699, 327680, 1, 327700, 65536, 2, 327701, 131072, 2, 262166, 131072, 2, 393233, 65536, 2, 393234, 65536, 2, 393235, 131072, 2, 393232, 0, 2, 196635, 1638401, 27, 196636, 1703937, 27, 262172, 1703937, 28)
 
-[node name="CliffShadows" type="TileMap" parent="YSort"]
-position = Vector2(2.08165e-12, -12)
-tile_set = ExtResource("9_fn36g")
-format = 2
-layer_0/tile_data = PackedInt32Array(524295, 0, 0, 393224, 0, 0, 786438, 0, 0, 917509, 0, 0, 917508, 0, 0, 655363, 0, 0, 655372, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 917513, 0, 0, 786450, 0, 0, 786451, 0, 0)
-
 [node name="CliffTileMap2" type="TileMap" parent="YSort"]
 y_sort_enabled = true
 tile_set = ExtResource("9_hqgvk")
 cell_quadrant_size = 32
 format = 2
 layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(262147, 0, 3, 262148, 393216, 0, 327684, 0, 1, 393220, 0, 2, 393221, 131072, 2, 327685, 327680, 1, 327686, 131072, 2, 262149, 65536, 0, 262150, 458752, 2, 196614, 262144, 0, 196615, 458752, 3, 131079, 262144, 0, 131080, 131072, 3, 458764, 0, 0, 524300, 589824, 1, 589836, 131072, 2, 589835, 0, 2, 524299, 0, 0, 524301, 131072, 2, 458765, 327680, 0, 458766, 65536, 3, 458767, 458752, 3, 393231, 196608, 0, 262156, 196608, 3, 524295, 196608, 0, 589833, 131072, 3, 589832, 327680, 0, 589831, 589824, 2, 589830, 65536, 3, 589829, 0, 3, 655368, 131072, 2, 655367, 0, 2, 131088, 65536, 0, 196624, 65536, 1, 393225, 196608, 3, 196623, 0, 1, 262160, 65536, 2, 262159, 0, 2, 262161, 65536, 2, 196625, 327680, 2, 131089, 131072, 0, 131087, 0, 0, 262162, 458752, 1, 196626, 131072, 0, 327699, 131072, 3, 327698, 262144, 3)
+layer_0/tile_data = PackedInt32Array(131088, 131072, 2, 131087, 0, 2, -65527, 327680, 1, -65526, 65536, 2, -65525, 65536, 2, -65524, 65536, 2, -65523, 65536, 2, -65522, 393216, 1, 14, 0, 1, 9, 131072, 1, 8, 65536, 1, 65545, 131072, 2, 65544, 327680, 1, 65550, 0, 2, 65551, 393216, 1, 15, 65536, 1, -65521, 65536, 1, -65520, 65536, 1, -131057, 65536, 1, -131058, 65536, 1, -131059, 65536, 1, -131060, 65536, 1, -131061, 65536, 1, -131062, 65536, 1, -131063, 65536, 1, -65528, 65536, 1, 7, 65536, 1, 65543, 393216, 1, 16, 327680, 1, 65552, 131072, 1, 131079, 0, 2, 131080, 131072, 2, 65542, 0, 2, -196595, 65536, 0, -65518, 131072, 2, -131054, 131072, 1, -196590, 131072, 0, -65519, 327680, 1, -131055, 65536, 1, -196591, 65536, 0, -131056, 65536, 1, -196592, 65536, 0, -196593, 65536, 0, -196594, 65536, 0, -196596, 65536, 0, -196597, 65536, 0, -196598, 65536, 0, -196599, 65536, 0, -131064, 65536, 1, -196600, 65536, 0, -65529, 65536, 1, -131065, 65536, 1, -196601, 65536, 0, -65530, 393216, 1, -131066, 65536, 1, -196602, 65536, 0, -65531, 65536, 2, -131067, 65536, 1, -196603, 65536, 0, -65532, 0, 2, -131068, 0, 1, -196604, 0, 0, 17, 131072, 2, 6, 0, 1)
 
 [node name="Stones" type="TileMap" parent="YSort"]
 visible = false
@@ -2477,8 +2485,14 @@ tile_set = SubResource("TileSet_2m5mm")
 format = 2
 layer_0/tile_data = PackedInt32Array(327707, 196608, 0, 131100, 196608, 0, 196636, 65536, 0, 196635, 131072, 0)
 
+[node name="Terb-shadow" type="Sprite2D" parent="YSort"]
+position = Vector2(432, 46)
+scale = Vector2(1.71429, 1.25)
+texture = ExtResource("7_a1hen")
+offset = Vector2(0, -2)
+
 [node name="Pot" parent="YSort" instance=ExtResource("16_d4k56")]
-position = Vector2(380, 32)
+position = Vector2(384, 32)
 collision_mask = 3
 
 [node name="Door" type="Area2D" parent="YSort/Pot"]
@@ -2491,7 +2505,7 @@ position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_s5esn")
 
 [node name="Player" parent="YSort" instance=ExtResource("1_c3ret")]
-position = Vector2(376, 68)
+position = Vector2(308, 68)
 
 [node name="PointLight2D" parent="YSort/Player" index="0"]
 energy = 0.57
@@ -2501,7 +2515,7 @@ texture_scale = 0.42
 visible = true
 z_index = -2
 
-[node name="RemoteTransform2D" parent="YSort/Player" index="14"]
+[node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")
 
 [node name="Stone1" type="Sprite2D" parent="YSort"]
@@ -2559,6 +2573,25 @@ texture = ExtResource("22_70771")
 region_enabled = true
 region_rect = Rect2(16, 16, 16, 16)
 
+[node name="Ground-bits10" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(430, 133)
+texture = ExtResource("22_70771")
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
+[node name="Ground-bits23" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(398, 50)
+texture = ExtResource("22_70771")
+flip_h = true
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
+[node name="Ground-bits24" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(348, 45)
+texture = ExtResource("22_70771")
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
 [node name="Ground-bits5" type="Sprite2D" parent="YSort/GroundBits"]
 visible = false
 position = Vector2(432, 99)
@@ -2567,9 +2600,9 @@ region_enabled = true
 region_rect = Rect2(16, 16, 16, 16)
 
 [node name="Ground-bits6" type="Sprite2D" parent="YSort/GroundBits"]
-position = Vector2(320, 27)
+position = Vector2(328, 36)
 rotation = 3.14159
-scale = Vector2(1, -1)
+scale = Vector2(1, -1.00002)
 texture = ExtResource("22_70771")
 region_enabled = true
 region_rect = Rect2(16, 16, 16, 16)
@@ -2612,6 +2645,37 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(80, 32, 16, 16)
 
+[node name="Ground-bits25" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(408, 114)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits20" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(410, 52)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits21" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(418, 54)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Ground-bits22" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(426, 51)
+texture = ExtResource("22_70771")
+offset = Vector2(0, 1)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
 [node name="Ground-bits17" type="Sprite2D" parent="YSort/GroundBits"]
 position = Vector2(466, 114)
 texture = ExtResource("22_70771")
@@ -2625,6 +2689,16 @@ texture = ExtResource("22_70771")
 offset = Vector2(0, -11)
 region_enabled = true
 region_rect = Rect2(16, 32, 32, 32)
+
+[node name="Ground-bits19" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(418, 106)
+texture = ExtResource("22_70771")
+offset = Vector2(0, -11)
+region_enabled = true
+region_rect = Rect2(16, 32, 32, 32)
+
+[node name="MushroomTall9" parent="YSort" instance=ExtResource("16_a4syf")]
+position = Vector2(428, 92)
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 visible = false
@@ -2655,13 +2729,16 @@ shape = SubResource("CircleShape2D_g38ux")
 position = Vector2(422, 103)
 
 [node name="MushroomTall5" parent="YSort" instance=ExtResource("22_qn5d2")]
-position = Vector2(344, 107)
+position = Vector2(464, 128)
 
 [node name="MushroomTall6" parent="YSort" instance=ExtResource("22_qn5d2")]
-position = Vector2(360, 116)
+position = Vector2(449, 132)
 
 [node name="MushroomTall7" parent="YSort" instance=ExtResource("22_qn5d2")]
-position = Vector2(369, 102)
+position = Vector2(458, 118)
+
+[node name="MushroomTall8" parent="YSort" instance=ExtResource("22_qn5d2")]
+position = Vector2(352, 44)
 
 [node name="MushroomTall2" parent="YSort" instance=ExtResource("22_qn5d2")]
 position = Vector2(432, 82)
@@ -2678,8 +2755,44 @@ y_sort_enabled = true
 [node name="MossClumpSmall" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(404, 98)
 
-[node name="MossClumpSmall58" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+[node name="MossClumpSmall68" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(404, 98)
+
+[node name="MossClumpSmall58" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(364, 47)
+
+[node name="MossClumpSmall69" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(356, 46)
+
+[node name="MossClumpSmall70" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(360, 50)
+
+[node name="MossClumpSmall71" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(396, 48)
+
+[node name="MossClumpSmall72" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(402, 51)
+
+[node name="MossClumpSmall73" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(412, 44)
+
+[node name="MossClumpSmall74" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(414, 48)
+
+[node name="MossClumpSmall75" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(418, 46)
+
+[node name="MossClumpSmall76" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(420, 43)
+
+[node name="MossClumpSmall77" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(426, 46)
+
+[node name="MossClumpSmall78" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(432, 46)
+
+[node name="MossClumpSmall79" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(422, 49)
 
 [node name="MossClumpSmall29" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(426, 96)
@@ -2861,6 +2974,90 @@ position = Vector2(428, 123)
 [node name="MossClumpSmall62" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(432, 123)
 
+[node name="MossClumpSmall80" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(423, 121)
+
+[node name="MossClumpSmall81" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(409, 123)
+
+[node name="MossClumpSmall82" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(412, 127)
+
+[node name="MossClumpSmall83" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(418, 115)
+
+[node name="MossClumpSmall84" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(405, 127)
+
+[node name="MossClumpSmall85" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(420, 125)
+
+[node name="MossClumpSmall86" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(418, 128)
+
+[node name="MossClumpSmall87" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(413, 131)
+
+[node name="MossClumpSmall88" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(420, 132)
+
+[node name="MossClumpSmall90" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(388, 130)
+
+[node name="MossClumpSmall91" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(396, 135)
+
+[node name="MossClumpSmall92" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(399, 125)
+
+[node name="MossClumpSmall93" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(404, 133)
+
+[node name="MossClumpSmall94" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(404, 133)
+
+[node name="MossClumpSmall95" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(409, 135)
+
+[node name="MossClumpSmall99" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(450, 126)
+
+[node name="MossClumpSmall102" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(454, 128)
+
+[node name="MossClumpSmall103" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(452, 119)
+
+[node name="MossClumpSmall104" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(442, 125)
+
+[node name="MossClumpSmall105" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(440, 130)
+
+[node name="MossClumpSmall106" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(443, 132)
+
+[node name="MossClumpSmall107" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(444, 128)
+
+[node name="MossClumpSmall100" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(445, 121)
+
+[node name="MossClumpSmall101" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(445, 121)
+
+[node name="MossClumpSmall96" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(399, 129)
+
+[node name="MossClumpSmall97" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(392, 128)
+
+[node name="MossClumpSmall98" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(398, 131)
+
+[node name="MossClumpSmall89" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(434, 127)
+
 [node name="MossClumpSmall63" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(438, 121)
 
@@ -2875,6 +3072,43 @@ position = Vector2(440, 109)
 
 [node name="MossClumpSmall67" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(440, 109)
+
+[node name="MushroomTall13" parent="YSort" instance=ExtResource("22_d686i")]
+position = Vector2(426, 105)
+
+[node name="MushroomTall10" parent="YSort" instance=ExtResource("22_mdlq6")]
+position = Vector2(460, 91)
+
+[node name="MushroomTall11" parent="YSort" instance=ExtResource("22_mdlq6")]
+position = Vector2(406, 97)
+scale = Vector2(-1, 1)
+
+[node name="MushroomTall12" parent="YSort" instance=ExtResource("23_e8ppn")]
+position = Vector2(452, 107)
+
+[node name="MushroomTall14" parent="YSort" instance=ExtResource("25_sm30s")]
+position = Vector2(468, 112)
+
+[node name="MushroomTall15" parent="YSort" instance=ExtResource("25_sm30s")]
+position = Vector2(474, 122)
+
+[node name="MushroomTall18" parent="YSort" instance=ExtResource("25_sm30s")]
+position = Vector2(399, 122)
+scale = Vector2(-1, 1)
+
+[node name="MushroomTall19" parent="YSort" instance=ExtResource("25_sm30s")]
+position = Vector2(405, 131)
+scale = Vector2(-1, 1)
+
+[node name="MushroomTall20" parent="YSort" instance=ExtResource("25_sm30s")]
+position = Vector2(392, 133)
+scale = Vector2(-1, 1)
+
+[node name="MushroomTall16" parent="YSort" instance=ExtResource("26_d4n0h")]
+position = Vector2(413, 125)
+
+[node name="MushroomTall17" parent="YSort" instance=ExtResource("26_d4n0h")]
+position = Vector2(452, 84)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
@@ -2895,6 +3129,7 @@ visible = false
 position = Vector2(216, 28)
 collision_layer = 3
 collision_mask = 3
+monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ZoomArea"]
 position = Vector2(9, 1)
