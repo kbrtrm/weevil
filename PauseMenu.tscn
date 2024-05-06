@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://cwmac8dvyokld"]
+[gd_scene load_steps=18 format=3 uid="uid://cwmac8dvyokld"]
 
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_2jgtw"]
 [ext_resource type="Texture2D" uid="uid://beyxtu38w0vao" path="res://Images/weevil-panel.png" id="2_ywu6f"]
+[ext_resource type="FontFile" uid="uid://ciocjsl7wxrkb" path="res://Themes/TerbAlpha.ttf" id="3_daoji"]
 [ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="3_qajoy"]
-[ext_resource type="FontFile" uid="uid://cy1qaj3vkd4c" path="res://Themes/chunkypeep-Regular.otf" id="4_b53a1"]
+[ext_resource type="FontFile" uid="uid://ctahmus3i348d" path="res://Themes/TinyClick.otf" id="4_t22hf"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_ayafd"]
 [ext_resource type="Texture2D" uid="uid://cvfblad1jj2ah" path="res://Images/stripe-bar-bg.png" id="5_ti72n"]
 
@@ -162,32 +163,53 @@ theme_override_constants/separation = 8
 [node name="PlayerStatus" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="Name" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="Label" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/Name"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_b53a1")
-theme_override_font_sizes/font_size = 12
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 24
 text = "Terby"
 
-[node name="Level" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/Name"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="Level" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/Name/MarginContainer"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("5_ayafd")
-theme_override_font_sizes/font_size = 12
+theme_override_fonts/font = ExtResource("4_t22hf")
+theme_override_font_sizes/font_size = 8
 text = "Level 1"
 
-[node name="XP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="XPVbox" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="XP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer/XPVbox"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("5_ayafd")
-theme_override_font_sizes/font_size = 12
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("4_t22hf")
+theme_override_font_sizes/font_size = 8
 text = "XP 0/100"
 
-[node name="TextureProgressBar2" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="TextureProgressBar2" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer/XPVbox"]
 texture_repeat = 2
 layout_mode = 2
 size_flags_vertical = 3
@@ -200,15 +222,25 @@ texture_progress = ExtResource("5_ti72n")
 tint_under = Color(0.203922, 1, 1, 1)
 tint_progress = Color(0.411765, 0, 0.411765, 1)
 
-[node name="HP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="HPVbox" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer2/HPVbox"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("5_ayafd")
-theme_override_font_sizes/font_size = 12
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("4_t22hf")
+theme_override_font_sizes/font_size = 8
 text = "HP 27/30	"
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer2/HPVbox"]
 layout_mode = 2
 texture_under = ExtResource("5_ti72n")
 
@@ -237,23 +269,31 @@ size_flags_vertical = 3
 
 [node name="Resume" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 16
 text = "Resume"
 alignment = 0
 
 [node name="Settings" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 16
 text = "Settings
 "
 alignment = 0
 
 [node name="Save" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 16
 text = "Save
 "
 alignment = 0
 
 [node name="Quit" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 16
 text = "Quit"
 alignment = 0
 
@@ -295,6 +335,8 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 theme_override_constants/side_margin = 0
 theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_daoji")
+theme_override_font_sizes/font_size = 16
 theme_override_styles/panel = SubResource("StyleBoxFlat_g6xva")
 
 [node name="Equip" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
@@ -343,7 +385,7 @@ text = "Items"
 visible = false
 layout_mode = 2
 
-[node name="Goals" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+[node name="Journal" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
