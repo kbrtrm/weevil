@@ -49,6 +49,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg", "res://addons/scene_manager/plugin.cfg")
 
+[gui]
+
+theme/custom_font="res://Themes/chunkypeep-Regular.otf"
+
 [importer_defaults]
 
 texture={

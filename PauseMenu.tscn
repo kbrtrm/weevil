@@ -1,60 +1,318 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwmac8dvyokld"]
+[gd_scene load_steps=16 format=3 uid="uid://cwmac8dvyokld"]
 
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_2jgtw"]
+[ext_resource type="Texture2D" uid="uid://beyxtu38w0vao" path="res://Images/weevil-panel.png" id="2_ywu6f"]
+[ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="3_qajoy"]
+[ext_resource type="FontFile" uid="uid://cy1qaj3vkd4c" path="res://Themes/chunkypeep-Regular.otf" id="4_b53a1"]
+[ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_ayafd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c85ce"]
+bg_color = Color(0.188235, 0.188235, 0.211765, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rcgys"]
+bg_color = Color(0.27451, 0.270588, 0.305882, 1)
+border_color = Color(0.239216, 0.239216, 0.266667, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adx8i"]
+bg_color = Color(0.239216, 0.239216, 0.266667, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3gvgl"]
+border_color = Color(0.827451, 0.796078, 0.737255, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_828jx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tem81"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.101961, 0.101961, 0.113725, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v13r0"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.27451, 0.270588, 0.305882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+expand_margin_bottom = 1.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snl5v"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.109804, 0.109804, 0.12549, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.239216, 0.239216, 0.266667, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+anti_aliasing = false
+
+[sub_resource type="Theme" id="Theme_evptb"]
+default_font_size = 12
+Button/font_sizes/font_size = 12
+Button/styles/hover = SubResource("StyleBoxFlat_c85ce")
+Button/styles/normal = SubResource("StyleBoxFlat_rcgys")
+Label/font_sizes/font_size = 12
+TabBar/font_sizes/font_size = 12
+TabBar/styles/tab_selected = SubResource("StyleBoxFlat_adx8i")
+TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_3gvgl")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_828jx")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_tem81")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_v13r0")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_snl5v")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g6xva"]
+bg_color = Color(0.27451, 0.270588, 0.305882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_evptb")
 script = ExtResource("1_2jgtw")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.219608, 0.247059, 0.313726, 0.407843)
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="GridContainer" type="GridContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
+layout_mode = 2
 theme_override_constants/v_separation = 8
 
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="MenuContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Pause"
+theme_override_constants/separation = 8
 
-[node name="ButtonResume" type="Button" parent="GridContainer"]
+[node name="SidePanel" type="VBoxContainer" parent="MarginContainer/MenuContainer"]
+custom_minimum_size = Vector2(182, 2.08165e-12)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatusMargin" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel"]
+layout_mode = 2
+
+[node name="ColorRect" type="NinePatchRect" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin"]
+layout_mode = 2
+texture = ExtResource("2_ywu6f")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="StatusPanel" type="HBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerStatus" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("4_b53a1")
+theme_override_font_sizes/font_size = 12
+text = "Terby"
+
+[node name="Level" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("5_ayafd")
+theme_override_font_sizes/font_size = 12
+text = "Level 1"
+
+[node name="MenuMargin" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel"]
+layout_mode = 2
+
+[node name="ColorRect" type="NinePatchRect" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin"]
+layout_mode = 2
+texture = ExtResource("2_ywu6f")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GameOptions" type="VBoxContainer" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Resume" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Resume"
 
-[node name="Settings" type="Button" parent="GridContainer"]
+[node name="Settings" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Settings
 "
 
-[node name="Quit" type="Button" parent="GridContainer"]
+[node name="Save" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
+layout_mode = 2
+text = "Save
+"
+
+[node name="Quit" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Quit"
 
-[connection signal="pressed" from="GridContainer/ButtonResume" to="." method="_on_button_resume_pressed"]
-[connection signal="pressed" from="GridContainer/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="GridContainer/Quit" to="." method="_on_quit_pressed"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="version" type="Label" parent="MarginContainer/MenuContainer/SidePanel/MarginContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ayafd")
+theme_override_font_sizes/font_size = 8
+
+[node name="MainPanel" type="VBoxContainer" parent="MarginContainer/MenuContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 0
+
+[node name="ColorRect" type="NinePatchRect" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_ywu6f")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/side_margin = 0
+theme_override_constants/outline_size = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_g6xva")
+
+[node name="Equip" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Label" type="Label" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Equip"]
+layout_mode = 2
+text = "Equipment"
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Equip"]
+custom_minimum_size = Vector2(64, 80)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+color = Color(0.458824, 0.294118, 0.87451, 1)
+
+[node name="PlayerPeek" type="CenterContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Equip/ColorRect"]
+custom_minimum_size = Vector2(64, 80)
+layout_mode = 2
+offset_right = 64.0
+offset_bottom = 80.0
+size_flags_horizontal = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Equip/ColorRect/PlayerPeek"]
+custom_minimum_size = Vector2(44, 50)
+layout_mode = 2
+texture = ExtResource("3_qajoy")
+
+[node name="Items" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Label" type="Label" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items"]
+layout_mode = 2
+text = "Items"
+
+[node name="Combine" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Goals" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Map" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Resume" to="." method="_on_button_resume_pressed"]
+[connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Save" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Quit" to="." method="_on_quit_pressed"]
