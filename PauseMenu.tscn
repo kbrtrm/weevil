@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://cwmac8dvyokld"]
+[gd_scene load_steps=17 format=3 uid="uid://cwmac8dvyokld"]
 
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_2jgtw"]
 [ext_resource type="Texture2D" uid="uid://beyxtu38w0vao" path="res://Images/weevil-panel.png" id="2_ywu6f"]
 [ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="3_qajoy"]
 [ext_resource type="FontFile" uid="uid://cy1qaj3vkd4c" path="res://Themes/chunkypeep-Regular.otf" id="4_b53a1"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_ayafd"]
+[ext_resource type="Texture2D" uid="uid://cvfblad1jj2ah" path="res://Images/stripe-bar-bg.png" id="5_ti72n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c85ce"]
 bg_color = Color(0.188235, 0.188235, 0.211765, 1)
@@ -178,6 +179,39 @@ theme_override_fonts/font = ExtResource("5_ayafd")
 theme_override_font_sizes/font_size = 12
 text = "Level 1"
 
+[node name="XP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("5_ayafd")
+theme_override_font_sizes/font_size = 12
+text = "XP 0/100"
+
+[node name="TextureProgressBar2" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+texture_repeat = 2
+layout_mode = 2
+size_flags_vertical = 3
+min_value = 45.0
+value = 90.0
+nine_patch_stretch = true
+stretch_margin_top = 4
+texture_under = ExtResource("5_ti72n")
+texture_progress = ExtResource("5_ti72n")
+tint_under = Color(0.203922, 1, 1, 1)
+tint_progress = Color(0.411765, 0, 0.411765, 1)
+
+[node name="HP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("5_ayafd")
+theme_override_font_sizes/font_size = 12
+text = "HP 27/30	"
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus"]
+layout_mode = 2
+texture_under = ExtResource("5_ti72n")
+
 [node name="MenuMargin" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel"]
 layout_mode = 2
 
@@ -204,20 +238,24 @@ size_flags_vertical = 3
 [node name="Resume" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Resume"
+alignment = 0
 
 [node name="Settings" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Settings
 "
+alignment = 0
 
 [node name="Save" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Save
 "
+alignment = 0
 
 [node name="Quit" type="Button" parent="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions"]
 layout_mode = 2
 text = "Quit"
+alignment = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MenuContainer/SidePanel"]
 layout_mode = 2
@@ -290,6 +328,7 @@ layout_mode = 2
 texture = ExtResource("3_qajoy")
 
 [node name="Items" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
