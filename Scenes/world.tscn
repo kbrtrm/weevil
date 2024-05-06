@@ -1,10 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=39 format=3 uid="uid://b0kityejrtyxw"]
 
-[ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_6ee3a"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_nwgro"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="2_bhbb1"]
-[ext_resource type="Shader" path="res://Scenes/pooddles.gdshader" id="3_mp063"]
 [ext_resource type="Texture2D" uid="uid://cf8lk5738a1g1" path="res://Images/PathTileset.png" id="3_q1bir"]
 [ext_resource type="Texture2D" uid="uid://47mrx0k4e88g" path="res://Images/diagonal-tilemap-DIRTPATHex.png" id="4_84in7"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_gtfkr"]
@@ -27,9 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://hn1rpa1uhpa6" path="res://Objects/FlowerBlueBell.tscn" id="23_e8ppn"]
 [ext_resource type="PackedScene" uid="uid://bqmmr6bnmif1p" path="res://Objects/FlowerPink.tscn" id="25_sm30s"]
 [ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yw28x"]
-shader = ExtResource("3_mp063")
+[ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
 texture = ExtResource("4_gtfkr")
@@ -2404,14 +2400,12 @@ radius = 4.12311
 [node name="World" type="Node2D"]
 script = ExtResource("1_nwgro")
 
-[node name="PuddleBG" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_yw28x")
+[node name="PuddleBG" type="ColorRect" parent="."]
 offset_left = 108.0
 offset_top = -96.0
 offset_right = 596.0
 offset_bottom = 220.0
-texture = ExtResource("1_6ee3a")
-stretch_mode = 1
+color = Color(0.556863, 0.85098, 0.905882, 1)
 
 [node name="GroundTiles" type="TileMap" parent="."]
 z_index = 2
@@ -2999,6 +2993,7 @@ position = Vector2(418, 128)
 position = Vector2(413, 131)
 
 [node name="MossClumpSmall88" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
 position = Vector2(420, 132)
 
 [node name="MossClumpSmall90" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
@@ -3017,7 +3012,7 @@ position = Vector2(404, 133)
 position = Vector2(404, 133)
 
 [node name="MossClumpSmall95" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
-position = Vector2(409, 135)
+position = Vector2(409, 144)
 
 [node name="MossClumpSmall99" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(450, 126)
@@ -3134,6 +3129,10 @@ monitoring = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ZoomArea"]
 position = Vector2(9, 1)
 shape = SubResource("CircleShape2D_8s6nn")
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer2" instance=ExtResource("26_llsrg")]
 
 [connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
 [connection signal="area_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_entered"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_py2js"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_1i6o0"]
-[ext_resource type="Shader" path="res://Shaders/whitecolor.gdshader" id="3_kb55j"]
+[ext_resource type="Shader" path="res://Player/asd.gdshader" id="3_bjqrv"]
 [ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="4_53t58"]
 [ext_resource type="Texture2D" uid="uid://c8yvaw2ccxt3j" path="res://Images/terb-FULL-20x25.png" id="4_pxf10"]
 [ext_resource type="AnimationLibrary" uid="uid://c51e0eb3545dp" path="res://Animations/player_animations.res" id="5_aa0tm"]
@@ -25,12 +25,49 @@ offsets = PackedFloat32Array(0.581395, 1)
 colors = PackedColorArray(1, 1, 1, 0.741176, 1, 1, 1, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g2217"]
-shader = ExtResource("3_kb55j")
-shader_parameter/active = false
+shader = ExtResource("3_bjqrv")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qtdko"]
 radius = 3.0
 height = 16.0
+
+[sub_resource type="Animation" id="Animation_bw37e"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2.08165e-12, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LandingParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0.9)]
+}
 
 [sub_resource type="Animation" id="Animation_ay5xb"]
 resource_name = "jump"
@@ -69,44 +106,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 0.9), Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_bw37e"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:offset:y")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(2.08165e-12, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("LandingParticles:emitting")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 0.9)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ogip"]
