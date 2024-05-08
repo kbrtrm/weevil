@@ -2,6 +2,16 @@ extends Control
 
 var _is_paused: bool = false:
 	set = set_paused
+	
+@onready var inventory: Inventory = preload("res://Inventory/PlayerInventory.tres")
+@onready var slots: Array = $MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer.get_children()
+
+func _ready():
+	update()
+
+func update():
+	for i in range(min(inventory.items.size(), slots.size())):
+		slots[i].update(inventory.items[i])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):

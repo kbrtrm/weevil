@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var ACCEL = 10
 @export var ROLL_SPEED = 160
 @export var FRICTION = 8
+@export var inventory: Inventory
 
 enum {
 	MOVE,

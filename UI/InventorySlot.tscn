@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtq703ifm68u0"]
+
+[ext_resource type="Script" path="res://UI/InventorySlot.gd" id="1_5if6u"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_lxfha"]
+
+[node name="Slot" type="Panel"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(40, 40)
+script = ExtResource("1_5if6u")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.25098, 0.25098, 0.25098, 1)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_lxfha")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="item" type="Sprite2D" parent="CenterContainer/Panel"]

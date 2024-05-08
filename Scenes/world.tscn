@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -23,8 +23,10 @@
 [ext_resource type="PackedScene" uid="uid://bjp6gsoust7s6" path="res://Objects/FlowerAvalancheLily.tscn" id="22_mdlq6"]
 [ext_resource type="PackedScene" uid="uid://1fcpi2rqusxk" path="res://Objects/MushroomTall.tscn" id="22_qn5d2"]
 [ext_resource type="PackedScene" uid="uid://hn1rpa1uhpa6" path="res://Objects/FlowerBlueBell.tscn" id="23_e8ppn"]
+[ext_resource type="PackedScene" uid="uid://bv1l6ncr2ys7m" path="res://Objects/FlowerForget.tscn" id="24_xcny1"]
 [ext_resource type="PackedScene" uid="uid://bqmmr6bnmif1p" path="res://Objects/FlowerPink.tscn" id="25_sm30s"]
 [ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
+[ext_resource type="PackedScene" uid="uid://cefaj3xu83cnx" path="res://Objects/FlowerWeed.tscn" id="26_fx2x1"]
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
@@ -2533,10 +2535,16 @@ frame = 1
 y_sort_enabled = true
 
 [node name="Ground-bits" type="Sprite2D" parent="YSort/GroundBits"]
-position = Vector2(412, 81)
+position = Vector2(395, 114)
 texture = ExtResource("22_70771")
 region_enabled = true
-region_rect = Rect2(96, 0, 16, 16)
+region_rect = Rect2(128, 32, 32, 32)
+
+[node name="Ground-bits11" type="Sprite2D" parent="YSort/GroundBits"]
+position = Vector2(468, 97)
+texture = ExtResource("22_70771")
+region_enabled = true
+region_rect = Rect2(128, 64, 32, 32)
 
 [node name="Ground-bits9" type="Sprite2D" parent="YSort/GroundBits"]
 position = Vector2(404, 48)
@@ -2743,6 +2751,14 @@ position = Vector2(445, 91)
 
 [node name="MushroomTall4" parent="YSort" instance=ExtResource("22_qn5d2")]
 position = Vector2(450, 83)
+
+[node name="Ground-bits11" type="Sprite2D" parent="YSort"]
+z_index = 2
+position = Vector2(481, 122)
+texture = ExtResource("22_70771")
+offset = Vector2(0, -8)
+region_enabled = true
+region_rect = Rect2(48, 32, 32, 32)
 
 [node name="Mosses" type="Node2D" parent="YSort"]
 y_sort_enabled = true
@@ -3015,6 +3031,9 @@ position = Vector2(404, 133)
 [node name="MossClumpSmall95" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(409, 144)
 
+[node name="MossClumpSmall108" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+position = Vector2(409, 144)
+
 [node name="MossClumpSmall99" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(450, 126)
 
@@ -3096,6 +3115,21 @@ scale = Vector2(-1, 1)
 position = Vector2(405, 131)
 scale = Vector2(-1, 1)
 
+[node name="MushroomTall21" parent="YSort" instance=ExtResource("24_xcny1")]
+position = Vector2(384, 111)
+rotation = 3.14159
+scale = Vector2(1, -1)
+
+[node name="MushroomTall24" parent="YSort" instance=ExtResource("24_xcny1")]
+position = Vector2(409, 91)
+rotation = 3.14159
+scale = Vector2(1, -1)
+
+[node name="MushroomTall22" parent="YSort" instance=ExtResource("24_xcny1")]
+position = Vector2(440, 94)
+rotation = 3.14159
+scale = Vector2(-1, -1)
+
 [node name="MushroomTall20" parent="YSort" instance=ExtResource("25_sm30s")]
 position = Vector2(392, 133)
 scale = Vector2(-1, 1)
@@ -3105,6 +3139,12 @@ position = Vector2(413, 125)
 
 [node name="MushroomTall17" parent="YSort" instance=ExtResource("26_d4n0h")]
 position = Vector2(452, 84)
+
+[node name="MushroomTall23" parent="YSort" instance=ExtResource("26_fx2x1")]
+position = Vector2(456, 116)
+
+[node name="MushroomTall25" parent="YSort" instance=ExtResource("26_fx2x1")]
+position = Vector2(470, 90)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

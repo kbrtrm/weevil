@@ -1,7 +1,8 @@
-[gd_scene load_steps=59 format=3 uid="uid://bd8hnf38x5qp6"]
+[gd_scene load_steps=60 format=3 uid="uid://bd8hnf38x5qp6"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_py2js"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_1i6o0"]
+[ext_resource type="Resource" uid="uid://b8mo15req8ivc" path="res://Inventory/PlayerInventory.tres" id="2_n11yk"]
 [ext_resource type="Shader" path="res://Player/asd.gdshader" id="3_bjqrv"]
 [ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="4_53t58"]
 [ext_resource type="Texture2D" uid="uid://c8yvaw2ccxt3j" path="res://Images/terb-FULL-20x25.png" id="4_pxf10"]
@@ -350,6 +351,7 @@ platform_floor_layers = 4294967292
 safe_margin = 1.0
 script = ExtResource("1_py2js")
 MAX_SPEED = 60
+inventory = ExtResource("2_n11yk")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cwmac8dvyokld"]
+[gd_scene load_steps=19 format=3 uid="uid://cwmac8dvyokld"]
 
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_2jgtw"]
 [ext_resource type="Texture2D" uid="uid://beyxtu38w0vao" path="res://Images/weevil-panel.png" id="2_ywu6f"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://ctahmus3i348d" path="res://Themes/TinyClick.otf" id="4_t22hf"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_ayafd"]
 [ext_resource type="Texture2D" uid="uid://cvfblad1jj2ah" path="res://Images/stripe-bar-bg.png" id="5_ti72n"]
+[ext_resource type="PackedScene" uid="uid://dtq703ifm68u0" path="res://UI/InventorySlot.tscn" id="8_8uycf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c85ce"]
 bg_color = Color(0.188235, 0.188235, 0.211765, 1)
@@ -123,10 +124,6 @@ theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
-
-[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
-layout_mode = 2
-theme_override_constants/v_separation = 8
 
 [node name="MenuContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -377,9 +374,38 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="Label" type="Label" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items"]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items"]
 layout_mode = 2
-text = "Items"
+theme_override_constants/h_separation = 5
+theme_override_constants/v_separation = 5
+columns = 9
+
+[node name="Slot" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot2" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot3" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot4" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot5" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot6" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot7" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot8" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
+
+[node name="Slot9" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items/GridContainer" instance=ExtResource("8_8uycf")]
+layout_mode = 2
 
 [node name="Combine" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 visible = false
