@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -13,6 +13,7 @@
 [ext_resource type="TileSet" uid="uid://d0ugsh4q0nbit" path="res://Scenes/WallShadows.tres" id="9_fn36g"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_hqgvk"]
 [ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
+[ext_resource type="PackedScene" uid="uid://df1dqbsyv1vha" path="res://Objects/PassThruObject.tscn" id="12_xqqty"]
 [ext_resource type="PackedScene" uid="uid://bn8sqnfqbho6t" path="res://Objects/FlowerRed.tscn" id="16_a4syf"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
 [ext_resource type="PackedScene" uid="uid://csfacg47xmu02" path="res://Objects/MossClumpSmall.tscn" id="16_py4mx"]
@@ -2525,6 +2526,23 @@ texture = ExtResource("20_f1fvu")
 hframes = 9
 frame = 2
 
+[node name="Stones4" type="Sprite2D" parent="YSort"]
+position = Vector2(411, 140)
+texture = ExtResource("20_f1fvu")
+hframes = 9
+frame = 2
+
+[node name="Stones5" type="Sprite2D" parent="YSort"]
+position = Vector2(476, 136)
+texture = ExtResource("20_f1fvu")
+hframes = 9
+frame = 3
+
+[node name="Stones6" type="Sprite2D" parent="YSort"]
+position = Vector2(465, 133)
+texture = ExtResource("20_f1fvu")
+hframes = 9
+
 [node name="Stones3" type="Sprite2D" parent="YSort"]
 position = Vector2(408, 105)
 texture = ExtResource("20_f1fvu")
@@ -2753,10 +2771,9 @@ position = Vector2(445, 91)
 position = Vector2(450, 83)
 
 [node name="Ground-bits11" type="Sprite2D" parent="YSort"]
-z_index = 2
-position = Vector2(481, 122)
+position = Vector2(481, 127)
 texture = ExtResource("22_70771")
-offset = Vector2(0, -8)
+offset = Vector2(0, -13)
 region_enabled = true
 region_rect = Rect2(48, 32, 32, 32)
 
@@ -3013,6 +3030,110 @@ position = Vector2(413, 131)
 self_modulate = Color(0.627451, 0.784314, 0.8, 1)
 position = Vector2(420, 132)
 
+[node name="MossClumpSmall109" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(487, 122)
+
+[node name="MossClumpSmall110" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(483, 129)
+
+[node name="MossClumpSmall111" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(476, 127)
+
+[node name="MossClumpSmall112" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(469, 126)
+
+[node name="MossClumpSmall113" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(460, 129)
+
+[node name="MossClumpSmall114" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(467, 121)
+
+[node name="MossClumpSmall115" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(486, 127)
+
+[node name="MossClumpSmall116" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(472, 131)
+
+[node name="MossClumpSmall117" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(455, 139)
+
+[node name="MossClumpSmall118" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(462, 140)
+
+[node name="MossClumpSmall119" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(468, 138)
+
+[node name="MossClumpSmall120" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(461, 136)
+
+[node name="MossClumpSmall121" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(455, 135)
+
+[node name="MossClumpSmall122" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(450, 135)
+
+[node name="MossClumpSmall123" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(440, 140)
+
+[node name="MossClumpSmall124" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(436, 142)
+
+[node name="MossClumpSmall125" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(433, 137)
+
+[node name="MossClumpSmall126" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(426, 136)
+
+[node name="MossClumpSmall127" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(430, 140)
+
+[node name="MossClumpSmall128" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(450, 147)
+
+[node name="MossClumpSmall129" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(458, 143)
+
+[node name="MossClumpSmall130" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(476, 141)
+
+[node name="MossClumpSmall131" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(469, 141)
+
+[node name="MossClumpSmall132" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(398, 139)
+
+[node name="MossClumpSmall133" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(388, 143)
+
+[node name="MossClumpSmall134" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
+self_modulate = Color(0.627451, 0.784314, 0.8, 1)
+position = Vector2(422, 147)
+
 [node name="MossClumpSmall90" parent="YSort/Mosses" instance=ExtResource("16_py4mx")]
 position = Vector2(388, 130)
 
@@ -3145,6 +3266,9 @@ position = Vector2(456, 116)
 
 [node name="MushroomTall25" parent="YSort" instance=ExtResource("26_fx2x1")]
 position = Vector2(470, 90)
+
+[node name="PassThruObject" parent="YSort" instance=ExtResource("12_xqqty")]
+position = Vector2(324, 114)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

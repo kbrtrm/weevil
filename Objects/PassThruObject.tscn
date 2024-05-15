@@ -1,0 +1,101 @@
+[gd_scene load_steps=9 format=3 uid="uid://df1dqbsyv1vha"]
+
+[ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="1_6ra3w"]
+[ext_resource type="Script" path="res://Objects/PassThruObject.gd" id="1_ma0bt"]
+[ext_resource type="Texture2D" uid="uid://ddro5dsa36jpb" path="res://Images/Grass.png" id="2_dv71m"]
+[ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="2_xkflk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6i4s"]
+size = Vector2(4, 4)
+
+[sub_resource type="Animation" id="Animation_thh84"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Material:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Material:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f2rd7"]
+resource_name = "wiggle"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Material:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.232129, 3.48787e-16, 0.232129, 3.48787e-16]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Material:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r0i0g"]
+_data = {
+"RESET": SubResource("Animation_thh84"),
+"wiggle": SubResource("Animation_f2rd7")
+}
+
+[node name="PassThruObject" type="Node2D"]
+script = ExtResource("1_ma0bt")
+texture = ExtResource("2_dv71m")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, 3)
+scale = Vector2(0.571429, 1)
+texture = ExtResource("1_6ra3w")
+
+[node name="Material" type="Sprite2D" parent="."]
+position = Vector2(0, 4)
+texture = ExtResource("2_xkflk")
+offset = Vector2(2.08165e-12, -4)
+
+[node name="WiggleDetect" type="Area2D" parent="."]
+position = Vector2(0, 4)
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WiggleDetect"]
+position = Vector2(0, -1)
+scale = Vector2(1, 0.5)
+shape = SubResource("RectangleShape2D_h6i4s")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_r0i0g")
+}
+
+[connection signal="body_entered" from="WiggleDetect" to="." method="_on_wiggle_detect_body_entered"]
