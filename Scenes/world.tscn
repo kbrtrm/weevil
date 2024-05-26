@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=43 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
 [ext_resource type="PackedScene" uid="uid://cefaj3xu83cnx" path="res://Objects/FlowerWeed.tscn" id="26_fx2x1"]
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
+[ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
 texture = ExtResource("4_gtfkr")
@@ -3269,6 +3270,7 @@ position = Vector2(470, 90)
 
 [node name="PassThruObject" parent="YSort" instance=ExtResource("12_xqqty")]
 position = Vector2(324, 114)
+texture = ExtResource("28_uwreq")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
