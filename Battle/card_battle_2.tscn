@@ -1,0 +1,117 @@
+[gd_scene load_steps=2 format=3 uid="uid://70ek0rlqmip4"]
+
+[ext_resource type="Script" path="res://Battle/card_battle_2.gd" id="1_5plji"]
+
+[node name="CardBattle2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5plji")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(360, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 112)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+color = Color(0.262745, 0.262745, 0.262745, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 112)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+color = Color(0.262745, 0.262745, 0.262745, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 112)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+color = Color(0.262745, 0.262745, 0.262745, 1)
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(60, 80)
+layout_mode = 2
+color = Color(0.490196, 0.490196, 1, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(60, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.490196, 0.490196, 1, 0)
+
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer/Panel/VBoxContainer/MarginContainer2/VBoxContainer/MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(60, 80)
+layout_mode = 2
+size_flags_horizontal = 8
+color = Color(0.490196, 0.490196, 1, 1)
+
+[node name="Panel2" type="Panel" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(16, 182)
+points = PackedVector2Array(50, 33, 280, 33)

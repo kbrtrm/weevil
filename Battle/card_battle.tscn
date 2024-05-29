@@ -21,6 +21,7 @@ script = ExtResource("2_wadon")
 
 [node name="CardSlot" type="ColorRect" parent="BattleCardArea"]
 custom_minimum_size = Vector2(96, 128)
+layout_mode = 0
 offset_left = 472.0
 offset_top = 106.0
 offset_right = 568.0
