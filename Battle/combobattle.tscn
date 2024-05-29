@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1q0p5j3y03oo"]
+
+[ext_resource type="Script" path="res://addons/simple_card_pile_ui/card_pile_ui.gd" id="1_k3aiv"]
+[ext_resource type="Script" path="res://addons/simple_card_pile_ui/card_ui.gd" id="2_m53kx"]
+[ext_resource type="Texture2D" uid="uid://dvwnofof2v62s" path="res://Images/card_clubs_A.png" id="3_6crmp"]
+[ext_resource type="Texture2D" uid="uid://bekqkwedd2vc" path="res://Images/card_back.png" id="4_j28sl"]
+
+[node name="Battle" type="Node2D"]
+
+[node name="CardPileUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 59.0
+offset_top = 128.0
+offset_right = 99.0
+offset_bottom = 168.0
+script = ExtResource("1_k3aiv")
+json_card_collection_path = "res://Cards/cards.json"
+
+[node name="CardUI" type="Control" parent="CardPileUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_m53kx")
+
+[node name="Frontface" type="TextureRect" parent="CardPileUI/CardUI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_6crmp")
+
+[node name="Backface" type="TextureRect" parent="CardPileUI/CardUI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_j28sl")
