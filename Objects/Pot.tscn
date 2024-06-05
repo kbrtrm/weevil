@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://lwxl8bmdpc12"]
+[gd_scene load_steps=4 format=3 uid="uid://lwxl8bmdpc12"]
 
 [ext_resource type="Texture2D" uid="uid://di3ejaetx2im0" path="res://Images/pot-shadow.png" id="1_tluce"]
 [ext_resource type="Texture2D" uid="uid://da70dcyi11f4q" path="res://Images/pot.png" id="1_xfi3p"]
+[ext_resource type="Texture2D" uid="uid://d02wvfchxxo4b" path="res://Images/pot2.png" id="2_xwvmt"]
 
 [node name="Pot" type="StaticBody2D"]
 y_sort_enabled = true
@@ -14,7 +15,7 @@ offset = Vector2(0, 47)
 
 [node name="PotMain" type="Sprite2D" parent="."]
 position = Vector2(0, -21)
-texture = ExtResource("1_xfi3p")
+texture = ExtResource("2_xwvmt")
 offset = Vector2(0, -25.5)
 
 [node name="PotDoor" type="Sprite2D" parent="."]

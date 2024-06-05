@@ -9,7 +9,7 @@ func _ready() -> void:
 		var dummyRect = ColorRect.new()
 		dummyRect.size = Vector2(80,112)
 		dummyRect.color = Color.AQUAMARINE
-		dummyRect.position = handLine.global_position + Vector2(i*90, 0)
+		dummyRect.position = handLine.global_position + Vector2(i*82, 0)
 		add_child(dummyRect)
 	print(handLine.position)
 	print(handLineContainer.position)
