@@ -1182,7 +1182,7 @@ position = Vector2(335, 119)
 position = Vector2(335, 119)
 
 [node name="MossClumpSmall50" parent="YSort" instance=ExtResource("11_px1op")]
-position = Vector2(307, 110)
+position = Vector2(335, 119)
 
 [node name="MossClumpSmall48" parent="YSort" instance=ExtResource("11_px1op")]
 position = Vector2(328, 121)

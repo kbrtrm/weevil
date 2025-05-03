@@ -13,6 +13,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j8bpx"]
 shader = ExtResource("2_0pssq")
+shader_parameter/offset = null
+shader_parameter/shadow_alpha = null
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_flk62"]
 texture = ExtResource("4_avb3o")
