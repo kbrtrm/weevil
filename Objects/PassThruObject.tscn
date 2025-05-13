@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://df1dqbsyv1vha"]
 
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="1_6ra3w"]
-[ext_resource type="Script" path="res://Objects/PassThruObject.gd" id="1_ma0bt"]
+[ext_resource type="Script" uid="uid://1mijglov1iit" path="res://Objects/PassThruObject.gd" id="1_ma0bt"]
 [ext_resource type="Texture2D" uid="uid://ddro5dsa36jpb" path="res://Images/Grass.png" id="2_dv71m"]
 [ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="2_xkflk"]
 
@@ -65,8 +65,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0i0g"]
 _data = {
-"RESET": SubResource("Animation_thh84"),
-"wiggle": SubResource("Animation_f2rd7")
+&"RESET": SubResource("Animation_thh84"),
+&"wiggle": SubResource("Animation_f2rd7")
 }
 
 [node name="PassThruObject" type="Node2D"]

@@ -13,6 +13,6 @@ void fragment() {
 			c.a = clamp(c.a + cr.a * shadow_alpha * (1.0 - c.a), 0.0, 1.0);
 		}
 	}
-		
+
 	COLOR = c;
 }

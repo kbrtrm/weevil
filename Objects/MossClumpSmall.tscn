@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://csfacg47xmu02"]
 
-[ext_resource type="Script" path="res://Objects/MossClumpSmall.gd" id="1_1eun0"]
+[ext_resource type="Script" uid="uid://di7de52o46xdk" path="res://Objects/MossClumpSmall.gd" id="1_1eun0"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="1_nloke"]
 [ext_resource type="Texture2D" uid="uid://dfj5orh2bpkss" path="res://Images/moss-clump.png" id="2_1rjnq"]
 
@@ -64,8 +64,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lb3dm"]
 _data = {
-"RESET": SubResource("Animation_ahw8b"),
-"wiggle": SubResource("Animation_ef8o6")
+&"RESET": SubResource("Animation_ahw8b"),
+&"wiggle": SubResource("Animation_ef8o6")
 }
 
 [node name="MossClumpSmall" type="Node2D"]

@@ -1,0 +1,150 @@
+[gd_scene load_steps=10 format=3 uid="uid://b720kpxgs12cd"]
+
+[ext_resource type="Script" uid="uid://sqf2wilo68ih" path="res://Cards/card.gd" id="1_wqwah"]
+[ext_resource type="Texture2D" uid="uid://vkhpwqi7m3u1" path="res://Images/paperclip2.png" id="2_roi1e"]
+[ext_resource type="FontFile" uid="uid://slaafm6ilf8n" path="res://Themes/click3x5.ttf" id="3_roi1e"]
+[ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="3_wqwah"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwah"]
+bg_color = Color(0.812985, 0.733833, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="Theme" id="Theme_qq3le"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ie34q"]
+bg_color = Color(0.579688, 0.597105, 0.645407, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fynp6"]
+bg_color = Color(0.792057, 0.630684, 0.222832, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wqwah"]
+size = Vector2(106, 150)
+
+[node name="Card" type="Node2D"]
+use_parent_material = true
+script = ExtResource("1_wqwah")
+
+[node name="Selected" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(110, 154)
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 108.0
+offset_bottom = 152.0
+pivot_offset = Vector2(55, 77)
+theme_override_styles/panel = SubResource("StyleBoxFlat_wqwah")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(106, 150)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 106.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(53, 75)
+mouse_filter = 1
+theme = SubResource("Theme_qq3le")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ie34q")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(53, 75)
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Panel" type="Panel" parent="Panel/VBoxContainer/MarginContainer/CenterContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fynp6")
+
+[node name="Cost" type="Label" parent="Panel/VBoxContainer/MarginContainer/CenterContainer/Panel"]
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 1.0
+theme_override_colors/font_outline_color = Color(0.453904, 0.380999, 0.329863, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "Paperclip"
+horizontal_alignment = 1
+
+[node name="Art" type="TextureRect" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_roi1e")
+stretch_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 3
+
+[node name="Description" type="RichTextLabel" parent="Panel/VBoxContainer/MarginContainer2"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 4
+theme_override_fonts/normal_font = ExtResource("3_wqwah")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Apply 2 [color=#1c51E7]weak[/color].
+Deal 3 damage."
+horizontal_alignment = 1
+
+[node name="Type" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_roi1e")
+theme_override_font_sizes/font_size = 8
+text = "Attack"
+horizontal_alignment = 1
+
+[node name="CollisionArea" type="Area2D" parent="."]
+position = Vector2(53, 75)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+shape = SubResource("RectangleShape2D_wqwah")
+
+[connection signal="mouse_entered" from="CollisionArea" to="." method="_on_collision_area_mouse_entered"]
+[connection signal="mouse_exited" from="CollisionArea" to="." method="_on_collision_area_mouse_exited"]

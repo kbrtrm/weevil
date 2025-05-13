@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://dc3swvbq3482r"]
 
 [ext_resource type="Texture2D" uid="uid://cevkep1m6jknc" path="res://Images/EnemyDeathEffect.png" id="1_4p7lf"]
-[ext_resource type="Script" path="res://Effects/Effect.gd" id="2_dqe84"]
+[ext_resource type="Script" uid="uid://drn0mehg46cpk" path="res://Effects/Effect.gd" id="2_dqe84"]
 [ext_resource type="AudioStream" uid="uid://dstpr3wra7y78" path="res://Music and Sounds/EnemyDie.wav" id="3_opl4l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l2beo"]

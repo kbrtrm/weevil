@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://do3g2siu7cy0f"]
 
-[ext_resource type="Script" path="res://Objects/Moss.gd" id="1_8cnat"]
+[ext_resource type="Script" uid="uid://enxyv4nlywwx" path="res://Objects/Moss.gd" id="1_8cnat"]
 [ext_resource type="Texture2D" uid="uid://ddro5dsa36jpb" path="res://Images/Grass.png" id="1_csq55"]
 [ext_resource type="PackedScene" uid="uid://cp2owch1u80fw" path="res://Overlap/hurtbox.tscn" id="3_yvagt"]
 

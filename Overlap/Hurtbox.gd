@@ -25,5 +25,3 @@ func _on_invincibility_started():
 	
 func _on_invincibility_ended():
 	collisionshape.set_deferred("disabled", false)
-
-

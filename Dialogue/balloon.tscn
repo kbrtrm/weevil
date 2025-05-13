@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://73jm5qjy52vq"]
 
-[ext_resource type="Script" path="res://Dialogue/balloon.gd" id="1_36de5"]
+[ext_resource type="Script" uid="uid://cymeydshn8hju" path="res://Dialogue/balloon.gd" id="1_36de5"]
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/dialogue_label.tscn" id="2_a8ve6"]
 [ext_resource type="Theme" uid="uid://bghddr48jeg3e" path="res://Themes/weevil2.tres" id="2_xh07l"]
 [ext_resource type="FontFile" uid="uid://slaafm6ilf8n" path="res://Themes/click3x5.ttf" id="3_6d8ge"]
-[ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_reponses_menu.gd" id="3_72ixx"]
+[ext_resource type="Script" uid="uid://cxhr3x2s5e118" path="res://addons/dialogue_manager/dialogue_reponses_menu.gd" id="3_72ixx"]
 [ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="3_hrbp3"]
 
 [sub_resource type="FontVariation" id="FontVariation_1gxy3"]

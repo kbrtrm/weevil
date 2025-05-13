@@ -1,8 +1,8 @@
 [gd_scene load_steps=16 format=3 uid="uid://nrmlki51us40"]
 
-[ext_resource type="Script" path="res://Scenes/world.gd" id="1_2djru"]
+[ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_2djru"]
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="2_cnl5a"]
-[ext_resource type="Shader" path="res://Scenes/pooddles.gdshader" id="2_fm3uo"]
+[ext_resource type="Shader" uid="uid://dylwathprg7og" path="res://Scenes/pooddles.gdshader" id="2_fm3uo"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="3_as8lo"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_vrveq"]
 [ext_resource type="Texture2D" uid="uid://cy3oiiy76sykn" path="res://Images/ground-bits.png" id="7_bomik"]
@@ -15,8 +15,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j8bpx"]
 shader = ExtResource("2_fm3uo")
-shader_parameter/offset = null
-shader_parameter/shadow_alpha = null
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/shadow_alpha = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_flk62"]
 texture = ExtResource("4_vrveq")
@@ -83,6 +83,9 @@ position = Vector2(272, 87)
 visible = true
 self_modulate = Color(1, 1, 1, 0.337255)
 z_index = -2
+
+[node name="AudioStreamPlayer" parent="YSort/Player" index="12"]
+stream = null
 
 [node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")

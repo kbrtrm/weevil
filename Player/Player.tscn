@@ -1,16 +1,15 @@
-[gd_scene load_steps=60 format=3 uid="uid://bd8hnf38x5qp6"]
+[gd_scene load_steps=59 format=3 uid="uid://bd8hnf38x5qp6"]
 
-[ext_resource type="Script" path="res://Player/Player.gd" id="1_py2js"]
+[ext_resource type="Script" uid="uid://btthinmkwp752" path="res://Player/Player.gd" id="1_py2js"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_1i6o0"]
 [ext_resource type="Resource" uid="uid://b8mo15req8ivc" path="res://Inventory/PlayerInventory.tres" id="2_n11yk"]
-[ext_resource type="Shader" path="res://Player/asd.gdshader" id="3_bjqrv"]
+[ext_resource type="Shader" uid="uid://4r884k8f27pg" path="res://Shaders/playershadow.gdshader" id="4_0j2ni"]
 [ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="4_53t58"]
 [ext_resource type="Texture2D" uid="uid://c8yvaw2ccxt3j" path="res://Images/terb-FULL-20x25.png" id="4_pxf10"]
 [ext_resource type="AnimationLibrary" uid="uid://c51e0eb3545dp" path="res://Animations/player_animations.res" id="5_aa0tm"]
-[ext_resource type="Script" path="res://Player/SwordHitbox.gd" id="5_uh2di"]
+[ext_resource type="Script" uid="uid://ckqk7e8jfkmgl" path="res://Player/SwordHitbox.gd" id="5_uh2di"]
 [ext_resource type="PackedScene" uid="uid://cp2owch1u80fw" path="res://Overlap/hurtbox.tscn" id="6_tlwiw"]
-[ext_resource type="AudioStream" uid="uid://bx0q5hv1qurlb" path="res://Music and Sounds/step2.wav" id="11_e0sr3"]
-[ext_resource type="Script" path="res://Player/FootstepSound.gd" id="12_cdcbo"]
+[ext_resource type="Script" uid="uid://ckbx5gomtg1pa" path="res://Player/FootstepSound.gd" id="12_cdcbo"]
 
 [sub_resource type="Gradient" id="Gradient_3ggjc"]
 colors = PackedColorArray(1, 1, 1, 0.282353, 0, 0, 0, 1)
@@ -26,7 +25,7 @@ offsets = PackedFloat32Array(0.581395, 1)
 colors = PackedColorArray(1, 1, 1, 0.741176, 1, 1, 1, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g2217"]
-shader = ExtResource("3_bjqrv")
+shader = ExtResource("4_0j2ni")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qtdko"]
 radius = 3.0
@@ -67,7 +66,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 0.9)]
+"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_ay5xb"]
@@ -111,8 +110,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ogip"]
 _data = {
-"RESET": SubResource("Animation_bw37e"),
-"jump": SubResource("Animation_ay5xb")
+&"RESET": SubResource("Animation_bw37e"),
+&"jump": SubResource("Animation_ay5xb")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uk6ns"]
@@ -275,7 +274,7 @@ states/Run/node = SubResource("AnimationNodeBlendSpace2D_mp2sl")
 states/Run/position = Vector2(506, 143)
 states/Start/position = Vector2(378, 100)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_s3n2w"), "Start", "Run", SubResource("AnimationNodeStateMachineTransition_dld0f"), "Start", "Attack", SubResource("AnimationNodeStateMachineTransition_hug2i"), "Start", "Roll", SubResource("AnimationNodeStateMachineTransition_pucae")]
-graph_offset = Vector2(-156, -51)
+graph_offset = Vector2(-127, -35)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gowjq"]
 radius = 7.0
@@ -335,9 +334,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yayjt"]
 _data = {
-"RESET": SubResource("Animation_wku17"),
-"Start": SubResource("Animation_qfrls"),
-"Stop": SubResource("Animation_651uu")
+&"RESET": SubResource("Animation_wku17"),
+&"Start": SubResource("Animation_qfrls"),
+&"Stop": SubResource("Animation_651uu")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_of1wa"]
@@ -350,7 +349,7 @@ collision_layer = 2
 platform_floor_layers = 4294967292
 safe_margin = 1.0
 script = ExtResource("1_py2js")
-MAX_SPEED = 60
+MAX_SPEED = 80
 inventory = ExtResource("2_n11yk")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
@@ -380,24 +379,21 @@ initial_velocity_min = 10.0
 initial_velocity_max = 25.0
 color_ramp = SubResource("Gradient_1ac5w")
 
-[node name="Reflection2" type="Sprite2D" parent="."]
+[node name="Shadow" type="Sprite2D" parent="."]
 visible = false
 show_behind_parent = true
 material = SubResource("ShaderMaterial_g2217")
-position = Vector2(0, 15)
+position = Vector2(0, 7.25)
+scale = Vector2(1, 0.46)
 texture = ExtResource("4_pxf10")
 flip_v = true
 hframes = 94
-frame = 64
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_g2217")
 position = Vector2(2.08165e-12, -5.5)
-scale = Vector2(1, 0.9)
 texture = ExtResource("4_pxf10")
 offset = Vector2(0, 2.08165e-12)
 hframes = 94
-frame = 86
 
 [node name="LandingParticles" type="CPUParticles2D" parent="."]
 y_sort_enabled = true
@@ -423,21 +419,21 @@ shape = SubResource("CapsuleShape2D_qtdko")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": ExtResource("5_aa0tm")
+&"": ExtResource("5_aa0tm")
 }
 
 [node name="AnimationJump" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_5ogip")
+&"": SubResource("AnimationLibrary_5ogip")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_6o1u2")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Attack/blend_position = Vector2(2.08165e-12, 1)
-parameters/Idle/blend_position = Vector2(2.08165e-12, 1)
+parameters/Idle/blend_position = Vector2(0, 0.58022)
 parameters/Roll/blend_position = Vector2(2.08165e-12, 1)
-parameters/Run/blend_position = Vector2(2.08165e-12, 1)
+parameters/Run/blend_position = Vector2(-0.303077, -0.326374)
 
 [node name="HitboxPivot" type="Marker2D" parent="."]
 visible = false
@@ -462,12 +458,11 @@ position = Vector2(-2.08165e-12, -3)
 shape = SubResource("CapsuleShape2D_56fth")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("11_e0sr3")
 volume_db = -12.905
 
 [node name="BlinkAnimation" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_yayjt")
+&"": SubResource("AnimationLibrary_yayjt")
 }
 
 [node name="FootstepSound" type="AudioStreamPlayer" parent="."]

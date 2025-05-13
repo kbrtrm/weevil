@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://bbuacxq0f485t"]
 
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="1_c54q7"]
-[ext_resource type="Script" path="res://Scenes/InsidePot.gd" id="1_f6gun"]
+[ext_resource type="Script" uid="uid://b8atrv8705c6s" path="res://Scenes/InsidePot.gd" id="1_f6gun"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_yqswm"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="2_mmt7l"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="3_gdldr"]

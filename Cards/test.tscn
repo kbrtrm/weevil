@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://ci055lk3xgre8"]
+
+[ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
+[ext_resource type="Texture2D" uid="uid://dlqqjyy2j6m7v" path="res://Cards/deck.png" id="3_oq7fu"]
+[ext_resource type="Script" uid="uid://6o3owerqtyai" path="res://Cards/Hand.gd" id="4_4pxya"]
+[ext_resource type="Texture2D" uid="uid://e8plwoybv3m7" path="res://Cards/discard.png" id="4_yllga"]
+
+[node name="Battle" type="Node2D"]
+
+[node name="CardManager" type="Node2D" parent="."]
+script = ExtResource("1_4pxya")
+
+[node name="Hand" type="Node2D" parent="."]
+script = ExtResource("4_4pxya")
+
+[node name="DeckStatus" type="Node2D" parent="Hand"]
+position = Vector2(36, 329)
+
+[node name="Sprite2D" type="Sprite2D" parent="Hand/DeckStatus"]
+texture = ExtResource("3_oq7fu")
+
+[node name="Count" type="Label" parent="Hand/DeckStatus"]
+offset_left = -18.0
+offset_top = 12.0
+offset_right = 22.0
+offset_bottom = 34.0
+theme_override_font_sizes/font_size = 8
+text = "0"
+
+[node name="DiscardStatus" type="Node2D" parent="Hand"]
+position = Vector2(606, 329)
+
+[node name="Sprite2D" type="Sprite2D" parent="Hand/DiscardStatus"]
+texture = ExtResource("4_yllga")
+
+[node name="Label" type="Label" parent="Hand/DiscardStatus"]
+offset_right = 40.0
+offset_bottom = 22.0

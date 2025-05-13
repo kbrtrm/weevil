@@ -1,0 +1,29 @@
+{
+	"cards": [
+		{
+			"id": "0001",
+			"name": "Pebble",
+			"cost": 1,
+			"description": "Deal 6 damage.",
+			"effect": {
+				"attack": 6
+			},
+			"rarity": "common",
+			"artwork_path": "res://Images/paperclip2x.png",
+			"type": "ATTACK"
+		},
+		{
+			"id": "0002",
+			"name": "Paperclip",
+			"cost": 1,
+			"description": "Deal 3 damage.\nApply 2 [b]weak.[/b]",
+			"effect": {
+				"attack": 3,
+				"weak": 2
+			},
+			"rarity": "common",
+			"artwork_path": "res://Images/paperclip2x.png",
+			"type": "ATTACK"
+		}
+	]
+}

@@ -1,10 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://b0fjp33hw1uow"]
 
-[ext_resource type="Script" path="res://Scenes/world.gd" id="1_gxdmj"]
+[ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_gxdmj"]
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="2_cbutl"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="3_kvjxh"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="4_4r84c"]
-[ext_resource type="Shader" path="res://Scenes/PuddleTest.gdshader" id="5_1yj8s"]
+[ext_resource type="Shader" uid="uid://dwww50u0uwue4" path="res://Scenes/PuddleTest.gdshader" id="5_1yj8s"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="11_cfycr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q3mhw"]
@@ -40,7 +40,10 @@ y_sort_enabled = true
 [node name="Player" parent="YSort" instance=ExtResource("4_4r84c")]
 position = Vector2(136, 16)
 
-[node name="RemoteTransform2D" parent="YSort/Player" index="14"]
+[node name="Sprite2D" parent="YSort/Player" index="4"]
+frame = 93
+
+[node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]

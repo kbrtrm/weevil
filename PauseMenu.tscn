@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://cwmac8dvyokld"]
 
-[ext_resource type="Script" path="res://PauseMenu.gd" id="1_2jgtw"]
+[ext_resource type="Script" uid="uid://bcjbmqbd2p8rs" path="res://PauseMenu.gd" id="1_2jgtw"]
 [ext_resource type="Texture2D" uid="uid://beyxtu38w0vao" path="res://Images/weevil-panel.png" id="2_ywu6f"]
 [ext_resource type="FontFile" uid="uid://ciocjsl7wxrkb" path="res://Themes/TerbAlpha.ttf" id="3_daoji"]
 [ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="3_qajoy"]
@@ -199,9 +199,9 @@ theme_override_constants/separation = 2
 
 [node name="XP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer/XPVbox"]
 layout_mode = 2
+theme_override_constants/line_spacing = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("4_t22hf")
 theme_override_font_sizes/font_size = 8
 text = "XP 0/100"
@@ -230,9 +230,9 @@ theme_override_constants/separation = 2
 
 [node name="HP" type="Label" parent="MarginContainer/MenuContainer/SidePanel/StatusMargin/MarginContainer/StatusPanel/PlayerStatus/MarginContainer2/HPVbox"]
 layout_mode = 2
+theme_override_constants/line_spacing = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/outline_size = 0
-theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("4_t22hf")
 theme_override_font_sizes/font_size = 8
 text = "HP 27/30	"
@@ -330,11 +330,12 @@ theme_override_constants/margin_bottom = 4
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/side_margin = 0
 theme_override_constants/outline_size = 0
+theme_override_constants/side_margin = 0
 theme_override_fonts/font = ExtResource("3_daoji")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/panel = SubResource("StyleBoxFlat_g6xva")
+current_tab = 0
 
 [node name="Equip" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 layout_mode = 2
@@ -342,6 +343,7 @@ theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
+metadata/_tab_index = 0
 
 [node name="Label" type="Label" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Equip"]
 layout_mode = 2
@@ -373,6 +375,7 @@ theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
+metadata/_tab_index = 1
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer/Items"]
 layout_mode = 2
@@ -410,14 +413,17 @@ layout_mode = 2
 [node name="Combine" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="Journal" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 3
 
 [node name="Map" type="MarginContainer" parent="MarginContainer/MenuContainer/MainPanel/MarginContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4
 
 [connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Resume" to="." method="_on_button_resume_pressed"]
 [connection signal="pressed" from="MarginContainer/MenuContainer/SidePanel/MenuMargin/MarginContainer/GameOptions/Settings" to="." method="_on_settings_pressed"]

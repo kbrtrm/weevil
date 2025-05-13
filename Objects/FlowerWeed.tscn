@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://cefaj3xu83cnx"]
 
-[ext_resource type="Script" path="res://Objects/MossClumpSmall.gd" id="1_fcyrx"]
+[ext_resource type="Script" uid="uid://di7de52o46xdk" path="res://Objects/MossClumpSmall.gd" id="1_fcyrx"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_3hsf7"]
 [ext_resource type="Texture2D" uid="uid://cy3oiiy76sykn" path="res://Images/ground-bits.png" id="3_i52rp"]
-[ext_resource type="Shader" path="res://Objects/sha.gdshader" id="4_rr7re"]
+[ext_resource type="Shader" uid="uid://c0c4ybujco5bg" path="res://Objects/sha.gdshader" id="4_rr7re"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8mc2g"]
 shader = ExtResource("4_rr7re")
@@ -92,8 +92,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lb3dm"]
 _data = {
-"RESET": SubResource("Animation_ahw8b"),
-"wiggle": SubResource("Animation_ef8o6")
+&"RESET": SubResource("Animation_ahw8b"),
+&"wiggle": SubResource("Animation_ef8o6")
 }
 
 [node name="MushroomTall" type="Node2D"]

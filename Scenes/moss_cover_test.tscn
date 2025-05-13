@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://8guswxf61cf2"]
 
-[ext_resource type="Script" path="res://Scenes/world.gd" id="1_qdmhn"]
-[ext_resource type="Shader" path="res://Scenes/pooddles.gdshader" id="2_0pssq"]
+[ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_qdmhn"]
+[ext_resource type="Shader" uid="uid://dylwathprg7og" path="res://Scenes/pooddles.gdshader" id="2_0pssq"]
 [ext_resource type="Texture2D" uid="uid://d3ajqnlp7q6k6" path="res://Images/dirt.png" id="3_w1dym"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_avb3o"]
 [ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="5_hxlg6"]
@@ -13,8 +13,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j8bpx"]
 shader = ExtResource("2_0pssq")
-shader_parameter/offset = null
-shader_parameter/shadow_alpha = null
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/shadow_alpha = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_flk62"]
 texture = ExtResource("4_avb3o")
@@ -65,10 +65,8 @@ y_sort_enabled = true
 [node name="Player" parent="YSort" instance=ExtResource("6_6ocpe")]
 position = Vector2(272, 87)
 
-[node name="Reflection2" parent="YSort/Player" index="3"]
-visible = true
-self_modulate = Color(1, 1, 1, 0.337255)
-z_index = -2
+[node name="Sprite2D" parent="YSort/Player" index="4"]
+frame = 93
 
 [node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")

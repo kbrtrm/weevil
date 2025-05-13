@@ -7,7 +7,7 @@ void fragment() {
 
     // Flip the y-coordinate to reflect vertically
     uv.y = 1.0 - uv.y;
-    
+
     // Sample the scene texture using the reflected UV
     vec4 reflected_color = texture(SCREEN_TEXTURE, uv);
 

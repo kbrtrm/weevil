@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cl1dof02i12ey"]
 
-[ext_resource type="Script" path="res://Enemies/CombatInitiationZone.gd" id="1_wehhs"]
+[ext_resource type="Script" uid="uid://7tehfjnocg5r" path="res://Enemies/CombatInitiationZone.gd" id="1_wehhs"]
 
 [node name="CombatInitiationZone" type="Area2D"]
 script = ExtResource("1_wehhs")

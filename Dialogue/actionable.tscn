@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://i7bo54ykex0x"]
 
-[ext_resource type="Script" path="res://Dialogue/Actionable.gd" id="1_52chr"]
+[ext_resource type="Script" uid="uid://0wrdrwfgehki" path="res://Dialogue/Actionable.gd" id="1_52chr"]
 
 [node name="Actionable" type="Area2D"]
 collision_layer = 64
