@@ -7,10 +7,10 @@ var drag_offset = Vector2.ZERO  # Store the offset between mouse and card positi
 
 @onready var drop_target = $"../DropTarget"
 @onready var discard_pile = $"../Hand/DiscardPile"
+@onready var hand = $"../Hand"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	cards = get_children()
 	# Connect to the drop target's card_played signal
 	drop_target.card_played.connect(_on_card_played)
 	
@@ -51,18 +51,36 @@ func _on_card_played(card):
 	move_card_to_discard(card)
 
 func move_card_to_discard(card):
-	# Remove card from its current parent
-	var current_parent = card.get_parent()
-	if current_parent:
-		current_parent.remove_child(card)
+	# Remove from hand
+	hand.remove_card_from_hand(card)
 	
-	# Add card to the discard pile
-	discard_pile.add_card(card)
+	# Create tween for animation
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
 	
-func _on_drop_target_card_played(card):
-	# First, play the card effect
-	if card.has_method("play_effect"):
-		card.play_effect()
+	# Animate the card to the discard pile
+	var target_position = discard_pile.global_position
+	tween.tween_property(card, "global_position", target_position, 0.5)
+	tween.parallel().tween_property(card, "scale", Vector2(0.1,0.1), 0.5)
+	tween.parallel().tween_property(card, "rotation_degrees", randf_range(-10, 10), 0.5)
 	
-	# Then move it to the discard pile
-	move_card_to_discard(card)
+	# After animation completes, add to discard pile
+	tween.tween_callback(func():
+		if card.get_parent():
+			card.get_parent().remove_child(card)
+			
+		if discard_pile:
+			if discard_pile.has_method("add_card"):
+				discard_pile.add_card(card)
+			else:
+				discard_pile.add_child(card)
+				card.position = Vector2.ZERO
+	)
+	
+#func _on_drop_target_card_played(card):
+	## First, play the card effect
+	#if card.has_method("play_effect"):
+		#card.play_effect()
+	#
+	## Then move it to the discard pile
+	#move_card_to_discard(card)

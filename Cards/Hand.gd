@@ -134,56 +134,69 @@ func move_card_to_discard(card):
 	arrange_cards()
 	update_ui()
 
-# Input handling
+# Remove a card from the hand without playing it
+# This is called by CardManager after the card_played signal
+func remove_card_from_hand(card):
+	if card in cards_in_hand:
+		print("Removing card from hand: ", card.card_name)
+		cards_in_hand.erase(card)
+		arrange_cards()
+		update_ui()
+
+# Input handling for card dragging
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			# Start dragging
-			if not card_being_dragged:
+			# Start dragging a card
+			if not cards_in_hand.any(func(c): return c.being_dragged):
 				var card = get_top_card_at_position(get_global_mouse_position())
-				if card:
-					start_drag(card)
+				if card and card.draggable:
+					card.start_drag()
 		else:
-			# End dragging
-			if card_being_dragged:
-				end_drag()
+			# Find the card being dragged and end its drag
+			for card in cards_in_hand:
+				if card.being_dragged:
+					card.end_drag()
+					break
 
-# Start dragging a card
-func start_drag(card):
-	card_being_dragged = card
-	
-	# Store original state
-	card.set_meta("original_position", card.position)
-	card.set_meta("original_rotation", card.rotation_degrees)
-	card.set_meta("original_z_index", card.z_index)
-	
-	# Setup dragging
-	drag_offset = get_global_mouse_position() - card.position
-	card.z_index = 1000
-	
-	# Update highlights
-	update_all_highlights()
+# Handle card drag started
+func on_card_drag_started(card):
+	# Clear highlights on other cards
+	for c in cards_in_hand:
+		if c != card and c.has_method("set_highlight"):
+			c.set_highlight(false)
 
-# End dragging a card
-func end_drag():
-	var drop_target = get_drop_target_at_position(get_global_mouse_position())
+# Handle card drag ended
+func on_card_drag_ended(card, drop_position):
+	# Check if dropped on a valid target
+	var drop_target = get_drop_target_at_position(drop_position)
 	
 	if drop_target:
-		# Play card on target
-		play_card(card_being_dragged, drop_target)
+		# Valid drop - emit signal on the drop target
+		# This will be handled by CardManager's _on_card_played
+		if drop_target.has_signal("card_played"):
+			drop_target.emit_signal("card_played", card)
+		else:
+			# Fallback if no signal - return card to hand
+			return_card_to_hand(card)
 	else:
-		# Return to hand
-		var tween = get_tree().create_tween()
-		tween.tween_property(card_being_dragged, "position", card_being_dragged.get_meta("original_position"), 0.3)
-		tween.tween_property(card_being_dragged, "rotation_degrees", card_being_dragged.get_meta("original_rotation"), 0.3)
-		
-		# Reset z-index after animation
-		tween.tween_callback(func():
-			if is_instance_valid(card_being_dragged):
-				card_being_dragged.z_index = card_being_dragged.get_meta("original_z_index")
-		)
+		# Invalid drop - return to hand
+		return_card_to_hand(card)
+
+# Helper function to return a card to its original position in hand
+func return_card_to_hand(card):
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(card, "global_position", card.original_position, 0.3)
+	tween.parallel().tween_property(card, "rotation", card.original_rotation, 0.3)
 	
-	card_being_dragged = null
+	# Reset z-index after animation
+	tween.tween_callback(func():
+		card.z_index = card.original_z_index
+		card.set_highlight(false)
+	)
+	
+	# Rearrange cards and update highlights
 	arrange_cards()
 	update_all_highlights()
 
@@ -285,9 +298,10 @@ func get_drop_target_at_position(position):
 			var shape = collision.shape
 			
 			if shape is RectangleShape2D:
-				# Convert to global position to properly check
-				var extents = shape.extents
-				var global_pos = target.global_position
+				# Make sure we're using Vector2 for all calculations
+				var global_pos = Vector2(target.global_position)
+				var extents = Vector2(shape.extents)
+				
 				var rect = Rect2(global_pos - extents, extents * 2)
 				
 				if rect.has_point(position):
@@ -295,21 +309,18 @@ func get_drop_target_at_position(position):
 	
 	return null
 
-# Play a card on a target
-func play_card(card, target):
-	# Remove from hand
-	cards_in_hand.erase(card)
-	
-	# Play the card effect
-	if card.has_method("play_effect"):
-		card.play_effect()
-	
-	# Move to discard pile  
-	move_card_to_discard(card)
-	
-	# Update hand (already done in move_card_to_discard)
-	# arrange_cards()
-	# update_ui()
+## Play a card on a target
+#func play_card(card, target):
+	## Remove from hand
+	#cards_in_hand.erase(card)
+	#
+	## Emit signal on target
+	#if target.has_signal("card_played"):
+		#target.emit_signal("card_played", card)
+		#
+	## Update hand
+	#arrange_cards()
+	#update_ui()
 
 # Handle card hover
 func on_card_hovered(card):
