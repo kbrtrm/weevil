@@ -25,6 +25,9 @@ var original_rotation = 0
 var original_position = Vector2.ZERO
 var original_z_index = 0
 
+# Add reference to discard pile
+@onready var discard_pile = find_child("DiscardPile")
+
 @onready var DeckStatusReference = find_child("DeckStatus")
 @onready var DeckCountLabel = DeckStatusReference.find_child("Count")
 
@@ -40,15 +43,7 @@ func _ready() -> void:
 	randomize()
 	deck.shuffle()
 	
-	# Create the draw button
-	#create_draw_button()
-	
-	draw_card(5)
-	
-	# You can start with an empty hand instead of drawing initial cards
-	# Or draw a few cards to start, e.g.:
-	# for i in range(3):
-	#     draw_card()
+	draw_card(7)
 
 # Create a button for drawing cards
 func create_draw_button():
@@ -63,7 +58,6 @@ func create_draw_button():
 func draw_card(count: int = 1):
 	draw_multiple_cards(count)
 
-# Helper function for drawing multiple cards with delay
 # Helper function for drawing multiple cards with delay
 func draw_multiple_cards(count: int, current: int = 0):
 	if current >= count:
@@ -140,10 +134,7 @@ func update_ui():
 			draw_button.text = "Hand Full"
 		else:
 			draw_button.text = "Draw Card (" + str(deck.size()) + ")"
-			
 
-# Arrange cards in a curved formation at the bottom of the screen
-# Arrange cards in a curved formation at the bottom of the screen
 # Arrange cards in a curved formation at the bottom of the screen
 func arrange_cards(is_drawing: bool = false):
 	var num_cards = cards_in_hand.size()
@@ -232,7 +223,7 @@ func arrange_cards(is_drawing: bool = false):
 			scaletween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.3)
 
 # Process input for dragging cards
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if card_being_dragged:
 		var mouse_pos = get_global_mouse_position()
 		card_being_dragged.position = mouse_pos - drag_offset
@@ -245,6 +236,10 @@ func _input(event: InputEvent) -> void:
 			var card = _get_card_under_mouse()
 			if card:
 				card_being_dragged = card
+				# Save original position and rotation for returning if needed
+				original_position = card.position
+				original_rotation = card.rotation_degrees
+				original_z_index = card.z_index
 				# Bring the dragged card to the front
 				card_being_dragged.z_index = 100
 				# Calculate drag offset
@@ -252,12 +247,93 @@ func _input(event: InputEvent) -> void:
 		else:
 			# Stop dragging
 			if card_being_dragged:
-				# You can add card played logic here
-				# For example, check if the card is dropped on a valid play area
+				# Check if the card is dropped on a valid play area
+				var drop_target = _check_drop_targets(get_global_mouse_position())
 				
-				# For now, just return it to the hand
+				if drop_target:
+					# Card was dropped on a valid target
+					play_card_on_target(card_being_dragged, drop_target)
+				else:
+					# No valid target, return the card to hand
+					card_being_dragged.z_index = original_z_index
+					var tween = get_tree().create_tween()
+					tween.tween_property(card_being_dragged, "position", original_position, 0.2)
+					tween.parallel().tween_property(card_being_dragged, "rotation_degrees", original_rotation, 0.2)
+				
 				card_being_dragged = null
-				arrange_cards()
+
+# NEW FUNCTION: Check if mouse position is over any drop target
+func _check_drop_targets(mouse_pos):
+	# Get all nodes in the "drop_targets" group
+	var drop_targets = get_tree().get_nodes_in_group("drop_targets")
+	
+	for target in drop_targets:
+		# Check if target has a collision shape and the mouse is inside it
+		if target is Area2D:
+			# Simple point inside rect check (improved from original solution)
+			# This assumes the Area2D has a CollisionShape2D child
+			var collision = target.get_node_or_null("CollisionShape2D")
+			if collision and collision.shape:
+				var shape = collision.shape
+				var rect = Rect2()
+				
+				if shape is RectangleShape2D:
+					var extents = shape.extents
+					var global_pos = target.global_position
+					rect = Rect2(global_pos - extents, extents * 2)
+				elif shape is CircleShape2D:
+					var radius = shape.radius
+					var global_pos = target.global_position
+					# Create a square that encompasses the circle
+					rect = Rect2(global_pos - Vector2(radius, radius), Vector2(radius * 2, radius * 2))
+				
+				if rect.has_point(mouse_pos):
+					return target
+	
+	return null
+
+# NEW FUNCTION: Play a card on a drop target
+func play_card_on_target(card, target):
+	# First remove the card from the hand array
+	if card in cards_in_hand:
+		cards_in_hand.erase(card)
+	else:
+		print("Error: Card not found in hand")
+		return
+	
+	# Emit the card_played signal from the target
+	if target.has_signal("card_played"):
+		target.emit_signal("card_played", card)
+	elif target.has_method("play_card"):
+		target.play_card(card)
+	
+	# Move the card to the discard pile
+	move_to_discard_pile(card)
+	
+	# Rearrange the hand
+	arrange_cards()
+	
+	# Update UI
+	update_ui()
+
+# NEW FUNCTION: Move a card to the discard pile
+func move_to_discard_pile(card):
+	if discard_pile:
+		# Remove card from its current parent
+		if card.get_parent():
+			card.get_parent().remove_child(card)
+		
+		# Add to discard pile
+		if discard_pile.has_method("add_card"):
+			discard_pile.add_card(card)
+		else:
+			# Fallback if no add_card method
+			discard_pile.add_child(card)
+			card.position = Vector2.ZERO
+			card.rotation_degrees = 0
+	else:
+		print("Warning: Discard pile not found, card will be removed")
+		card.queue_free()
 
 # Helper function to get the card under the mouse
 func _get_card_under_mouse():
@@ -276,7 +352,6 @@ func _get_card_under_mouse():
 			return card
 			
 	return null
-	
 
 # Add a card to hand (can be called from outside)
 func add_card_to_hand(card_data):

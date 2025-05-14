@@ -13,6 +13,8 @@ var name_label: Label
 var description_label: RichTextLabel
 var art_texture: TextureRect
 
+@onready var HoverHighlightRef = $Panel/HoverHighlight
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	center_pivot()
@@ -42,5 +44,12 @@ func center_pivot():
 		child.position -= half_size
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
+
+func _on_area_2d_mouse_entered() -> void:
+	HoverHighlightRef.visible = true
+
+
+func _on_area_2d_mouse_exited() -> void:
+	HoverHighlightRef.visible = false

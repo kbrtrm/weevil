@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci055lk3xgre8"]
+[gd_scene load_steps=10 format=3 uid="uid://ci055lk3xgre8"]
 
 [ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
 [ext_resource type="Texture2D" uid="uid://dlqqjyy2j6m7v" path="res://Cards/deck.png" id="3_oq7fu"]
 [ext_resource type="Script" uid="uid://6o3owerqtyai" path="res://Cards/Hand.gd" id="4_4pxya"]
+[ext_resource type="Script" uid="uid://bgv0hfrekxq4q" path="res://Cards/DiscardPile.gd" id="4_44pfk"]
 [ext_resource type="Texture2D" uid="uid://e8plwoybv3m7" path="res://Cards/discard.png" id="4_yllga"]
+[ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="5_aus0a"]
+[ext_resource type="Texture2D" uid="uid://8e5scb54cfaa" path="res://Battle/drop-target.png" id="6_e3ex1"]
+[ext_resource type="Script" uid="uid://xoe3picbl4o2" path="res://Cards/DropTarget.gd" id="7_jisrp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_44pfk"]
+size = Vector2(90, 124)
 
 [node name="Battle" type="Node2D"]
 
@@ -27,12 +34,34 @@ offset_bottom = 34.0
 theme_override_font_sizes/font_size = 8
 text = "0"
 
-[node name="DiscardStatus" type="Node2D" parent="Hand"]
+[node name="DiscardPile" type="Node2D" parent="Hand"]
 position = Vector2(606, 329)
+script = ExtResource("4_44pfk")
 
-[node name="Sprite2D" type="Sprite2D" parent="Hand/DiscardStatus"]
+[node name="Sprite2D" type="Sprite2D" parent="Hand/DiscardPile"]
 texture = ExtResource("4_yllga")
 
-[node name="Label" type="Label" parent="Hand/DiscardStatus"]
+[node name="Label" type="Label" parent="Hand/DiscardPile"]
 offset_right = 40.0
 offset_bottom = 22.0
+
+[node name="Energy" type="Label" parent="."]
+offset_left = 18.0
+offset_top = 277.0
+offset_right = 58.0
+offset_bottom = 299.0
+theme_override_fonts/font = ExtResource("5_aus0a")
+theme_override_font_sizes/font_size = 8
+text = "3/3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DropTarget" type="Area2D" parent="."]
+position = Vector2(329, 69)
+script = ExtResource("7_jisrp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DropTarget"]
+shape = SubResource("RectangleShape2D_44pfk")
+
+[node name="Sprite2D" type="Sprite2D" parent="DropTarget"]
+texture = ExtResource("6_e3ex1")

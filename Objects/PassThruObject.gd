@@ -12,21 +12,21 @@ func _ready() -> void:
 	choose_random_flip(sprite)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
-func _on_wiggle_detect_body_entered(body: Node2D) -> void:
+func _on_wiggle_detect_body_entered(_body: Node2D) -> void:
 	if wiggle:
 		animation.play("wiggle")
 
-func choose_random_flip(sprite):
+func choose_random_flip(sprt):
 	# Generate a random integer between 0 and 1
 	var random_choice = randi() % 2
 
 	# Print the randomly chosen option
 	match random_choice:
 		0:
-			sprite.flip_h = true
+			sprt.flip_h = true
 			# Call a function or perform actions for Option A
 		1:
 			pass

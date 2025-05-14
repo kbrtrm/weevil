@@ -10,7 +10,7 @@ func _ready():
 #	choose_random_flip(mossMaterial)
 
 
-func _on_area_2d_body_entered(body):
+func _on_area_2d_body_entered(_body):
 	wiggleAnimation.play("wiggle")
 
 func choose_random_flip(sprite):

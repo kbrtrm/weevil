@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=43 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -30,7 +30,6 @@
 [ext_resource type="PackedScene" uid="uid://cefaj3xu83cnx" path="res://Objects/FlowerWeed.tscn" id="26_fx2x1"]
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
-[ext_resource type="PackedScene" uid="uid://ci055lk3xgre8" path="res://Cards/test.tscn" id="31_1vso6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
 texture = ExtResource("4_gtfkr")
@@ -2511,9 +2510,6 @@ position = Vector2(308, 68)
 energy = 0.57
 texture_scale = 0.42
 
-[node name="Sprite2D" parent="YSort/Player" index="4"]
-frame = 93
-
 [node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")
 
@@ -3301,8 +3297,6 @@ shape = SubResource("CircleShape2D_8s6nn")
 
 [node name="PauseMenu" parent="CanvasLayer2" instance=ExtResource("26_llsrg")]
 visible = false
-
-[node name="Battle" parent="." instance=ExtResource("31_1vso6")]
 
 [connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
 [connection signal="area_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_entered"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bmixqagkkfphp"]
+[gd_scene load_steps=10 format=3 uid="uid://bmixqagkkfphp"]
 
 [ext_resource type="Texture2D" uid="uid://tyrmc4walymm" path="res://Cards/card-front-bg.png" id="1_75krv"]
 [ext_resource type="Script" uid="uid://cvktnho8lcaxb" path="res://Cards/card_2.gd" id="1_yot0q"]
@@ -8,6 +8,18 @@
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="4_km0ui"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b3uvy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62fgo"]
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.937255, 0.705882, 0.129412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yot0q"]
 size = Vector2(90, 124)
@@ -25,6 +37,20 @@ offset_bottom = 124.0
 pivot_offset = Vector2(45, 62)
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_b3uvy")
+
+[node name="HoverHighlight" type="Panel" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_62fgo")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Panel"]
 layout_mode = 1
@@ -131,3 +157,6 @@ horizontal_alignment = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Panel/Area2D"]
 position = Vector2(45, 62)
 shape = SubResource("RectangleShape2D_yot0q")
+
+[connection signal="mouse_entered" from="Panel/Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Area2D" to="." method="_on_area_2d_mouse_exited"]

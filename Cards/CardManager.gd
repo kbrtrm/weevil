@@ -5,11 +5,16 @@ var cards = []
 var card_being_dragged
 var drag_offset = Vector2.ZERO  # Store the offset between mouse and card position
 
+@onready var drop_target = $"../DropTarget"
+@onready var discard_pile = $"../Hand/DiscardPile"
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	cards = get_children()
+	# Connect to the drop target's card_played signal
+	drop_target.card_played.connect(_on_card_played)
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if card_being_dragged:
 		var mouse_pos = get_global_mouse_position()
 		card_being_dragged.position = mouse_pos - drag_offset
@@ -37,3 +42,19 @@ func raycast_check_for_card():
 		# Card top level node is two parents up
 		return result[0].collider.get_parent().get_parent()
 	return null
+
+func _on_card_played(card):
+	# First, play the card effect
+	card.play_effect()
+	
+	# Then move it to the discard pile
+	move_card_to_discard(card)
+
+func move_card_to_discard(card):
+	# Remove card from its current parent
+	var current_parent = card.get_parent()
+	if current_parent:
+		current_parent.remove_child(card)
+	
+	# Add card to the discard pile
+	discard_pile.add_card(card)

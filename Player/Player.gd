@@ -37,7 +37,7 @@ func _ready():
 	animtree.active = true
 	swordhitbox.knockback_vector = roll_vector
 
-func _process(delta):
+func _process(_delta):
 	match state:
 		MOVE:
 			move_state()
