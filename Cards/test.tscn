@@ -1,12 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://ci055lk3xgre8"]
+[gd_scene load_steps=13 format=3 uid="uid://ci055lk3xgre8"]
 
 [ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
+[ext_resource type="Script" uid="uid://bcahcb1040btf" path="res://Cards/BattleManager.gd" id="1_aifkc"]
 [ext_resource type="Texture2D" uid="uid://dlqqjyy2j6m7v" path="res://Cards/deck.png" id="3_oq7fu"]
 [ext_resource type="Script" uid="uid://6o3owerqtyai" path="res://Cards/Hand.gd" id="4_4pxya"]
 [ext_resource type="Script" uid="uid://bgv0hfrekxq4q" path="res://Cards/DiscardPile.gd" id="4_44pfk"]
 [ext_resource type="Texture2D" uid="uid://e8plwoybv3m7" path="res://Cards/discard.png" id="4_yllga"]
 [ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="5_aus0a"]
 [ext_resource type="Texture2D" uid="uid://8e5scb54cfaa" path="res://Battle/drop-target.png" id="6_e3ex1"]
+[ext_resource type="Script" uid="uid://bad7tekpftsc6" path="res://Cards/EnergryManager.gd" id="6_jisrp"]
 [ext_resource type="Script" uid="uid://xoe3picbl4o2" path="res://Cards/DropTarget.gd" id="7_jisrp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jisrp"]
@@ -16,6 +18,7 @@ size = Vector2(72.807, 42.6539)
 size = Vector2(90, 124)
 
 [node name="Battle" type="Node2D"]
+script = ExtResource("1_aifkc")
 
 [node name="CardManager" type="Node2D" parent="."]
 script = ExtResource("1_4pxya")
@@ -60,7 +63,10 @@ offset_bottom = 23.0
 theme_override_font_sizes/font_size = 8
 text = "0"
 
-[node name="Energy" type="Label" parent="."]
+[node name="EnergyManager" type="Node2D" parent="."]
+script = ExtResource("6_jisrp")
+
+[node name="Energy" type="Label" parent="EnergyManager"]
 offset_left = 18.0
 offset_top = 277.0
 offset_right = 58.0
@@ -80,6 +86,14 @@ shape = SubResource("RectangleShape2D_44pfk")
 
 [node name="Sprite2D" type="Sprite2D" parent="DropTarget"]
 texture = ExtResource("6_e3ex1")
+
+[node name="EndTurnButton" type="Button" parent="."]
+offset_left = 570.0
+offset_top = 283.0
+offset_right = 629.0
+offset_bottom = 302.0
+theme_override_font_sizes/font_size = 8
+text = "End Turn"
 
 [connection signal="input_event" from="Hand/DeckStatus/DeckArea2D" to="Hand" method="_on_deck_area_2d_input_event"]
 [connection signal="card_played" from="DropTarget" to="CardManager" method="_on_drop_target_card_played"]

@@ -35,7 +35,7 @@ func _ready() -> void:
 	deck.shuffle()
 	
 	# Initial draw
-	draw_card(5)
+	#draw_card(5)
 
 # Draw specified number of cards
 func draw_card(count: int = 1):
@@ -185,20 +185,46 @@ func on_card_drag_ended(card, drop_position):
 
 # Helper function to return a card to its original position in hand
 func return_card_to_hand(card):
-	var tween = get_tree().create_tween()
+	# Make sure card is still in the cards_in_hand array
+	if not card in cards_in_hand:
+		cards_in_hand.append(card)
+	
+	# Create tween to animate back to original position
+	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(card, "global_position", card.original_position, 0.3)
-	tween.parallel().tween_property(card, "rotation", card.original_rotation, 0.3)
 	
-	# Reset z-index after animation
-	tween.tween_callback(func():
-		card.z_index = card.original_z_index
-		card.set_highlight(false)
-	)
+	# This is called when card couldn't be played, so get the original position
+	if "original_position" in card and card.original_position != Vector2.ZERO:
+		var target_pos = card.original_position
+		var target_rot = card.original_rotation
+		
+		# Animate card back to position
+		tween.tween_property(card, "position", target_pos, 0.3)
+		tween.parallel().tween_property(card, "rotation_degrees", target_rot, 0.3)
+		
+		# Shake the card to indicate it couldn't be played
+		tween.tween_callback(func(): shake_card(card))
+	else:
+		# Fallback: just arrange all cards
+		arrange_cards()
 	
-	# Rearrange cards and update highlights
-	arrange_cards()
+	# Update highlights
 	update_all_highlights()
+
+# Add a shake card effect for feedback
+func shake_card(card):
+	var original_pos = card.position
+	
+	var tween = create_tween()
+	tween.tween_property(card, "position", original_pos + Vector2(5, 0), 0.05)
+	tween.tween_property(card, "position", original_pos - Vector2(5, 0), 0.05)
+	tween.tween_property(card, "position", original_pos, 0.05)
+	
+	# Flash the cost label red
+	if "cost_label" in card and card.cost_label:
+		var original_color = card.cost_label.modulate
+		tween.parallel().tween_property(card.cost_label, "modulate", Color(1.0, 0.3, 0.3, 1.0), 0.1)
+		tween.tween_property(card.cost_label, "modulate", original_color, 0.1)
 
 # Arrange cards in hand
 func arrange_cards(is_drawing: bool = false):
@@ -373,3 +399,34 @@ func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: 
 			## Connect to signals
 			#viewer.card_clicked.connect(_on_deck_card_clicked)
 			#viewer.viewer_closed.connect(_on_deck_viewer_closed)
+			
+func discard_card_to_pile(card):
+	# Remove from hand if it's still there
+	if card in cards_in_hand:
+		cards_in_hand.erase(card)
+	
+	# Create tween for animation
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	
+	# Animate the card to the discard pile
+	var target_position = discard_pile.global_position
+	tween.tween_property(card, "global_position", target_position, 0.3)
+	tween.parallel().tween_property(card, "scale", Vector2(0.1, 0.1), 0.3)
+	tween.parallel().tween_property(card, "rotation_degrees", randf_range(-10, 10), 0.3)
+	
+	# After animation completes, add to discard pile
+	tween.tween_callback(func():
+		if card.get_parent():
+			card.get_parent().remove_child(card)
+			
+		if discard_pile:
+			if discard_pile.has_method("add_card"):
+				discard_pile.add_card(card)
+			else:
+				discard_pile.add_child(card)
+				card.position = Vector2.ZERO
+	)
+	
+	# Update UI
+	update_ui()

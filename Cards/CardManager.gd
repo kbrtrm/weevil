@@ -8,6 +8,7 @@ var drag_offset = Vector2.ZERO  # Store the offset between mouse and card positi
 @onready var drop_target = $"../DropTarget"
 @onready var discard_pile = $"../Hand/DiscardPile"
 @onready var hand = $"../Hand"
+@onready var energy_manager = $"../EnergyManager"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,6 +45,15 @@ func raycast_check_for_card():
 	return null
 
 func _on_card_played(card):
+	# Check energy cost
+	var energy_cost = card.card_cost  # Use your existing card_cost property
+	
+	# Try to use energy
+	if energy_manager and not energy_manager.use_energy(energy_cost):
+		# Not enough energy - return the card to hand
+		hand.return_card_to_hand(card)
+		return
+		
 	# First, play the card effect
 	card.play_effect()
 	
