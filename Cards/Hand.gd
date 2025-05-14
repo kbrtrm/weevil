@@ -18,12 +18,17 @@ var deck = []                 # Reference to your global deck
 var cards_in_hand = []        # Array to track cards currently in hand
 var card_being_dragged = null
 var drag_offset = Vector2.ZERO
+var highlighted_card = null
 
 # Add a tracking variable for the currently hovered card
 var hovered_card = null
 var original_rotation = 0
 var original_position = Vector2.ZERO
 var original_z_index = 0
+
+var is_dragging = false  # Track dragging state
+var just_dragged = false  # Track if we just finished dragging (to prevent immediate hover issues)
+var highlight_clear_timer = null  # Timer to prevent highlight issues
 
 # Add reference to discard pile
 @onready var discard_pile = find_child("DiscardPile")
@@ -180,6 +185,9 @@ func arrange_cards(is_drawing: bool = false):
 	# Final validation to ensure a valid start_x
 	start_x = max(SCREEN_MARGIN, start_x)
 	
+	# Update z-indices BEFORE positioning
+	update_card_z_indices()
+	
 	# Position each card
 	for i in range(num_cards):
 		var card = cards_in_hand[i]
@@ -202,9 +210,6 @@ func arrange_cards(is_drawing: bool = false):
 		
 		var angle = -adjusted_angle * (num_cards - 1) / 2 + i * adjusted_angle
 		
-		# Calculate z-index (overlapping)
-		card.z_index = i
-		
 		# Create tween for position and rotation
 		var tween = get_tree().create_tween()
 		tween.set_ease(Tween.EASE_IN_OUT)  # Set ease in/out for smooth animation
@@ -224,43 +229,101 @@ func arrange_cards(is_drawing: bool = false):
 
 # Process input for dragging cards
 func _process(_delta: float) -> void:
-	if card_being_dragged:
+	if is_dragging and card_being_dragged:
 		var mouse_pos = get_global_mouse_position()
 		card_being_dragged.position = mouse_pos - drag_offset
 		card_being_dragged.rotation_degrees = 0  # Keep card upright while dragging
+		
+		# Keep highlighted while dragging
+		if card_being_dragged.has_method("set_highlight"):
+			card_being_dragged.set_highlight(true)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			# Start dragging a card
-			var card = _get_card_under_mouse()
-			if card:
-				card_being_dragged = card
-				# Save original position and rotation for returning if needed
-				original_position = card.position
-				original_rotation = card.rotation_degrees
-				original_z_index = card.z_index
-				# Bring the dragged card to the front
-				card_being_dragged.z_index = 100
-				# Calculate drag offset
-				drag_offset = get_global_mouse_position() - card.position
-		else:
-			# Stop dragging
-			if card_being_dragged:
-				# Check if the card is dropped on a valid play area
+			# Only start dragging if we're not already dragging
+			if not is_dragging and not card_being_dragged:
+				# Set dragging flag first to prevent multiple drag processing
+				is_dragging = true
+				
+				# Clear all highlights first
+				_clear_all_highlights()
+				
+				# Get the topmost card under the mouse
+				var card = _get_topmost_card_at_position(get_global_mouse_position())
+				
+				if card:
+					# Store the card being dragged
+					card_being_dragged = card
+					
+					# Save original properties
+					original_position = card.position
+					original_rotation = card.rotation_degrees
+					original_z_index = card.z_index
+					
+					# Bring to front while dragging
+					card_being_dragged.z_index = cards_in_hand.size() + 100  # Much higher than normal
+					
+					# Calculate drag offset
+					drag_offset = get_global_mouse_position() - card.position
+					
+					# Highlight only the dragged card
+					if card.has_method("set_highlight"):
+						card.set_highlight(true)
+		else:  # Mouse released
+			if is_dragging and card_being_dragged:
+				# Check if dropped on a valid target
 				var drop_target = _check_drop_targets(get_global_mouse_position())
 				
 				if drop_target:
-					# Card was dropped on a valid target
+					# Play the card on the target
 					play_card_on_target(card_being_dragged, drop_target)
 				else:
-					# No valid target, return the card to hand
-					card_being_dragged.z_index = original_z_index
+					# Return to hand
 					var tween = get_tree().create_tween()
 					tween.tween_property(card_being_dragged, "position", original_position, 0.2)
 					tween.parallel().tween_property(card_being_dragged, "rotation_degrees", original_rotation, 0.2)
+					
+					# Reset z-index
+					card_being_dragged.z_index = original_z_index
 				
+				# Set flag to prevent immediate hover issues
+				just_dragged = true
+				
+				# Start a short timer to allow proper hover detection after drag
+				if highlight_clear_timer:
+					highlight_clear_timer.queue_free()
+				highlight_clear_timer = get_tree().create_timer(0.1)
+				highlight_clear_timer.timeout.connect(_after_drag_timer_timeout)
+				
+				# Clear dragging state
 				card_being_dragged = null
+				is_dragging = false
+				
+				# Update card positions and z-indices
+				arrange_cards()
+
+# Add this function to handle post-drag timer timeout
+func _after_drag_timer_timeout():
+	just_dragged = false
+	
+	# Clear all highlights
+	_clear_all_highlights()
+	
+	# Check what's under the mouse now
+	var current_card = _get_topmost_card_at_position(get_global_mouse_position())
+	if current_card and current_card.has_method("set_highlight"):
+		current_card.set_highlight(true)
+		hovered_card = current_card
+
+# Add this function to clear all card highlights
+func _clear_all_highlights():
+	for card in cards_in_hand:
+		if card.has_method("set_highlight"):
+			card.set_highlight(false)
+	
+	# Reset hovered card reference
+	hovered_card = null
 
 # NEW FUNCTION: Check if mouse position is over any drop target
 func _check_drop_targets(mouse_pos):
@@ -311,10 +374,16 @@ func play_card_on_target(card, target):
 	move_to_discard_pile(card)
 	
 	# Rearrange the hand
-	arrange_cards()
+	arrange_cards()  # This now calls update_card_z_indices()
 	
 	# Update UI
 	update_ui()
+	
+	# Check if mouse is over a card now and highlight it
+	var current_card = _get_topmost_card_at_position(get_global_mouse_position())
+	if current_card and current_card.has_method("set_highlight"):
+		current_card.set_highlight(true)
+		hovered_card = current_card
 
 # NEW FUNCTION: Move a card to the discard pile
 func move_to_discard_pile(card):
@@ -337,21 +406,7 @@ func move_to_discard_pile(card):
 
 # Helper function to get the card under the mouse
 func _get_card_under_mouse():
-	var mouse_pos = get_global_mouse_position()
-	
-	# Check cards in reverse order (top to bottom) for better usability
-	for i in range(cards_in_hand.size() - 1, -1, -1):
-		var card = cards_in_hand[i]
-		
-		# Simple rectangular collision check
-		# You might want to use Area2D for more accurate collision
-		var card_size = Vector2(90, 124)  # Use your actual card size
-		var card_rect = Rect2(card.position - card_size/2, card_size)
-		
-		if card_rect.has_point(mouse_pos):
-			return card
-			
-	return null
+	return _get_topmost_card_at_position(get_global_mouse_position())
 
 # Add a card to hand (can be called from outside)
 func add_card_to_hand(card_data):
@@ -410,3 +465,105 @@ func _on_shuffle_button_pressed():
 	randomize()
 	deck.shuffle()
 	print("Deck shuffled!")
+	
+# Called when a card wants to be highlighted
+func highlight_card(card):
+	# First, unhighlight any currently highlighted card
+	if highlighted_card and highlighted_card != card:
+		# Call the unhighlight method on the previous card
+		if highlighted_card.has_method("set_highlight"):
+			highlighted_card.set_highlight(false)
+	
+	# Set the new highlighted card
+	highlighted_card = card
+	
+	# Make sure no other cards are highlighted
+	for c in cards_in_hand:
+		if c != card and c.has_method("set_highlight"):
+			c.set_highlight(false)
+			
+# Called when a card is hovered
+func on_card_hovered(card):
+	# Skip hover handling during dragging or right after dragging
+	if is_dragging or just_dragged:
+		return
+	
+	# Find the topmost card at the current mouse position
+	var topmost_card = _get_topmost_card_at_position(get_global_mouse_position())
+	
+	# Only process if this is actually the topmost card
+	if topmost_card == card:
+		# Clear all other highlights first
+		_clear_all_highlights()
+		
+		# Highlight this card
+		if card.has_method("set_highlight"):
+			card.set_highlight(true)
+			
+		# Save as currently hovered card
+		hovered_card = card
+	else:
+		# This is not the topmost card, so it shouldn't be highlighted
+		# This handles cases of overlapping cards triggering hover events
+		if card.has_method("set_highlight"):
+			card.set_highlight(false)
+
+# Called when card hover ends
+func on_card_unhovered(card):
+	# Skip hover handling during dragging
+	if is_dragging or just_dragged:
+		return
+	
+	# Let's delay the unhover slightly to prevent flickering
+	await get_tree().create_timer(0.05).timeout
+	
+	# Check what's currently under the mouse
+	var current_topmost = _get_topmost_card_at_position(get_global_mouse_position())
+	
+	# If the mouse moved to a different card, highlight that one instead
+	if current_topmost and current_topmost != card:
+		# Clear all other highlights first
+		_clear_all_highlights()
+		
+		# Highlight the new card
+		if current_topmost.has_method("set_highlight"):
+			current_topmost.set_highlight(true)
+			
+		# Update the hovered card reference
+		hovered_card = current_topmost
+	else:
+		# Only unhighlight if this was the previously hovered card
+		if hovered_card == card:
+			# No other card under mouse, clear the highlight
+			if card.has_method("set_highlight"):
+				card.set_highlight(false)
+			
+			# Clear hovered card reference
+			hovered_card = null
+
+# Get the topmost card (highest z-index) at a given position
+func _get_topmost_card_at_position(position):
+	var highest_z_index = -1
+	var topmost_card = null
+	
+	for card in cards_in_hand:
+		var card_size = Vector2(90, 124)  # Use your actual card size
+		var card_rect = Rect2(card.position - card_size/2, card_size)
+		
+		if card_rect.has_point(position) and card.z_index > highest_z_index:
+			highest_z_index = card.z_index
+			topmost_card = card
+	
+	return topmost_card
+	
+# Ensure z-indices are properly set for all cards
+func update_card_z_indices():
+	# Sort cards by their position in the cards_in_hand array
+	# Later cards (higher index) should be displayed on top
+	for i in range(cards_in_hand.size()):
+		var card = cards_in_hand[i]
+		card.z_index = i
+	
+	# If there's a card being dragged, ensure it's always on top
+	if card_being_dragged and card_being_dragged in cards_in_hand:
+		card_being_dragged.z_index = cards_in_hand.size() + 10

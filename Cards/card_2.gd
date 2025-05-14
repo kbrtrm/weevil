@@ -13,6 +13,8 @@ var name_label: Label
 var description_label: RichTextLabel
 var art_texture: TextureRect
 
+var is_highlighted = false
+
 @onready var HoverHighlightRef = $Panel/HoverHighlight
 
 # Called when the node enters the scene tree for the first time.
@@ -47,9 +49,35 @@ func center_pivot():
 func _process(_delta: float) -> void:
 	pass
 
-func _on_area_2d_mouse_entered() -> void:
-	HoverHighlightRef.visible = true
+# Turn highlight on/off programmatically
+func set_highlight(state: bool):
+	is_highlighted = state
+	
+	var panel = get_node_or_null("Panel")
+	if panel:
+		var highlight = panel.get_node_or_null("HoverHighlight")
+		if highlight:
+			highlight.visible = state
 
+# Called when mouse enters the card area
+func _on_area_2d_mouse_entered():
+	var hand = get_parent()
+	if hand and hand.has_method("on_card_hovered"):
+		hand.on_card_hovered(self)
+	else:
+		# Fallback if not in a hand
+		set_highlight(true)
 
-func _on_area_2d_mouse_exited() -> void:
-	HoverHighlightRef.visible = false
+# Called when mouse exits the card area
+func _on_area_2d_mouse_exited():
+	var hand = get_parent()
+	if hand and hand.has_method("on_card_unhovered"):
+		hand.on_card_unhovered(self)
+	else:
+		# Fallback if not in a hand
+		set_highlight(false)
+
+# Card effect when played (implemented by your specific cards)
+func play_effect():
+	print("Playing card: ", card_name)
+	# Implement card-specific effects here
