@@ -142,9 +142,16 @@ func update_ui():
 
 # Arrange cards in a curved formation at the bottom of the screen
 func arrange_cards(is_drawing: bool = false):
+	# Clean up the cards_in_hand array first to remove any invalid cards
+	for i in range(cards_in_hand.size() - 1, -1, -1):
+		if not is_instance_valid(cards_in_hand[i]) or not cards_in_hand[i].is_inside_tree():
+			cards_in_hand.remove_at(i)
+	
 	var num_cards = cards_in_hand.size()
 	if num_cards <= 0:
 		return
+	
+	print("Arranging ", num_cards, " cards") # Debug print
 	
 	# Get screen width
 	var screen_width = get_viewport_rect().size.x
@@ -185,12 +192,16 @@ func arrange_cards(is_drawing: bool = false):
 	# Final validation to ensure a valid start_x
 	start_x = max(SCREEN_MARGIN, start_x)
 	
-	# Update z-indices BEFORE positioning
+	# Update z-indices before positioning
 	update_card_z_indices()
 	
 	# Position each card
 	for i in range(num_cards):
 		var card = cards_in_hand[i]
+		
+	 # Skip if this is the card being dragged or if card is invalid
+		if (is_dragging and card == card_being_dragged) or not is_instance_valid(card) or not card.is_inside_tree():
+			continue
 		
 		# Calculate normalized position (0 to 1) from left to right
 		var t = 0.0
@@ -229,31 +240,26 @@ func arrange_cards(is_drawing: bool = false):
 
 # Process input for dragging cards
 func _process(_delta: float) -> void:
-	if is_dragging and card_being_dragged:
+	if is_dragging and is_instance_valid(card_being_dragged) and card_being_dragged.is_inside_tree():
 		var mouse_pos = get_global_mouse_position()
 		card_being_dragged.position = mouse_pos - drag_offset
 		card_being_dragged.rotation_degrees = 0  # Keep card upright while dragging
-		
-		# Keep highlighted while dragging
-		if card_being_dragged.has_method("set_highlight"):
-			card_being_dragged.set_highlight(true)
+	elif is_dragging:
+		# Card is no longer valid, reset dragging state
+		is_dragging = false
+		card_being_dragged = null
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			# Only start dragging if we're not already dragging
 			if not is_dragging and not card_being_dragged:
-				# Set dragging flag first to prevent multiple drag processing
-				is_dragging = true
-				
-				# Clear all highlights first
-				_clear_all_highlights()
-				
 				# Get the topmost card under the mouse
 				var card = _get_topmost_card_at_position(get_global_mouse_position())
 				
 				if card:
-					# Store the card being dragged
+					# Set dragging flag
+					is_dragging = true
 					card_being_dragged = card
 					
 					# Save original properties
@@ -261,47 +267,53 @@ func _input(event: InputEvent) -> void:
 					original_rotation = card.rotation_degrees
 					original_z_index = card.z_index
 					
-					# Bring to front while dragging
-					card_being_dragged.z_index = cards_in_hand.size() + 100  # Much higher than normal
-					
-					# Calculate drag offset
-					drag_offset = get_global_mouse_position() - card.position
-					
-					# Highlight only the dragged card
-					if card.has_method("set_highlight"):
-						card.set_highlight(true)
+					# Move this card to the absolute front if it's valid
+					# First, check if card is still in the scene tree
+					if is_instance_valid(card_being_dragged) and card_being_dragged.is_inside_tree():
+						# Then set this card much higher than any others
+						card_being_dragged.z_index = 1000  # Use a very high value
+						
+						# Calculate drag offset
+						drag_offset = get_global_mouse_position() - card.position
+						
+						# Add highlight
+						if card.has_method("set_highlight"):
+							card.set_highlight(true)
+					else:
+						# Card is not valid, reset dragging state
+						is_dragging = false
+						card_being_dragged = null
+		
 		else:  # Mouse released
 			if is_dragging and card_being_dragged:
-				# Check if dropped on a valid target
-				var drop_target = _check_drop_targets(get_global_mouse_position())
-				
-				if drop_target:
-					# Play the card on the target
-					play_card_on_target(card_being_dragged, drop_target)
-				else:
-					# Return to hand
-					var tween = get_tree().create_tween()
-					tween.tween_property(card_being_dragged, "position", original_position, 0.2)
-					tween.parallel().tween_property(card_being_dragged, "rotation_degrees", original_rotation, 0.2)
+				# Make sure card is still valid
+				if is_instance_valid(card_being_dragged) and card_being_dragged.is_inside_tree():
+					# Check if dropped on a valid target
+					var drop_target = _check_drop_targets(get_global_mouse_position())
 					
-					# Reset z-index
-					card_being_dragged.z_index = original_z_index
+					if drop_target:
+						# Play the card on the target
+						play_card_on_target(card_being_dragged, drop_target)
+					else:
+						# Return to hand - animate back to original position
+						var tween = get_tree().create_tween()
+						tween.tween_property(card_being_dragged, "position", original_position, 0.3)
+						tween.parallel().tween_property(card_being_dragged, "rotation_degrees", original_rotation, 0.3)
+						
+						# After animation, restore z-index and arrange cards
+						tween.tween_callback(func(): 
+							# Make sure card is still valid before setting z-index
+							if is_instance_valid(card_being_dragged) and card_being_dragged.is_inside_tree():
+								# Restore the original z-index
+								card_being_dragged.z_index = original_z_index
+							
+							# Rearrange all cards
+							arrange_cards()
+						)
 				
-				# Set flag to prevent immediate hover issues
-				just_dragged = true
-				
-				# Start a short timer to allow proper hover detection after drag
-				if highlight_clear_timer:
-					highlight_clear_timer.queue_free()
-				highlight_clear_timer = get_tree().create_timer(0.1)
-				highlight_clear_timer.timeout.connect(_after_drag_timer_timeout)
-				
-				# Clear dragging state
-				card_being_dragged = null
+				# Reset dragging state
 				is_dragging = false
-				
-				# Update card positions and z-indices
-				arrange_cards()
+				card_being_dragged = null
 
 # Add this function to handle post-drag timer timeout
 func _after_drag_timer_timeout():
@@ -547,23 +559,38 @@ func _get_topmost_card_at_position(position):
 	var topmost_card = null
 	
 	for card in cards_in_hand:
+		# Simple rectangular collision check
 		var card_size = Vector2(90, 124)  # Use your actual card size
 		var card_rect = Rect2(card.position - card_size/2, card_size)
 		
-		if card_rect.has_point(position) and card.z_index > highest_z_index:
-			highest_z_index = card.z_index
-			topmost_card = card
+		if card_rect.has_point(position):
+			print("Card at position: ", card.card_name if "card_name" in card else "Unknown", " with z-index: ", card.z_index) # Debug print
+			
+			if card.z_index > highest_z_index:
+				highest_z_index = card.z_index
+				topmost_card = card
+	
+	if topmost_card:
+		print("Topmost card: ", topmost_card.card_name if "card_name" in topmost_card else "Unknown") # Debug print
 	
 	return topmost_card
 	
-# Ensure z-indices are properly set for all cards
+# Make sure z-indices are properly set for all cards
 func update_card_z_indices():
 	# Sort cards by their position in the cards_in_hand array
 	# Later cards (higher index) should be displayed on top
 	for i in range(cards_in_hand.size()):
 		var card = cards_in_hand[i]
-		card.z_index = i
+		
+		# Make sure card is still valid before setting z-index
+		if is_instance_valid(card) and card.is_inside_tree():
+			card.z_index = i
+		else:
+			# Card is no longer valid, remove from the array
+			cards_in_hand.remove_at(i)
+			# Need to adjust the loop counter since we removed an item
+			i -= 1
 	
 	# If there's a card being dragged, ensure it's always on top
-	if card_being_dragged and card_being_dragged in cards_in_hand:
+	if is_dragging and is_instance_valid(card_being_dragged) and card_being_dragged.is_inside_tree():
 		card_being_dragged.z_index = cards_in_hand.size() + 10

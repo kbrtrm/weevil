@@ -51,13 +51,17 @@ func _process(_delta: float) -> void:
 
 # Turn highlight on/off programmatically
 func set_highlight(state: bool):
-	is_highlighted = state
-	
+	# Get direct reference to the highlight panel
 	var panel = get_node_or_null("Panel")
 	if panel:
 		var highlight = panel.get_node_or_null("HoverHighlight")
 		if highlight:
 			highlight.visible = state
+			print("Setting highlight to: ", state) # Debug print
+		else:
+			print("HoverHighlight not found in Panel!") # Debug print
+	else:
+		print("Panel not found in card!") # Debug print
 
 # Called when mouse enters the card area
 func _on_area_2d_mouse_entered():
