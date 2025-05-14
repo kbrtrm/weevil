@@ -49,39 +49,22 @@ func center_pivot():
 func _process(_delta: float) -> void:
 	pass
 
-# Turn highlight on/off programmatically
-func set_highlight(state: bool):
-	# Get direct reference to the highlight panel
-	var panel = get_node_or_null("Panel")
-	if panel:
-		var highlight = panel.get_node_or_null("HoverHighlight")
-		if highlight:
-			highlight.visible = state
-			print("Setting highlight to: ", state) # Debug print
-		else:
-			print("HoverHighlight not found in Panel!") # Debug print
-	else:
-		print("Panel not found in card!") # Debug print
+# In card_2.gd - simplified hover functions
 
-# Called when mouse enters the card area
+func set_highlight(state: bool):
+	var highlight = $Panel/HoverHighlight
+	if highlight:
+		highlight.visible = state
+
 func _on_area_2d_mouse_entered():
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_hovered"):
 		hand.on_card_hovered(self)
-	else:
-		# Fallback if not in a hand
-		set_highlight(true)
 
-# Called when mouse exits the card area
 func _on_area_2d_mouse_exited():
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_unhovered"):
 		hand.on_card_unhovered(self)
-	else:
-		# Fallback if not in a hand
-		set_highlight(false)
-
-# Card effect when played (implemented by your specific cards)
+		
 func play_effect():
-	print("Playing card: ", card_name)
-	# Implement card-specific effects here
+	print("played card this is it's effect")

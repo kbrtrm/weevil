@@ -65,3 +65,5 @@ shape = SubResource("RectangleShape2D_44pfk")
 
 [node name="Sprite2D" type="Sprite2D" parent="DropTarget"]
 texture = ExtResource("6_e3ex1")
+
+[connection signal="card_played" from="DropTarget" to="CardManager" method="_on_drop_target_card_played"]
