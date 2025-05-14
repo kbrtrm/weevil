@@ -5,6 +5,7 @@ signal card_played(card)
 
 func _ready():
 	input_pickable = true
+	add_to_group("drop_targets")
 
 # These methods are part of Godot's drag and drop system
 func can_drop_data(position, data):

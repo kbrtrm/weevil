@@ -82,6 +82,58 @@ func _process(delta: float) -> void:
 		card_being_dragged.position = get_global_mouse_position() - drag_offset
 		card_being_dragged.rotation_degrees = 0
 
+# Move a card to the discard pile with animation
+func move_card_to_discard(card):
+	# Remove from hand if it's still there
+	if card in cards_in_hand:
+		cards_in_hand.erase(card)
+	
+	# Don't remove the card from the parent yet - we want to animate it first
+	
+	# Start animation to discard pile
+	if discard_pile:
+		# Calculate the global position of the discard pile
+		var target_position = discard_pile.global_position
+		
+		# Create a tween for the animation
+		var tween = get_tree().create_tween()
+		tween.set_ease(Tween.EASE_OUT)
+		tween.set_trans(Tween.TRANS_BACK)
+		
+		# Animate the card to the discard pile position
+		tween.tween_property(card, "global_position", target_position, 0.5)
+		tween.parallel().tween_property(card, "scale", Vector2(0,0), 0.5)
+		
+		# Animate rotation to flat (or slightly random for visual effect)
+		var target_rotation = randf_range(-10, 10)
+		tween.parallel().tween_property(card, "rotation_degrees", target_rotation, 0.5)
+		
+		# Ensure card is at a good z-index during the animation
+		card.z_index = 1000
+		
+		# After animation completes, add to discard pile
+		tween.tween_callback(func():
+			# Remove card from current parent
+			if card.get_parent():
+				card.get_parent().remove_child(card)
+				
+			# Add to discard pile
+			if discard_pile.has_method("add_card"):
+				discard_pile.add_card(card)
+			else:
+				# Fallback if no add_card method
+				discard_pile.add_child(card)
+				card.position = Vector2.ZERO
+		)
+	else:
+		# If no discard pile found, just free the card
+		print("Warning: Discard pile not found, card will be removed")
+		card.queue_free()
+	
+	# Update hand (cards are already removed from the hand array)
+	arrange_cards()
+	update_ui()
+
 # Input handling
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -233,7 +285,11 @@ func get_drop_target_at_position(position):
 			var shape = collision.shape
 			
 			if shape is RectangleShape2D:
-				var rect = Rect2(target.global_position - shape.extents, shape.extents * 2)
+				# Convert to global position to properly check
+				var extents = shape.extents
+				var global_pos = target.global_position
+				var rect = Rect2(global_pos - extents, extents * 2)
+				
 				if rect.has_point(position):
 					return target
 	
@@ -244,29 +300,16 @@ func play_card(card, target):
 	# Remove from hand
 	cards_in_hand.erase(card)
 	
-	# Emit signal on target
-	if target.has_signal("card_played"):
-		target.emit_signal("card_played", card)
-	elif target.has_method("play_card"):
-		target.play_card(card)
+	# Play the card effect
+	if card.has_method("play_effect"):
+		card.play_effect()
 	
-	# Move to discard
-	if card.get_parent():
-		card.get_parent().remove_child(card)
-		
-	if discard_pile:
-		if discard_pile.has_method("add_card"):
-			discard_pile.add_card(card)
-		else:
-			discard_pile.add_child(card)
-			card.position = Vector2.ZERO
-			card.rotation_degrees = 0
-	else:
-		card.queue_free()
+	# Move to discard pile  
+	move_card_to_discard(card)
 	
-	# Update hand
-	arrange_cards()
-	update_ui()
+	# Update hand (already done in move_card_to_discard)
+	# arrange_cards()
+	# update_ui()
 
 # Handle card hover
 func on_card_hovered(card):
@@ -299,3 +342,23 @@ func update_all_highlights():
 		card_being_dragged.set_highlight(true)
 	elif hovered_card and hovered_card.has_method("set_highlight"):
 		hovered_card.set_highlight(true)
+
+
+
+func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var viewer = preload("res://Cards/DeckViewer.tscn").instantiate()
+			add_child(viewer)
+			
+			# Position at center of screen
+			var screen_size = get_viewport_rect().size
+			viewer.position = Vector2(screen_size.x / 2, screen_size.y / 2)
+			viewer.z_index = 2000
+			
+			# Display the deck
+			viewer.display_deck(deck, "Remaining Cards: " + str(deck.size()))
+			
+			## Connect to signals
+			#viewer.card_clicked.connect(_on_deck_card_clicked)
+			#viewer.viewer_closed.connect(_on_deck_viewer_closed)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ci055lk3xgre8"]
+[gd_scene load_steps=11 format=3 uid="uid://ci055lk3xgre8"]
 
 [ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
 [ext_resource type="Texture2D" uid="uid://dlqqjyy2j6m7v" path="res://Cards/deck.png" id="3_oq7fu"]
@@ -8,6 +8,9 @@
 [ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="5_aus0a"]
 [ext_resource type="Texture2D" uid="uid://8e5scb54cfaa" path="res://Battle/drop-target.png" id="6_e3ex1"]
 [ext_resource type="Script" uid="uid://xoe3picbl4o2" path="res://Cards/DropTarget.gd" id="7_jisrp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jisrp"]
+size = Vector2(72.807, 42.6539)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44pfk"]
 size = Vector2(90, 124)
@@ -34,6 +37,14 @@ offset_bottom = 34.0
 theme_override_font_sizes/font_size = 8
 text = "0"
 
+[node name="DeckArea2D" type="Area2D" parent="Hand/DeckStatus"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hand/DeckStatus/DeckArea2D"]
+position = Vector2(2, 2)
+rotation = 0.523599
+skew = 0.0593411
+shape = SubResource("RectangleShape2D_jisrp")
+
 [node name="DiscardPile" type="Node2D" parent="Hand"]
 position = Vector2(606, 329)
 script = ExtResource("4_44pfk")
@@ -42,8 +53,12 @@ script = ExtResource("4_44pfk")
 texture = ExtResource("4_yllga")
 
 [node name="Label" type="Label" parent="Hand/DiscardPile"]
-offset_right = 40.0
-offset_bottom = 22.0
+offset_left = 6.0
+offset_top = 12.0
+offset_right = 27.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 8
+text = "0"
 
 [node name="Energy" type="Label" parent="."]
 offset_left = 18.0
@@ -66,4 +81,5 @@ shape = SubResource("RectangleShape2D_44pfk")
 [node name="Sprite2D" type="Sprite2D" parent="DropTarget"]
 texture = ExtResource("6_e3ex1")
 
+[connection signal="input_event" from="Hand/DeckStatus/DeckArea2D" to="Hand" method="_on_deck_area_2d_input_event"]
 [connection signal="card_played" from="DropTarget" to="CardManager" method="_on_drop_target_card_played"]

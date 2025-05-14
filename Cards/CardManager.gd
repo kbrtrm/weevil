@@ -58,3 +58,11 @@ func move_card_to_discard(card):
 	
 	# Add card to the discard pile
 	discard_pile.add_card(card)
+	
+func _on_drop_target_card_played(card):
+	# First, play the card effect
+	if card.has_method("play_effect"):
+		card.play_effect()
+	
+	# Then move it to the discard pile
+	move_card_to_discard(card)
