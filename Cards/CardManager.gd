@@ -44,14 +44,15 @@ func raycast_check_for_card():
 		return result[0].collider.get_parent().get_parent()
 	return null
 
+# In CardManager.gd
 func _on_card_played(card):
 	# Check energy cost
-	var energy_cost = card.card_cost  # Use your existing card_cost property
+	var energy_cost = card.card_cost
 	
 	# Try to use energy
 	if energy_manager and not energy_manager.use_energy(energy_cost):
-		# Not enough energy - return the card to hand
-		hand.return_card_to_hand(card)
+		# Not enough energy - return the card to hand WITH shaking
+		hand.return_card_to_hand(card, true)
 		return
 		
 	# First, play the card effect

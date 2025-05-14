@@ -40,6 +40,10 @@ func _ready() -> void:
 # Draw specified number of cards
 func draw_card(count: int = 1):
 	for i in range(count):
+		# Check if deck is empty and reshuffle discard pile if needed
+		if deck.size() <= 0:
+			reshuffle_discard_pile()
+			
 		if deck.size() <= 0 or cards_in_hand.size() >= MAX_CARDS_IN_HAND:
 			break
 			
@@ -177,17 +181,28 @@ func on_card_drag_ended(card, drop_position):
 		if drop_target.has_signal("card_played"):
 			drop_target.emit_signal("card_played", card)
 		else:
-			# Fallback if no signal - return card to hand
-			return_card_to_hand(card)
+			# Fallback if no signal - return card to hand without shaking
+			return_card_to_hand(card, false)
 	else:
-		# Invalid drop - return to hand
-		return_card_to_hand(card)
+		# Invalid drop - return to hand without shaking
+		return_card_to_hand(card, false)
 
 # Helper function to return a card to its original position in hand
-func return_card_to_hand(card):
+# Added a parameter to control whether the card should shake
+func return_card_to_hand(card, should_shake: bool = false):
 	# Make sure card is still in the cards_in_hand array
 	if not card in cards_in_hand:
 		cards_in_hand.append(card)
+	
+	# Calculate what the rotation should be based on the card's position in the hand
+	var card_index = cards_in_hand.find(card)
+	var num_cards = cards_in_hand.size()
+	var proper_rotation = 0.0
+	
+	if num_cards > 1:
+		# Calculate the proper rotation based on the card's position in the hand
+		var t = float(card_index) / float(num_cards - 1)
+		proper_rotation = -CARD_ANGLE * (num_cards - 1) / 2 + card_index * CARD_ANGLE
 	
 	# Create tween to animate back to original position
 	var tween = create_tween()
@@ -196,14 +211,17 @@ func return_card_to_hand(card):
 	# This is called when card couldn't be played, so get the original position
 	if "original_position" in card and card.original_position != Vector2.ZERO:
 		var target_pos = card.original_position
-		var target_rot = card.original_rotation
 		
-		# Animate card back to position
+		# Animate card back to position with proper rotation
 		tween.tween_property(card, "position", target_pos, 0.3)
-		tween.parallel().tween_property(card, "rotation_degrees", target_rot, 0.3)
+		tween.parallel().tween_property(card, "rotation_degrees", proper_rotation, 0.3)
 		
-		# Shake the card to indicate it couldn't be played
-		tween.tween_callback(func(): shake_card(card))
+		# Save the proper rotation so the card remembers it
+		card.original_rotation = proper_rotation
+		
+		# Only shake if specifically requested (e.g., for insufficient energy)
+		if should_shake:
+			tween.tween_callback(func(): shake_card(card))
 	else:
 		# Fallback: just arrange all cards
 		arrange_cards()
@@ -214,11 +232,16 @@ func return_card_to_hand(card):
 # Add a shake card effect for feedback
 func shake_card(card):
 	var original_pos = card.position
+	var original_rot = card.rotation_degrees
 	
 	var tween = create_tween()
+	# Shake horizontally
 	tween.tween_property(card, "position", original_pos + Vector2(5, 0), 0.05)
 	tween.tween_property(card, "position", original_pos - Vector2(5, 0), 0.05)
 	tween.tween_property(card, "position", original_pos, 0.05)
+	
+	# Ensure rotation is maintained after shaking
+	tween.tween_property(card, "rotation_degrees", original_rot, 0.05)
 	
 	# Flash the cost label red
 	if "cost_label" in card and card.cost_label:
@@ -430,3 +453,82 @@ func discard_card_to_pile(card):
 	
 	# Update UI
 	update_ui()
+	
+# New function to reshuffle discard pile into deck
+func reshuffle_discard_pile():
+	# First, check if we have a discard pile reference
+	if not discard_pile or discard_pile.discarded_cards.size() <= 0:
+		print("No cards in discard pile to reshuffle!")
+		return
+		
+	print("Reshuffling discard pile into deck...")
+	
+	# Create a temporary array to hold card data
+	var cards_to_add = []
+	
+	# Get all card data from discarded cards
+	for discarded_card in discard_pile.discarded_cards:
+		# Extract the data we need to recreate this card
+		var card_data = {
+			"name": discarded_card.card_name,
+			"cost": discarded_card.card_cost,
+			"desc": discarded_card.card_desc
+		}
+		
+		# Add art reference if available
+		if discarded_card.card_art:
+			card_data["art"] = discarded_card.card_art.resource_path
+			
+		# Add to our array of cards to shuffle back in
+		cards_to_add.append(card_data)
+		
+		# Remove the card node
+		discarded_card.queue_free()
+	
+	# Clear the discard pile
+	discard_pile.discarded_cards.clear()
+	
+	# Update discard pile UI
+	var label = discard_pile.find_child("Label")
+	if label:
+		label.text = "0"
+		
+	# Play a reshuffling animation/effect if desired
+	play_reshuffle_effect()
+	
+	# Add the cards to the deck and shuffle
+	deck.append_array(cards_to_add)
+	randomize()
+	deck.shuffle()
+	
+	# Update deck UI
+	update_ui()	
+
+# Play a visual effect for reshuffling
+func play_reshuffle_effect():
+	# Simple animation showing cards moving from discard to deck
+	if discard_pile and deck_status:
+		# Create a temporary sprite to show movement
+		var temp_sprite = Sprite2D.new()
+		temp_sprite.texture = preload("res://Cards/card-front-bg.png")  # Use an appropriate texture
+		temp_sprite.scale = Vector2(0.5, 0.5)  # Smaller version for the animation
+		add_child(temp_sprite)
+		
+		# Position at discard pile
+		temp_sprite.global_position = discard_pile.global_position
+		
+		# Create animation
+		var tween = create_tween()
+		tween.set_ease(Tween.EASE_IN_OUT)
+		
+		# Move to deck position
+		tween.tween_property(temp_sprite, "global_position", deck_status.global_position, 0.5)
+		
+		# Scale down as it reaches the deck
+		tween.parallel().tween_property(temp_sprite, "scale", Vector2(0.1, 0.1), 0.5)
+		
+		# Add a little rotation for visual interest
+		tween.parallel().tween_property(temp_sprite, "rotation_degrees", 360, 0.5)
+		
+		# Clean up after animation
+		tween.tween_callback(func(): temp_sprite.queue_free())

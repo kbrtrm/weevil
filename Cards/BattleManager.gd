@@ -34,29 +34,16 @@ func start_turn():
 
 # Play a visual effect to indicate end of turn
 func play_end_turn_effect():
-	# Darken the screen briefly
-	var screen_overlay = ColorRect.new()
-	screen_overlay.color = Color(0, 0, 0, 0)
-	screen_overlay.size = get_viewport_rect().size
-	add_child(screen_overlay)
-	
-	# Create tween for darkening effect
-	#var tween = create_tween()
-	#tween.tween_property(screen_overlay, "color", Color(0, 0, 0, 0.3), 0.2)
-	#tween.tween_property(screen_overlay, "color", Color(0, 0, 0, 0), 0.2)
-	
-	# Remove the overlay after the effect
-	#tween.tween_callback(func():
-		#screen_overlay.queue_free()
-	#)
+	pass
 
+# Make end_turn() an async function that waits for discard_hand to complete
 func end_turn():
 	if is_player_turn:
 		# Play end turn effect
 		play_end_turn_effect()
 		
-		# Discard all cards in hand at the end of player's turn
-		discard_hand()
+		# Wait for discard to complete before continuing
+		await discard_hand()
 	
 	# Emit signal
 	turn_ended.emit(current_turn, is_player_turn)
@@ -71,7 +58,7 @@ func end_turn():
 	# Start the next turn
 	start_turn()
 
-# Discard all cards in the player's hand
+# Modify discard_hand to properly return when complete
 func discard_hand():
 	# Create a copy of the array since we'll be modifying it while iterating
 	var cards_to_discard = hand.cards_in_hand.duplicate()
