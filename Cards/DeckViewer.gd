@@ -119,10 +119,20 @@ func _create_card_grid(deck_data, grid_width, card_scale, spacing):
 		
 		# Set card properties
 		card.card_name = card_data.name
-		card.card_cost = card_data.cost
-		card.card_desc = card_data.desc
+		card.card_cost = card_data.cost if "cost" in card_data else 1
 		
-		if "art" in card_data:
+		# Handle different property names for description
+		if "description" in card_data:
+			card.card_desc = card_data.description
+		elif "desc" in card_data:
+			card.card_desc = card_data.desc
+		else:
+			card.card_desc = "No description available"
+		
+		# Handle different property names for artwork
+		if "artwork_path" in card_data and card_data.artwork_path:
+			card.card_art = load(card_data.artwork_path)
+		elif "art" in card_data and card_data.art:
 			card.card_art = load(card_data.art)
 		
 		# Add to container and position

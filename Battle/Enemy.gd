@@ -8,7 +8,7 @@ signal enemy_died
 
 # Enemy stats
 @export var enemy_name: String = "Enemy"
-@export var max_health: int = 50
+@export var max_health: int = 15
 @export var base_damage: int = 8
 var health: int
 var block: int = 0

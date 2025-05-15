@@ -463,6 +463,33 @@ func update_all_highlights():
 func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("Opening deck viewer with " + str(deck.size()) + " cards")
+			
+			# Create a safe version of the deck for viewing
+			var view_deck = []
+			for card_data in deck:
+				# Create a clean copy with only the necessary properties
+				var safe_card = {
+					"name": card_data.name,
+					"cost": card_data.cost if "cost" in card_data else 1
+				}
+				
+				# Handle different property names
+				if "description" in card_data:
+					safe_card["description"] = card_data.description
+				elif "desc" in card_data:
+					safe_card["description"] = card_data.desc  # Unify to use 'description'
+				else:
+					safe_card["description"] = "No description"
+					
+				# Handle different art property names
+				if "artwork_path" in card_data and card_data.artwork_path:
+					safe_card["art"] = card_data.artwork_path
+				elif "art" in card_data and card_data.art:
+					safe_card["art"] = card_data.art
+					
+				view_deck.append(safe_card)
+			
 			var viewer = preload("res://Cards/DeckViewer.tscn").instantiate()
 			add_child(viewer)
 			
@@ -472,11 +499,7 @@ func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: 
 			viewer.z_index = 2000
 			
 			# Display the deck
-			viewer.display_deck(deck, "Remaining Cards: " + str(deck.size()))
-			
-			## Connect to signals
-			#viewer.card_clicked.connect(_on_deck_card_clicked)
-			#viewer.viewer_closed.connect(_on_deck_viewer_closed)
+			viewer.display_deck(view_deck, "Remaining Cards: " + str(deck.size()))
 			
 func discard_card_to_pile(card):
 	# Remove from hand if it's still there
