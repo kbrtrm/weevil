@@ -49,6 +49,7 @@ func take_damage(amount: int):
 	# Ensure amount is an integer
 	amount = int(amount)
 	print("Enemy.take_damage: Called with amount = " + str(amount))
+	print("Enemy.take_damage: Current block = " + str(block))
 	
 	# Apply vulnerable effect (50% more damage)
 	var actual_damage = amount
@@ -64,13 +65,14 @@ func take_damage(amount: int):
 		actual_damage -= block_reduction
 		block -= block_reduction
 		print("Enemy.take_damage: Block absorbed " + str(block_reduction) + " damage. Remaining block: " + str(block))
+		print("Enemy.take_damage: Damage after block: " + str(actual_damage))
 		update_block_display()
 	
 	# Apply the remaining damage to health
 	actual_damage = int(actual_damage)  # Ensure integer
 	var old_health = health
 	health = max(0, health - actual_damage)
-	print("Enemy.take_damage: Health reduced from " + str(old_health) + " to " + str(health))
+	print("Enemy.take_damage: Health reduced from " + str(old_health) + " to " + str(health) + " (damage taken: " + str(old_health - health) + ")")
 	
 	# Emit signal
 	emit_signal("health_changed", health, max_health)
@@ -207,21 +209,37 @@ func execute_intent():
 	
 	match intent:
 		"attack":
-			# Attack the player
+			# Store original values to track what happened
+			var original_health = player.health
+			var original_block = player.block
+			
+			# Attack the player - this will handle vulnerable and block internally
 			player.take_damage(intent_value)
 			
-			# Create attack visual
+			# Calculate what happened during damage application
+			var block_used = max(0, original_block - player.block)
+			var health_lost = max(0, original_health - player.health)
+			
+			# Create attack visual based on what happened
 			var damage_label = Label.new()
-			damage_label.text = str(int(intent_value))
-			damage_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+			
+			if health_lost == 0:
+				# Attack was fully blocked
+				damage_label.text = "BLOCK"
+				damage_label.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))  # Blue for block
+			else:
+				# Some damage went through to health
+				damage_label.text = str(int(health_lost))
+				damage_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Red for damage
+			
 			damage_label.add_theme_font_size_override("font_size", 16)
 			player.add_child(damage_label)
 			damage_label.position = Vector2(0, -20)
 			
 			# Animate and remove
 			var tween = create_tween()
-			tween.tween_property(damage_label, "position", Vector2(0, -40), 0.5)
-			tween.parallel().tween_property(damage_label, "modulate", Color(1, 0.3, 0.3, 0), 0.5)
+			tween.tween_property(damage_label, "position", Vector2(0, -40), 1.0)
+			#tween.parallel().tween_property(damage_label, "modulate", damage_label.modulate.with_alpha(0), 0.5)
 			tween.tween_callback(func(): damage_label.queue_free())
 			
 		"defend":

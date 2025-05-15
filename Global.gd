@@ -54,11 +54,20 @@ func initialize_deck():
 			success_count += 1
 	
 	# 1 Penny (draw)
-	if add_card_to_deck("penny"):
+	for i in range(5):
+		if add_card_to_deck("penny"):
+			success_count += 5
+		
+	# 1 Gum
+	if add_card_to_deck("gum"):
 		success_count += 1
 		
-		# 1 Gum
-	if add_card_to_deck("gum"):
+	# 1 Gum
+	if add_card_to_deck("rubber_band"):
+		success_count += 1
+
+	# 1 Thumbtack
+	if add_card_to_deck("thumbtack"):
 		success_count += 1
 	
 	# Shuffle the deck

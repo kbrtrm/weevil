@@ -203,11 +203,43 @@ func apply_effect(battle_manager, effect_data):
 # Apply damage to a target
 func apply_damage_effect(target, amount):
 	if target.has_method("take_damage"):
-		# Create damage effect
-		create_damage_effect(target.global_position, amount)
+		# Store original health to calculate actual damage taken
+		var original_health = target.health
+		var original_block = target.block
 		
-		# Apply the actual damage
+		# Apply the actual damage - this will handle vulnerable and block internally
 		target.take_damage(amount)
+		
+		# Calculate what happened during damage application
+		var block_used = max(0, original_block - target.block)
+		var health_lost = max(0, original_health - target.health)
+		
+		# Create damage effect based on what happened
+		var damage_popup = Label.new()
+		
+		if health_lost == 0:
+			# Attack was fully blocked
+			damage_popup.text = "BLOCK"
+			damage_popup.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))  # Blue for block
+		else:
+			# Some damage went through to health
+			damage_popup.text = str(int(health_lost))
+			damage_popup.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Red for damage
+		
+		damage_popup.add_theme_font_size_override("font_size", 16)
+		
+		# Add to scene
+		get_tree().root.add_child(damage_popup)
+		damage_popup.global_position = target.global_position + Vector2(0, -20)
+		
+		# Animate
+		var tween = create_tween()
+		tween.set_ease(Tween.EASE_OUT)
+		tween.tween_property(damage_popup, "global_position", target.global_position + Vector2(0, -40), 0.5)
+		tween.parallel().tween_property(damage_popup, "modulate", Color(damage_popup.modulate.r, damage_popup.modulate.g, damage_popup.modulate.b, 0), 0.5)
+		
+		# Remove after animation
+		tween.tween_callback(func(): damage_popup.queue_free())
 	else:
 		print("Warning: Target cannot take damage")
 
@@ -261,6 +293,11 @@ func apply_draw_effect(battle_manager, amount):
 	var hand = battle_manager.get_node_or_null("Hand")
 	
 	if hand and hand.has_method("draw_card"):
+		# Check if deck is empty and needs reshuffling
+		if hand.deck.size() <= 0 and hand.has_method("reshuffle_discard_pile"):
+			print("Card effect: Draw pile is empty! Reshuffling discard pile...")
+			hand.reshuffle_discard_pile()
+		
 		# Create effect text
 		create_draw_effect(hand.global_position, amount)
 		
@@ -285,7 +322,7 @@ func apply_bleed_effect(target, amount):
 func create_draw_effect(position, amount):
 	# Create draw number popup
 	var draw_popup = Label.new()
-	draw_popup.text = "Draw " + str(amount) + " card" + ("s" if amount > 1 else "")
+	draw_popup.text = "Draw " + str(int(amount)) + " card" + ("s" if amount > 1 else "")
 	draw_popup.add_theme_color_override("font_color", Color(0.9, 0.9, 0.2))
 	draw_popup.add_theme_font_size_override("font_size", 16)
 	
@@ -308,7 +345,7 @@ func create_draw_effect(position, amount):
 func create_damage_effect(position, amount):
 	# Create damage number popup
 	var damage_popup = Label.new()
-	damage_popup.text = str(amount)
+	damage_popup.text = str(int(amount))
 	damage_popup.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
 	damage_popup.add_theme_font_size_override("font_size", 16)
 	
@@ -319,8 +356,8 @@ func create_damage_effect(position, amount):
 	# Animate
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(damage_popup, "global_position", position + Vector2(0, -40), 0.5)
-	tween.parallel().tween_property(damage_popup, "modulate", Color(1, 0.3, 0.3, 0), 0.5)
+	tween.tween_property(damage_popup, "global_position", position + Vector2(0, -40), 1.0)
+	tween.parallel().tween_property(damage_popup, "modulate", Color(1, 0.3, 0.3, 0), 1.0)
 	
 	# Remove after animation
 	tween.tween_callback(func(): damage_popup.queue_free())
@@ -329,7 +366,7 @@ func create_damage_effect(position, amount):
 func create_block_effect(position, amount):
 	# Create block number popup
 	var block_popup = Label.new()
-	block_popup.text = "+" + str(amount) + " Block"
+	block_popup.text = "+" + str(int(amount)) + " Block"
 	block_popup.add_theme_color_override("font_color", Color(0.2, 0.6, 1.0))
 	block_popup.add_theme_font_size_override("font_size", 16)
 	
@@ -340,8 +377,8 @@ func create_block_effect(position, amount):
 	# Animate
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(block_popup, "global_position", position + Vector2(0, -40), 0.5)
-	tween.parallel().tween_property(block_popup, "modulate", Color(0.2, 0.6, 1.0, 0), 0.5)
+	tween.tween_property(block_popup, "global_position", position + Vector2(0, -40), 1.0)
+	tween.parallel().tween_property(block_popup, "modulate", Color(0.2, 0.6, 1.0, 0), 1.0)
 	
 	# Remove after animation
 	tween.tween_callback(func(): block_popup.queue_free())
@@ -354,26 +391,26 @@ func create_status_effect(position, status_type, amount):
 	
 	match status_type:
 		"weak":
-			status_popup.text = "+" + str(amount) + " Weak"
+			status_popup.text = "+" + str(int(amount)) + " Weak"
 			color = Color(0.7, 0.3, 0.7)  # Purple
 		"vulnerable":
-			status_popup.text = "+" + str(amount) + " Vulnerable"
+			status_popup.text = "+" + str(int(amount)) + " Vulnerable"
 			color = Color(1.0, 0.5, 0.1)  # Orange
 		"bleed":
-			status_popup.text = "+" + str(amount) + " Bleed"
+			status_popup.text = "+" + str(int(amount)) + " Bleed"
 			color = Color(0.9, 0.1, 0.1)  # Dark red
 		"poison":
-			status_popup.text = "+" + str(amount) + " Poison"
+			status_popup.text = "+" + str(int(amount)) + " Poison"
 			color = Color(0.2, 0.8, 0.4)  # Green
 		"strength":
-			status_popup.text = "+" + str(amount) + " Strength"
+			status_popup.text = "+" + str(int(amount)) + " Strength"
 			color = Color(0.9, 0.1, 0.3)  # Red
 		"dexterity":
-			status_popup.text = "+" + str(amount) + " Dexterity"
+			status_popup.text = "+" + str(int(amount)) + " Dexterity"
 			color = Color(0.1, 0.8, 0.3)  # Green
 		_:
 			# Default for any other status effects
-			status_popup.text = "+" + str(amount) + " " + status_type.capitalize()
+			status_popup.text = "+" + str(int(amount)) + " " + status_type.capitalize()
 			color = Color(0.8, 0.8, 0.2)  # Yellow
 	
 	status_popup.add_theme_color_override("font_color", color)
@@ -396,7 +433,7 @@ func create_status_effect(position, status_type, amount):
 func create_heal_effect(position, amount):
 	# Create heal number popup
 	var heal_popup = Label.new()
-	heal_popup.text = "+" + str(amount) + " HP"
+	heal_popup.text = "+" + str(int(amount)) + " HP"
 	heal_popup.add_theme_color_override("font_color", Color(0.2, 0.8, 0.2))
 	heal_popup.add_theme_font_size_override("font_size", 16)
 	
@@ -417,7 +454,7 @@ func create_heal_effect(position, amount):
 func create_energy_effect(position, amount):
 	# Create energy number popup
 	var energy_popup = Label.new()
-	energy_popup.text = "+" + str(amount) + " Energy"
+	energy_popup.text = "+" + str(int(amount)) + " Energy"
 	energy_popup.add_theme_color_override("font_color", Color(0.9, 0.7, 0.1))
 	energy_popup.add_theme_font_size_override("font_size", 16)
 	
@@ -438,7 +475,7 @@ func create_energy_effect(position, amount):
 func create_critical_hit_effect(position, amount):
 	# Create critical hit popup with larger font and shaking animation
 	var crit_popup = Label.new()
-	crit_popup.text = str(amount) + "!"
+	crit_popup.text = str(int(amount)) + "!"
 	crit_popup.add_theme_color_override("font_color", Color(1, 0.1, 0.1))
 	crit_popup.add_theme_font_size_override("font_size", 24)
 	

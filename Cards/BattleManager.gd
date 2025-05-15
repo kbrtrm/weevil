@@ -29,7 +29,13 @@ func _ready():
 
 func start_turn():
 	if is_player_turn:
-		# Player's turn
+		# Player's turn - Make sure to reset player's block
+		var player = get_player()
+		if player and player.has_method("start_turn"):
+			print("BattleManager: Calling player.start_turn()")
+			player.start_turn()  # This will reset player's block to 0
+			
+		# Handle energy and card draw
 		energy_manager.new_turn()
 		
 		# Only draw cards if this isn't the very first turn (since we already drew in _ready)

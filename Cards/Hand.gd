@@ -78,8 +78,14 @@ func create_emergency_deck():
 func draw_card(count: int = 1):
 	print("Hand: Drawing " + str(count) + " cards. Current deck size: " + str(deck.size()))
 	
+	# Check if we need to reshuffle before attempting to draw
+	if deck.size() == 0 and discard_pile and discard_pile.discarded_cards.size() > 0:
+		print("Hand: Draw pile is empty! Reshuffling discard pile before drawing...")
+		reshuffle_discard_pile()
+	
+	# Now proceed with drawing if possible
 	if deck.size() == 0:
-		print("Hand: Cannot draw cards - deck is empty!")
+		print("Hand: Cannot draw cards - deck is empty and no cards in discard pile!")
 		return
 	
 	for i in range(count):
@@ -532,7 +538,7 @@ func discard_card_to_pile(card):
 	# Update UI
 	update_ui()
 	
-# New function to reshuffle discard pile into deck
+# Reshuffle discard pile into deck
 func reshuffle_discard_pile():
 	# First, check if we have a discard pile reference
 	if not discard_pile or discard_pile.discarded_cards.size() <= 0:
@@ -546,19 +552,26 @@ func reshuffle_discard_pile():
 	
 	# Get all card data from discarded cards
 	for discarded_card in discard_pile.discarded_cards:
-		# Extract the data we need to recreate this card
-		var card_data = {
-			"name": discarded_card.card_name,
-			"cost": discarded_card.card_cost,
-			"desc": discarded_card.card_desc
-		}
+		# Try to get original card data from CardDatabase for proper effects
+		var original_card_data = CardDatabase.get_card_by_name(discarded_card.card_name)
 		
-		# Add art reference if available
-		if discarded_card.card_art:
-			card_data["art"] = discarded_card.card_art.resource_path
+		if original_card_data:
+			# If we found it in the database, use that data (complete with effects)
+			cards_to_add.append(original_card_data)
+		else:
+			# Fallback to reconstructing from the card instance
+			var card_data = {
+				"name": discarded_card.card_name,
+				"cost": discarded_card.card_cost,
+				"desc": discarded_card.card_desc
+			}
 			
-		# Add to our array of cards to shuffle back in
-		cards_to_add.append(card_data)
+			# Add art reference if available
+			if discarded_card.card_art:
+				card_data["art"] = discarded_card.card_art.resource_path
+				
+			# Add to our array of cards to shuffle back in
+			cards_to_add.append(card_data)
 		
 		# Remove the card node
 		discarded_card.queue_free()
@@ -580,7 +593,7 @@ func reshuffle_discard_pile():
 	deck.shuffle()
 	
 	# Update deck UI
-	update_ui()	
+	update_ui()
 
 # Play a visual effect for reshuffling
 func play_reshuffle_effect():

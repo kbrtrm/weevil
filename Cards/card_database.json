@@ -15,7 +15,7 @@
 	{
 	  "id": "paperclip",
 	  "name": "Paperclip",
-	  "cost": 1,
+	  "cost": 0,
 	  "description": "Deal 3 damage.\nApply 2 weak.",
 	  "effects": [
 		{"type": "damage", "value": 3, "target": "enemy"},
@@ -41,10 +41,10 @@
 	  "id": "rubber_band",
 	  "name": "Rubber Band",
 	  "cost": 1,
-	  "description": "Deal 4 damage.\nApply 1 vulnerable.",
+	  "description": "Deal 4 damage.\nApply 4 vulnerable.",
 	  "effects": [
-		{"type": "damage", "value": 4, "target": "enemy"},
-		{"type": "vulnerable", "value": 1, "target": "enemy"}
+		{"type": "damage", "value": 1, "target": "enemy"},
+		{"type": "vulnerable", "value": 4, "target": "enemy"}
 	  ],
 	  "rarity": "common",
 	  "artwork_path": "res://Images/cig.png",
@@ -67,10 +67,10 @@
 	  "id": "penny",
 	  "name": "Penny",
 	  "cost": 0,
-	  "description": "Deal 1 damage.\nDraw a card.",
+	  "description": "Deal 1 damage.\nDraw 2 cards.",
 	  "effects": [
 		{"type": "damage", "value": 1, "target": "enemy"},
-		{"type": "draw", "value": 1, "target": "player"}
+		{"type": "draw", "value": 2, "target": "player"}
 	  ],
 	  "rarity": "common",
 	  "artwork_path": "res://Cards/penny.png",
@@ -80,10 +80,10 @@
 	  "id": "thumbtack",
 	  "name": "Thumbtack",
 	  "cost": 2,
-	  "description": "Deal 8 damage.\nApply 1 bleed.",
+	  "description": "Deal 8 damage.\nApply 2 bleed.",
 	  "effects": [
 		{"type": "damage", "value": 8, "target": "enemy"},
-		{"type": "bleed", "value": 1, "target": "enemy"}
+		{"type": "bleed", "value": 2, "target": "enemy"}
 	  ],
 	  "rarity": "uncommon",
 	  "artwork_path": "res://Cards/cost-bg.png",

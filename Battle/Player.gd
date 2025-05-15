@@ -34,6 +34,7 @@ func _ready():
 # Take damage with block reduction
 func take_damage(amount: int):
 	print("Player: Taking " + str(amount) + " damage")
+	print("Player: Current block = " + str(block))
 	amount = int(amount)
 	
 	# Apply vulnerable effect (50% more damage)
@@ -43,20 +44,20 @@ func take_damage(amount: int):
 		actual_damage = int(floor(actual_damage * vulnerable_multiplier))
 		print("Player: Vulnerable! Damage increased to " + str(actual_damage))
 	
-	print("Current block:" + str(block))
 	# Apply damage reduction from block
 	if block > 0:
 		var block_reduction = min(block, actual_damage)
 		actual_damage -= block_reduction
 		block -= block_reduction
 		print("Player: Block absorbed " + str(block_reduction) + " damage. Remaining block: " + str(block))
+		print("Player: Damage after block: " + str(actual_damage))
 		update_block_display()
 	
 	# Apply the remaining damage to health
 	actual_damage = int(actual_damage)  # Ensure integer
 	var old_health = health
 	health = max(0, health - actual_damage)
-	print("Player: Taking " + str(actual_damage) + " damage after block. Health now: " + str(health) + "/" + str(max_health))
+	print("Player: Health reduced from " + str(old_health) + " to " + str(health) + " (damage taken: " + str(old_health - health) + ")")
 	
 	# Emit signal
 	emit_signal("health_changed", health, max_health)
@@ -84,19 +85,8 @@ func add_block(amount: int):
 	# Emit signal
 	emit_signal("block_changed", block)
 	
-	# Create a visual effect for block gained
-	var block_label = Label.new()
-	block_label.text = "+" + str(amount) + " Block"
-	block_label.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))  # Blue
-	block_label.add_theme_font_size_override("font_size", 16)
-	add_child(block_label)
-	block_label.position = Vector2(0, -20)
-	
-	# Animate and remove
-	var tween = create_tween()
-	tween.tween_property(block_label, "position", Vector2(0, -40), 0.5)
-	tween.parallel().tween_property(block_label, "modulate", Color(0.3, 0.7, 1.0, 0), 0.5)
-	tween.tween_callback(func(): block_label.queue_free())
+	# REMOVED: Visual effect creation
+	# (The card's apply_block_effect function will handle this)
 	
 	# Update display
 	update_block_display()
