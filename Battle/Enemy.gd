@@ -30,6 +30,9 @@ var strength: int = 0
 @onready var status_container = $StatusContainer
 
 func _ready():
+	# Add to enemies group
+	add_to_group("enemies")
+	
 	# Initialize health to max at start
 	health = max_health
 	
@@ -234,27 +237,28 @@ func update_block_display():
 		block_icon.visible = block > 0
 
 # Update intent display
+# Add to Enemy.gd update_intent_display function
 func update_intent_display():
 	if intent_label:
 		match intent:
 			"attack":
-				intent_label.text = str(intent_value)
+				intent_label.text = str(intent_value) + " DMG"
 			"defend":
-				intent_label.text = "+" + str(intent_value)
+				intent_label.text = "+" + str(intent_value) + " BLK"
 			"buff":
-				intent_label.text = "+" + str(intent_value)
-	
+				intent_label.text = "+" + str(intent_value) + " STR"
+		
+		# Make sure text is visible
+		intent_label.add_theme_font_size_override("font_size", 12)
+		
 	if intent_icon:
 		match intent:
 			"attack":
-				# Use an attack icon
-				pass
+				intent_icon.modulate = Color(1, 0.3, 0.3)  # Red for attack
 			"defend":
-				# Use a shield icon
-				pass
+				intent_icon.modulate = Color(0.3, 0.7, 1)  # Blue for defend
 			"buff":
-				# Use a buff icon
-				pass
+				intent_icon.modulate = Color(1, 0.8, 0.2)  # Yellow for buff
 
 # Update status effect display
 func update_status_display():

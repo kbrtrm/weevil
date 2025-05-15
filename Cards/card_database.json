@@ -1,122 +1,93 @@
-[gd_resource type="JSON" format=3 uid="uid://doxhasa2p5lvv"]
-
-[resource]
-data = {
-"cards": [{
-"artwork_path": "res://Images/pebble.png",
-"cost": 1.0,
-"description": "Deal 6 damage.",
-"effects": [{
-"target": "enemy",
-"type": "damage",
-"value": 6.0
-}],
-"id": "pebble",
-"name": "Pebble",
-"rarity": "common",
-"type": "attack"
-}, {
-"artwork_path": "res://Images/paperclip2.png",
-"cost": 1.0,
-"description": "Deal 3 damage.
-Apply 2 weak.",
-"effects": [{
-"target": "enemy",
-"type": "damage",
-"value": 3.0
-}, {
-"target": "enemy",
-"type": "weak",
-"value": 2.0
-}],
-"id": "paperclip",
-"name": "Paperclip",
-"rarity": "common",
-"type": "attack"
-}, {
-"artwork_path": "res://Images/acorn.png",
-"cost": 1.0,
-"description": "Gain 5 block.",
-"effects": [{
-"target": "player",
-"type": "block",
-"value": 5.0
-}],
-"id": "acorn",
-"name": "Acorn",
-"rarity": "common",
-"type": "skill"
-}, {
-"artwork_path": "res://Images/rubber_band.png",
-"cost": 1.0,
-"description": "Deal 4 damage.
-Apply 1 vulnerable.",
-"effects": [{
-"target": "enemy",
-"type": "damage",
-"value": 4.0
-}, {
-"target": "enemy",
-"type": "vulnerable",
-"value": 1.0
-}],
-"id": "rubber_band",
-"name": "Rubber Band",
-"rarity": "common",
-"type": "attack"
-}, {
-"artwork_path": "res://Images/gum.png",
-"cost": 1.0,
-"description": "Gain 3 block.
-Heal 2 HP.",
-"effects": [{
-"target": "player",
-"type": "block",
-"value": 3.0
-}, {
-"target": "player",
-"type": "heal",
-"value": 2.0
-}],
-"id": "gum",
-"name": "Gum",
-"rarity": "uncommon",
-"type": "skill"
-}, {
-"artwork_path": "res://Images/penny.png",
-"cost": 0.0,
-"description": "Deal 1 damage.
-Draw a card.",
-"effects": [{
-"target": "enemy",
-"type": "damage",
-"value": 1.0
-}, {
-"target": "player",
-"type": "draw",
-"value": 1.0
-}],
-"id": "penny",
-"name": "Penny",
-"rarity": "common",
-"type": "attack"
-}, {
-"artwork_path": "res://Images/thumbtack.png",
-"cost": 2.0,
-"description": "Deal 8 damage.
-Apply 1 bleed.",
-"effects": [{
-"target": "enemy",
-"type": "damage",
-"value": 8.0
-}, {
-"target": "enemy",
-"type": "bleed",
-"value": 1.0
-}],
-"id": "thumbtack",
-"name": "Thumbtack",
-"rarity": "uncommon",
-"type": "attack"
-}]
+{
+  "cards": [
+	{
+	  "id": "pebble",
+	  "name": "Pebble",
+	  "cost": 1,
+	  "description": "Deal 6 damage.",
+	  "effects": [
+		{"type": "damage", "value": 6, "target": "enemy"}
+	  ],
+	  "rarity": "common",
+	  "artwork_path": "res://Images/pebble.png",
+	  "type": "attack"
+	},
+	{
+	  "id": "paperclip",
+	  "name": "Paperclip",
+	  "cost": 1,
+	  "description": "Deal 3 damage.\nApply 2 weak.",
+	  "effects": [
+		{"type": "damage", "value": 3, "target": "enemy"},
+		{"type": "weak", "value": 2, "target": "enemy"}
+	  ],
+	  "rarity": "common",
+	  "artwork_path": "res://Images/paperclip2.png",
+	  "type": "attack"
+	},
+	{
+	  "id": "acorn",
+	  "name": "Acorn",
+	  "cost": 1,
+	  "description": "Gain 5 block.",
+	  "effects": [
+		{"type": "block", "value": 5, "target": "player"}
+	  ],
+	  "rarity": "common",
+	  "artwork_path": "res://Images/acorn.png",
+	  "type": "skill"
+	},
+	{
+	  "id": "rubber_band",
+	  "name": "Rubber Band",
+	  "cost": 1,
+	  "description": "Deal 4 damage.\nApply 1 vulnerable.",
+	  "effects": [
+		{"type": "damage", "value": 4, "target": "enemy"},
+		{"type": "vulnerable", "value": 1, "target": "enemy"}
+	  ],
+	  "rarity": "common",
+	  "artwork_path": "res://Images/rubber_band.png",
+	  "type": "attack"
+	},
+	{
+	  "id": "gum",
+	  "name": "Gum",
+	  "cost": 1,
+	  "description": "Gain 3 block.\nHeal 2 HP.",
+	  "effects": [
+		{"type": "block", "value": 3, "target": "player"},
+		{"type": "heal", "value": 2, "target": "player"}
+	  ],
+	  "rarity": "uncommon",
+	  "artwork_path": "res://Images/gum.png",
+	  "type": "skill"
+	},
+	{
+	  "id": "penny",
+	  "name": "Penny",
+	  "cost": 0,
+	  "description": "Deal 1 damage.\nDraw a card.",
+	  "effects": [
+		{"type": "damage", "value": 1, "target": "enemy"},
+		{"type": "draw", "value": 1, "target": "player"}
+	  ],
+	  "rarity": "common",
+	  "artwork_path": "res://Images/penny.png",
+	  "type": "attack"
+	},
+	{
+	  "id": "thumbtack",
+	  "name": "Thumbtack",
+	  "cost": 2,
+	  "description": "Deal 8 damage.\nApply 1 bleed.",
+	  "effects": [
+		{"type": "damage", "value": 8, "target": "enemy"},
+		{"type": "bleed", "value": 1, "target": "enemy"}
+	  ],
+	  "rarity": "uncommon",
+	  "artwork_path": "res://Images/thumbtack.png",
+	  "type": "attack"
+	}
+  ]
 }

@@ -23,6 +23,9 @@ var dexterity: int = 0
 @onready var status_container = $StatusContainer
 
 func _ready():
+	# Add to player group
+	add_to_group("player")
+	
 	# Initialize UI
 	update_health_display()
 	update_block_display()

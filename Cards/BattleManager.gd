@@ -75,13 +75,29 @@ func _on_end_turn_pressed():
 	if is_player_turn:
 		end_turn()
 		
-# Get the enemy object
+# Fix the get_enemy and get_player functions in BattleManager.gd
 func get_enemy():
-	# Return the current enemy in battle
-	# For now, just return the first enemy node found
-	return get_node_or_null("Enemy")
+	# Look for the Enemy node directly in the scene
+	var enemy = get_node_or_null("Enemy")
+	if enemy:
+		return enemy
+	
+	# If not found, search through all children
+	for child in get_children():
+		if child.name == "Enemy" or child.is_in_group("enemies"):
+			return child
+	
+	return null
 
-# Get the player object
 func get_player():
-	# Return the player object
-	return get_node_or_null("Player")
+	# Look for the Player node directly in the scene 
+	var player = get_node_or_null("Player")
+	if player:
+		return player
+	
+	# If not found, search through all children
+	for child in get_children():
+		if child.name == "Player" or child.is_in_group("player"):
+			return child
+	
+	return null
