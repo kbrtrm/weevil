@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvd2l65i7q5l7"]
+
+[ext_resource type="Script" uid="uid://bcmpuyx43x0s7" path="res://Battle/Player.gd" id="1_winow"]
+[ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="2_cpcn0"]
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_winow")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_cpcn0")
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="BlockIcon" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlockLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="StatusContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0

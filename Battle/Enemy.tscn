@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://f4785n66umoe"]
+
+[ext_resource type="Texture2D" uid="uid://dov8l1r1ie1dw" path="res://Images/cig.png" id="1_4jc76"]
+
+[node name="Enemy" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_4jc76")
+hframes = 2
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="BlockIcon" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlockLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="IntentIcon" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="IntentLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="StatusContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0

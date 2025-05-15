@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ci055lk3xgre8"]
+[gd_scene load_steps=15 format=3 uid="uid://ci055lk3xgre8"]
 
 [ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
 [ext_resource type="Script" uid="uid://bcahcb1040btf" path="res://Cards/BattleManager.gd" id="1_aifkc"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://8e5scb54cfaa" path="res://Battle/drop-target.png" id="6_e3ex1"]
 [ext_resource type="Script" uid="uid://bad7tekpftsc6" path="res://Cards/EnergryManager.gd" id="6_jisrp"]
 [ext_resource type="Script" uid="uid://xoe3picbl4o2" path="res://Cards/DropTarget.gd" id="7_jisrp"]
+[ext_resource type="PackedScene" uid="uid://bvd2l65i7q5l7" path="res://Battle/Player.tscn" id="11_eevyr"]
+[ext_resource type="PackedScene" uid="uid://f4785n66umoe" path="res://Battle/Enemy.tscn" id="12_qiokm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jisrp"]
 size = Vector2(72.807, 42.6539)
@@ -94,6 +96,12 @@ offset_right = 629.0
 offset_bottom = 302.0
 theme_override_font_sizes/font_size = 8
 text = "End Turn"
+
+[node name="Player" parent="." instance=ExtResource("11_eevyr")]
+position = Vector2(215, 94)
+
+[node name="Enemy" parent="." instance=ExtResource("12_qiokm")]
+position = Vector2(445, 98)
 
 [connection signal="input_event" from="Hand/DeckStatus/DeckArea2D" to="Hand" method="_on_deck_area_2d_input_event"]
 [connection signal="card_played" from="DropTarget" to="CardManager" method="_on_drop_target_card_played"]
