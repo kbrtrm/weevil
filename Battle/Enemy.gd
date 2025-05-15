@@ -46,20 +46,31 @@ func _ready():
 
 # Take damage with block reduction
 func take_damage(amount: int):
+	# Ensure amount is an integer
+	amount = int(amount)
+	print("Enemy.take_damage: Called with amount = " + str(amount))
+	
 	# Apply vulnerable effect (50% more damage)
 	var actual_damage = amount
 	if vulnerable > 0:
-		actual_damage = floor(actual_damage * 1.5)
+		var vulnerable_multiplier = 1.5
+		actual_damage = int(floor(actual_damage * vulnerable_multiplier))
+		print("Enemy.take_damage: Vulnerable applied! Damage increased to " + str(actual_damage))
 	
 	# Apply damage reduction from block
 	if block > 0:
 		var block_reduction = min(block, actual_damage)
+		block_reduction = int(block_reduction)  # Ensure integer
 		actual_damage -= block_reduction
 		block -= block_reduction
+		print("Enemy.take_damage: Block absorbed " + str(block_reduction) + " damage. Remaining block: " + str(block))
 		update_block_display()
 	
 	# Apply the remaining damage to health
+	actual_damage = int(actual_damage)  # Ensure integer
+	var old_health = health
 	health = max(0, health - actual_damage)
+	print("Enemy.take_damage: Health reduced from " + str(old_health) + " to " + str(health))
 	
 	# Emit signal
 	emit_signal("health_changed", health, max_health)
@@ -71,9 +82,14 @@ func take_damage(amount: int):
 	if health <= 0:
 		die()
 
-# Add block/defense
+# Enemy.gd - Updated add_block with integer conversion
 func add_block(amount: int):
+	# Ensure amount is an integer
+	amount = int(amount)
+	
 	block += amount
+	block = int(block)  # Ensure integer
+	
 	emit_signal("block_changed", block)
 	update_block_display()
 
@@ -103,6 +119,11 @@ func add_strength(amount: int):
 
 # Called at the start of the enemy's turn
 func start_turn():
+	# Reset block at START of turn (after player attack)
+	block = 0
+	update_block_display()
+	print("Enemy.start_turn: Block reset to 0 at the start of turn")
+	
 	# Process status effects - like bleed damage
 	if bleed > 0:
 		take_damage(bleed)
@@ -133,14 +154,11 @@ func start_turn():
 	
 	# Update UI
 	update_health_display()
-	update_block_display()
 	update_status_display()
 
-# Called at the end of the enemy's turn
 func end_turn():
-	# Reset block at end of turn
-	block = 0
-	update_block_display()
+	# DO NOT reset block here, keep it for player attacks
+	print("Enemy.end_turn: Block preserved for player attacks: " + str(block))
 	
 	# Reduce duration of status effects
 	if weak > 0:
@@ -158,19 +176,21 @@ func choose_intent():
 	
 	if roll < 0.6:  # 60% chance to attack
 		intent = "attack"
-		intent_value = base_damage + strength
+		var base_attack = base_damage + strength
+		intent_value = int(base_attack)  # Ensure integer
 		
 		# Apply weak effect (25% less damage)
 		if weak > 0:
-			intent_value = floor(intent_value * 0.75)
+			var old_value = intent_value
+			intent_value = int(floor(intent_value * 0.75))  # Ensure integer
 	
 	elif roll < 0.85:  # 25% chance to defend
 		intent = "defend"
-		intent_value = randi_range(5, 10)
+		intent_value = int(randi_range(5, 10))  # Ensure integer
 	
 	else:  # 15% chance to buff
 		intent = "buff"
-		intent_value = 2
+		intent_value = int(2)  # Ensure integer
 	
 	# Update the intent display
 	update_intent_display()
@@ -192,7 +212,7 @@ func execute_intent():
 			
 			# Create attack visual
 			var damage_label = Label.new()
-			damage_label.text = str(intent_value)
+			damage_label.text = str(int(intent_value))
 			damage_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
 			damage_label.add_theme_font_size_override("font_size", 16)
 			player.add_child(damage_label)
@@ -242,11 +262,11 @@ func update_intent_display():
 	if intent_label:
 		match intent:
 			"attack":
-				intent_label.text = str(intent_value) + " DMG"
+				intent_label.text = str(int(intent_value)) + " DMG"
 			"defend":
-				intent_label.text = "+" + str(intent_value) + " BLK"
+				intent_label.text = "+" + str(int(intent_value)) + " BLK"
 			"buff":
-				intent_label.text = "+" + str(intent_value) + " STR"
+				intent_label.text = "+" + str(int(intent_value)) + " STR"
 		
 		# Make sure text is visible
 		intent_label.add_theme_font_size_override("font_size", 8)
@@ -260,9 +280,32 @@ func update_intent_display():
 			"buff":
 				intent_icon.modulate = Color(1, 0.8, 0.2)  # Yellow for buff
 
-# Update status effect display
+# Enemy.gd - Updated update_status_display function
 func update_status_display():
-	# This would update any UI elements showing status effects
-	# For example, showing icons for weak, vulnerable, etc.
-	# You could implement this with a status effect container
-	pass
+	# Clear existing status icons
+	for child in status_container.get_children():
+		child.queue_free()
+	
+	# Create status effect displays
+	if weak > 0:
+		add_status_icon("weak", weak, Color(0.7, 0.3, 0.7))  # Purple
+	
+	if vulnerable > 0:
+		add_status_icon("vulnerable", vulnerable, Color(1.0, 0.5, 0.1))  # Orange
+	
+	if bleed > 0:
+		add_status_icon("bleed", bleed, Color(0.9, 0.1, 0.1))  # Dark red
+	
+	if strength > 0:
+		add_status_icon("strength", strength, Color(0.9, 0.1, 0.3))  # Red
+
+# Helper function to add a status icon
+func add_status_icon(status_name, amount, color):
+	var icon = Label.new()
+	icon.text = status_name.capitalize() + "\n" + str(amount)
+	icon.add_theme_color_override("font_color", color)
+	icon.add_theme_font_size_override("font_size", 8)
+	icon.custom_minimum_size = Vector2(40, 25)
+	
+	# Add to status container
+	status_container.add_child(icon)

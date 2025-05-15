@@ -33,20 +33,30 @@ func _ready():
 
 # Take damage with block reduction
 func take_damage(amount: int):
+	print("Player: Taking " + str(amount) + " damage")
+	amount = int(amount)
+	
 	# Apply vulnerable effect (50% more damage)
 	var actual_damage = amount
 	if vulnerable > 0:
-		actual_damage = floor(actual_damage * 1.5)
+		var vulnerable_multiplier = 1.5
+		actual_damage = int(floor(actual_damage * vulnerable_multiplier))
+		print("Player: Vulnerable! Damage increased to " + str(actual_damage))
 	
+	print("Current block:" + str(block))
 	# Apply damage reduction from block
 	if block > 0:
 		var block_reduction = min(block, actual_damage)
 		actual_damage -= block_reduction
 		block -= block_reduction
+		print("Player: Block absorbed " + str(block_reduction) + " damage. Remaining block: " + str(block))
 		update_block_display()
 	
 	# Apply the remaining damage to health
+	actual_damage = int(actual_damage)  # Ensure integer
+	var old_health = health
 	health = max(0, health - actual_damage)
+	print("Player: Taking " + str(actual_damage) + " damage after block. Health now: " + str(health) + "/" + str(max_health))
 	
 	# Emit signal
 	emit_signal("health_changed", health, max_health)
@@ -60,8 +70,35 @@ func take_damage(amount: int):
 
 # Add block/defense
 func add_block(amount: int):
+	# Ensure amount is an integer
+	amount = int(amount)
+	print("Player.add_block: Adding " + str(amount) + " block")
+	print("Player.add_block: Current block was: " + str(block))
+	
+	# Add the block
 	block += amount
+	block = int(block)  # Ensure integer
+	
+	print("Player.add_block: New block total: " + str(block))
+	
+	# Emit signal
 	emit_signal("block_changed", block)
+	
+	# Create a visual effect for block gained
+	var block_label = Label.new()
+	block_label.text = "+" + str(amount) + " Block"
+	block_label.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))  # Blue
+	block_label.add_theme_font_size_override("font_size", 16)
+	add_child(block_label)
+	block_label.position = Vector2(0, -20)
+	
+	# Animate and remove
+	var tween = create_tween()
+	tween.tween_property(block_label, "position", Vector2(0, -40), 0.5)
+	tween.parallel().tween_property(block_label, "modulate", Color(0.3, 0.7, 1.0, 0), 0.5)
+	tween.tween_callback(func(): block_label.queue_free())
+	
+	# Update display
 	update_block_display()
 
 # Heal health
@@ -96,18 +133,20 @@ func add_dexterity(amount: int):
 
 # Called at the start of the player's turn
 func start_turn():
+	# Reset block at START of turn (after enemy attack)
+	block = 0
+	update_block_display()
+	print("Player.start_turn: Block reset to 0 at the start of turn")
+	
 	# Process status effects
 	
 	# Update UI elements
 	update_health_display()
-	update_block_display()
 	update_status_display()
 
-# Called at the end of the player's turn
 func end_turn():
-	# Reset block at end of turn
-	block = 0
-	update_block_display()
+	# DO NOT reset block here, keep it for enemy attacks
+	print("Player.end_turn: Block preserved for enemy attacks: " + str(block))
 	
 	# Reduce duration of status effects
 	if weak > 0:
@@ -117,7 +156,7 @@ func end_turn():
 	
 	# Update status display
 	update_status_display()
-
+	
 # Player death
 func die():
 	# Handle game over
@@ -128,19 +167,41 @@ func die():
 # Update the health display
 func update_health_display():
 	if health_label:
-		health_label.text = str(health) + "/" + str(max_health)
+		health_label.text = str(int(health)) + "/" + str(int(max_health))
 
-# Update the block display
 func update_block_display():
 	if block_label:
-		block_label.text = str(block)
-	
-	if block_icon:
+		block_label.text = str(int(block))
+		
+		# Show icon only if we have block
 		block_icon.visible = block > 0
 
-# Update status effect display
+# Player.gd - Updated update_status_display function
 func update_status_display():
-	# This would update any UI elements showing status effects
-	# For example, showing icons for weak, vulnerable, etc.
-	# You could implement this with a status effect container
-	pass
+	# Clear existing status icons
+	for child in status_container.get_children():
+		child.queue_free()
+	
+	# Create status effect displays
+	if weak > 0:
+		add_status_icon("weak", weak, Color(0.7, 0.3, 0.7))  # Purple
+	
+	if vulnerable > 0:
+		add_status_icon("vulnerable", vulnerable, Color(1.0, 0.5, 0.1))  # Orange
+	
+	if strength > 0:
+		add_status_icon("strength", strength, Color(0.9, 0.1, 0.3))  # Red
+	
+	if dexterity > 0:
+		add_status_icon("dexterity", dexterity, Color(0.1, 0.8, 0.3))  # Green
+
+# Helper function to add a status icon
+func add_status_icon(status_name, amount, color):
+	var icon = Label.new()
+	icon.text = status_name.capitalize() + "\n" + str(amount)
+	icon.add_theme_color_override("font_color", color)
+	icon.add_theme_font_size_override("font_size", 8)
+	icon.custom_minimum_size = Vector2(40, 25)
+	
+	# Add to status container
+	status_container.add_child(icon)
