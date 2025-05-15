@@ -74,3 +74,14 @@ func discard_hand():
 func _on_end_turn_pressed():
 	if is_player_turn:
 		end_turn()
+		
+# Get the enemy object
+func get_enemy():
+	# Return the current enemy in battle
+	# For now, just return the first enemy node found
+	return get_node_or_null("Enemy")
+
+# Get the player object
+func get_player():
+	# Return the player object
+	return get_node_or_null("Player")

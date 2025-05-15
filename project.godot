@@ -20,8 +20,8 @@ config/icon="res://Images/icon.svg"
 PlayerStats="*res://Player/PlayerStats.tscn"
 State="*res://state.gd"
 SceneManager="*res://addons/scene_manager/SceneManager.tscn"
-CardDatabase="*res://CardDatabase.gd"
 Global="*res://Global.gd"
+CardDatabase="*res://Cards/CardDatabase.gd"
 
 [dialogue_manager]
 
