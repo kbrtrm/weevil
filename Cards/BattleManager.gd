@@ -15,6 +15,15 @@ func _ready():
 	# Connect end turn button
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	
+	# Wait for Global to initialize the deck
+	if not Global.deck_initialized:
+		print("BattleManager: Waiting for deck to be initialized...")
+		await Global.deck_initialized_signal
+		
+	# Add a slight delay to allow all nodes to fully initialize
+	await get_tree().create_timer(0.1).timeout
+	
+	print("BattleManager: Starting first turn")
 	# Start the first turn
 	start_turn()
 
@@ -22,13 +31,24 @@ func start_turn():
 	if is_player_turn:
 		# Player's turn
 		energy_manager.new_turn()
-		hand.draw_card(5)  # Draw a card at the start of turn
+		
+		# Only draw cards if this isn't the very first turn (since we already drew in _ready)
+		if current_turn == 1:
+			# Initial hand draw at the start of the game
+			print("BattleManager: Drawing initial hand of 5 cards")
+			hand.draw_card(5)
+		else:
+			# Draw a card at the start of subsequent turns
+			hand.draw_card(5)
 	else:
 		# Enemy's turn
-		# Implement enemy AI here
+		# Process enemy start_turn for all enemies
+		get_tree().call_group("enemies", "start_turn")
+		
+		# Add a delay before automatically ending enemy turn
 		await get_tree().create_timer(1.0).timeout
 		end_turn()  # Automatically end enemy turn after AI acts
-	
+
 	# Emit signal
 	turn_started.emit(current_turn, is_player_turn)
 
@@ -39,11 +59,19 @@ func play_end_turn_effect():
 # Make end_turn() an async function that waits for discard_hand to complete
 func end_turn():
 	if is_player_turn:
+		# Call end_turn on player
+		var player = get_player()
+		if player and player.has_method("end_turn"):
+			player.end_turn()
+			
 		# Play end turn effect
 		play_end_turn_effect()
 		
 		# Wait for discard to complete before continuing
 		await discard_hand()
+	else:
+		# Call end_turn on all enemies
+		get_tree().call_group("enemies", "end_turn")
 	
 	# Emit signal
 	turn_ended.emit(current_turn, is_player_turn)
@@ -75,7 +103,7 @@ func _on_end_turn_pressed():
 	if is_player_turn:
 		end_turn()
 		
-# Fix the get_enemy and get_player functions in BattleManager.gd
+# Get the enemy and player functions
 func get_enemy():
 	# Look for the Enemy node directly in the scene
 	var enemy = get_node_or_null("Enemy")

@@ -249,7 +249,7 @@ func update_intent_display():
 				intent_label.text = "+" + str(intent_value) + " STR"
 		
 		# Make sure text is visible
-		intent_label.add_theme_font_size_override("font_size", 12)
+		intent_label.add_theme_font_size_override("font_size", 8)
 		
 	if intent_icon:
 		match intent:

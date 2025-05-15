@@ -4,13 +4,18 @@ extends Node
 # Store loaded card data
 var cards = {}
 var card_list = []
+var initialized = false
+signal database_initialized
 
 func _ready():
+	print("CardDatabase: _ready() called")
 	# Load the card database
 	load_card_database()
 
 # Load the card database from JSON
 func load_card_database():
+	print("CardDatabase: Loading card database...")
+	
 	var file = FileAccess.open("res://Cards/card_database.json", FileAccess.READ)
 	if not file:
 		push_error("Failed to open card database file")
@@ -30,15 +35,25 @@ func load_card_database():
 		push_error("Invalid card database format")
 		return
 	
+	print("CardDatabase: Found " + str(data.cards.size()) + " cards in database")
+	
 	# Process the cards
 	for card_data in data.cards:
 		if "id" in card_data:
 			# Store by ID for easy lookup
 			cards[card_data.id] = card_data
 			card_list.append(card_data)
+	
+	print("CardDatabase: Processed " + str(cards.size()) + " cards")
+	initialized = true
+	emit_signal("database_initialized")
 
 # Get card data by ID
 func get_card(card_id):
+	if not initialized:
+		push_error("CardDatabase: Tried to get card before database was initialized!")
+		return null
+		
 	if card_id in cards:
 		return cards[card_id]
 	
@@ -47,6 +62,10 @@ func get_card(card_id):
 
 # Get card data by name
 func get_card_by_name(card_name):
+	if not initialized:
+		push_error("CardDatabase: Tried to get card by name before database was initialized!")
+		return null
+		
 	for card in card_list:
 		if card.name == card_name:
 			return card

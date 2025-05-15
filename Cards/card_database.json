@@ -9,7 +9,7 @@
 		{"type": "damage", "value": 6, "target": "enemy"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/pebble.png",
+	  "artwork_path": "res://Images/stone1.png",
 	  "type": "attack"
 	},
 	{
@@ -22,7 +22,7 @@
 		{"type": "weak", "value": 2, "target": "enemy"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/paperclip2.png",
+	  "artwork_path": "res://Cards/paperclip-big.png",
 	  "type": "attack"
 	},
 	{
@@ -47,7 +47,7 @@
 		{"type": "vulnerable", "value": 1, "target": "enemy"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/rubber_band.png",
+	  "artwork_path": "res://Images/cig.png",
 	  "type": "attack"
 	},
 	{
@@ -60,7 +60,7 @@
 		{"type": "heal", "value": 2, "target": "player"}
 	  ],
 	  "rarity": "uncommon",
-	  "artwork_path": "res://Images/gum.png",
+	  "artwork_path": "res://Cards/gum.png",
 	  "type": "skill"
 	},
 	{
@@ -73,7 +73,7 @@
 		{"type": "draw", "value": 1, "target": "player"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/penny.png",
+	  "artwork_path": "res://Cards/penny.png",
 	  "type": "attack"
 	},
 	{
@@ -86,7 +86,7 @@
 		{"type": "bleed", "value": 1, "target": "enemy"}
 	  ],
 	  "rarity": "uncommon",
-	  "artwork_path": "res://Images/thumbtack.png",
+	  "artwork_path": "res://Cards/cost-bg.png",
 	  "type": "attack"
 	}
   ]

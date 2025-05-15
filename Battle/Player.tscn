@@ -12,15 +12,20 @@ texture = ExtResource("2_cpcn0")
 [node name="HealthLabel" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 22.0
+theme_override_font_sizes/font_size = 8
 
 [node name="BlockIcon" type="TextureRect" parent="."]
-offset_right = 40.0
+offset_left = -30.0
+offset_right = 10.0
 offset_bottom = 40.0
 
 [node name="BlockLabel" type="Label" parent="."]
-offset_right = 40.0
+offset_left = -20.0
+offset_right = 20.0
 offset_bottom = 22.0
+theme_override_font_sizes/font_size = 8
 
 [node name="StatusContainer" type="HBoxContainer" parent="."]
+offset_top = 20.0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 60.0

@@ -29,16 +29,59 @@ var hovered_card = null
 
 # Called when the node enters the scene tree
 func _ready() -> void:
+	print("Hand: _ready() called")
+	
+	# Wait for Global.deck to be initialized
+	if not Global.deck_initialized:
+		print("Hand: Waiting for Global.deck to be initialized...")
+		await Global.deck_initialized_signal
+	
 	# Initialize and shuffle deck
-	deck = Global.deck.duplicate()
+	print("Hand: Initializing deck with " + str(Global.deck.size()) + " cards")
+	
+	if Global.deck.size() == 0:
+		push_error("Hand: Global.deck is empty after initialization!")
+		# Create an emergency deck to avoid crashes
+		create_emergency_deck()
+	else:
+		deck = Global.deck.duplicate()
+		
 	randomize()
 	deck.shuffle()
 	
-	# Initial draw
-	#draw_card(5)
+	# Update UI initially
+	update_ui()
+	
+	print("Hand: Ready complete, deck size: " + str(deck.size()))
+
+# Create an emergency deck if everything else fails
+func create_emergency_deck():
+	print("Hand: Creating emergency deck!")
+	deck = [
+		{
+			"name": "Emergency Card",
+			"desc": "Deal 5 damage.",
+			"description": "Deal 5 damage.",
+			"cost": 1,
+			"effects": [
+				{"type": "damage", "value": 5, "target": "enemy"}
+			]
+		}
+	]
+	
+	# Duplicate to create multiple cards
+	var base_card = deck[0]
+	for i in range(9):
+		deck.append(base_card.duplicate())
 
 # Draw specified number of cards
 func draw_card(count: int = 1):
+	print("Hand: Drawing " + str(count) + " cards. Current deck size: " + str(deck.size()))
+	
+	if deck.size() == 0:
+		print("Hand: Cannot draw cards - deck is empty!")
+		return
+	
 	for i in range(count):
 		# Check if deck is empty and reshuffle discard pile if needed
 		if deck.size() <= 0:
@@ -49,28 +92,39 @@ func draw_card(count: int = 1):
 			
 		# Get card data and create instance
 		var card_data = deck.pop_front()
+		
+		if card_data == null:
+			print("Error: Tried to draw a card but card_data is null!")
+			continue
+			
+		print("Hand: Drawing card: " + card_data.name)
 		var card = CardScene.instantiate()
 		
 		# Set properties
 		card.card_name = card_data.name
-		card.card_cost = card_data.cost
-		card.card_desc = card_data.desc
+		card.card_cost = card_data.cost if "cost" in card_data else 1
 		
-		if "art" in card_data:
+		# Handle different description property names
+		if "description" in card_data:
+			card.card_desc = card_data.description
+		elif "desc" in card_data:
+			card.card_desc = card_data.desc
+		else:
+			card.card_desc = "No description"
+		
+		# Handle different art property paths
+		if "artwork_path" in card_data and card_data.artwork_path:
+			card.card_art = load(card_data.artwork_path)
+		elif "art" in card_data and card_data.art:
 			card.card_art = load(card_data.art)
 		
 		# Add to scene with initial properties
 		add_child(card)
 		card.position = deck_status.position
-		#card.scale = Vector2(0.1, 0.1)  # Start small
 		card.rotation_degrees = -60.0
 		
 		# Add to hand array
 		cards_in_hand.append(card)
-		
-		# If drawing multiple cards, add a small delay between each
-		#if i < count - 1:
-			#await get_tree().create_timer(0.15).timeout
 	
 	# Update UI and arrange cards only once
 	update_ui()
@@ -78,7 +132,8 @@ func draw_card(count: int = 1):
 
 # Update UI elements
 func update_ui():
-	deck_count_label.text = str(deck.size())
+	if deck_count_label:
+		deck_count_label.text = str(deck.size())
 
 # Process input for dragging cards
 func _process(delta: float) -> void:
