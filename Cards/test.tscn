@@ -80,7 +80,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DropTarget" type="Area2D" parent="."]
-position = Vector2(320, 69)
+position = Vector2(316, 69)
 script = ExtResource("7_jisrp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DropTarget"]
