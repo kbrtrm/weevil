@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=40 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -9,10 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="7_a1hen"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="8_entl1"]
 [ext_resource type="Texture2D" uid="uid://dov8l1r1ie1dw" path="res://Images/cig.png" id="8_krn53"]
-[ext_resource type="PackedScene" uid="uid://i7bo54ykex0x" path="res://Dialogue/actionable.tscn" id="8_nepb0"]
 [ext_resource type="TileSet" uid="uid://d0ugsh4q0nbit" path="res://Scenes/WallShadows.tres" id="9_fn36g"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_hqgvk"]
-[ext_resource type="Resource" uid="uid://d1p0s300k2skb" path="res://Dialogue/ciggy.dialogue" id="9_u1dq1"]
 [ext_resource type="PackedScene" uid="uid://df1dqbsyv1vha" path="res://Objects/PassThruObject.tscn" id="12_xqqty"]
 [ext_resource type="PackedScene" uid="uid://bn8sqnfqbho6t" path="res://Objects/FlowerRed.tscn" id="16_a4syf"]
 [ext_resource type="PackedScene" uid="uid://lwxl8bmdpc12" path="res://Objects/Pot.tscn" id="16_d4k56"]
@@ -2397,8 +2395,6 @@ radius = 8.06226
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ke18"]
 radius = 4.12311
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_g38ux"]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_8s6nn"]
 
 [node name="World" type="Node2D"]
@@ -2720,7 +2716,7 @@ position = Vector2(428, 92)
 
 [node name="Ciggy" type="CharacterBody2D" parent="YSort"]
 y_sort_enabled = true
-position = Vector2(284, 47)
+position = Vector2(308, 138)
 
 [node name="Sprite2D" type="Sprite2D" parent="YSort/Ciggy"]
 y_sort_enabled = true
@@ -2735,12 +2731,6 @@ hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy"]
 shape = SubResource("CircleShape2D_8ke18")
-
-[node name="Actionable" parent="YSort/Ciggy" instance=ExtResource("8_nepb0")]
-dialogue_resource = ExtResource("9_u1dq1")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy/Actionable"]
-shape = SubResource("CircleShape2D_g38ux")
 
 [node name="MushroomTall" parent="YSort" instance=ExtResource("22_qn5d2")]
 position = Vector2(422, 103)

@@ -160,12 +160,18 @@ func end_turn():
 	# Update status display
 	update_status_display()
 	
-# Player death
+# Modify the die function
 func die():
 	# Handle game over
 	print("Player Defeated - Game Over!")
-	# You could emit a signal here to trigger a game over screen
-	# get_tree().call_group("game_controllers", "player_died")
+	
+	# Find battle manager to end battle
+	var battle_manager = get_parent()
+	if battle_manager and battle_manager.has_method("end_battle"):
+		battle_manager.end_battle(false)  # false = player lost
+	else:
+		# Show game over screen as fallback
+		get_tree().call_group("game_controllers", "player_died")
 
 # Update the health display
 func update_health_display():

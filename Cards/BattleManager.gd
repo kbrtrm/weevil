@@ -15,6 +15,14 @@ func _ready():
 	# Connect end turn button
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	
+	# Set up enemies from Global data
+	setup_enemies()
+	
+	# Wait for Global to initialize the deck
+	if not Global.deck_initialized:
+		print("BattleManager: Waiting for deck to be initialized...")
+		await Global.deck_initialized_signal
+	
 	# Wait for Global to initialize the deck
 	if not Global.deck_initialized:
 		print("BattleManager: Waiting for deck to be initialized...")
@@ -26,6 +34,29 @@ func _ready():
 	print("BattleManager: Starting first turn")
 	# Start the first turn
 	start_turn()
+
+# New function to set up enemies based on global data
+func setup_enemies():
+	if Global.current_battle_enemies.size() > 0:
+		var enemy = get_enemy()
+		if enemy:
+			var enemy_data = Global.current_battle_enemies[0]
+			# Set enemy properties from data
+			enemy.enemy_name = enemy_data.get("name", "Enemy")
+			enemy.max_health = enemy_data.get("max_health", 15)
+			enemy.base_damage = enemy_data.get("base_damage", 8)
+			
+			# Initialize health
+			enemy.health = enemy.max_health
+			
+			# Update UI
+			enemy.update_health_display()
+			enemy.update_intent_display()
+			
+			print("BattleManager: Enemy setup complete - " + enemy.enemy_name)
+	else:
+		print("Warning: No enemy data found for battle")
+
 
 func start_turn():
 	if is_player_turn:
@@ -91,6 +122,18 @@ func end_turn():
 	
 	# Start the next turn
 	start_turn()
+	
+# Add this method to handle battle completion
+func end_battle(player_won = true):
+	print("BattleManager: Battle ended. Player won: " + str(player_won))
+	
+	# Handle rewards if player won
+	if player_won:
+		# Add rewards logic here
+		pass
+	
+	# Return to the overworld
+	Global.return_to_overworld(player_won)
 
 # Modify discard_hand to properly return when complete
 func discard_hand():

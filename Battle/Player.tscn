@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="2_cpcn0"]
 [ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_cpcn0"]
 
-[node name="Player" type="Node2D"]
+[node name="Player" type="Node2D" groups=["player"]]
 script = ExtResource("1_winow")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

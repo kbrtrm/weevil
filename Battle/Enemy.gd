@@ -267,7 +267,16 @@ func die():
 	# You could trigger an animation here and remove the enemy
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color(1, 1, 1, 0), 1.0)
-	tween.tween_callback(func(): queue_free())
+	
+	# When animation is done, end the battle
+	tween.tween_callback(func():
+		# Find the battle manager to end the battle
+		var battle_manager = get_parent()
+		if battle_manager and battle_manager.has_method("end_battle"):
+			battle_manager.end_battle(true)  # true = player won
+		else:
+			queue_free()
+	)
 
 # Update the health display
 func update_health_display():

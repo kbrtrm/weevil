@@ -4,6 +4,14 @@ var deck = []
 var deck_initialized = false
 signal deck_initialized_signal
 
+# Battle system variables
+var current_battle_enemies = []
+var player_position = Vector2.ZERO
+var current_scene_path = ""
+var enemy_position = Vector2.ZERO
+var enemy_instance_id = 0
+var returning_from_battle = false
+
 func _ready():
 	print("Global: _ready() called")
 	
@@ -147,6 +155,51 @@ func create_fallback_deck():
 	var initial_cards = deck.duplicate()
 	for i in range(4):
 		deck.append_array(initial_cards.duplicate())
+
+# Save overworld state before entering a battle
+func save_overworld_state():
+	# Save current scene
+	current_scene_path = get_tree().current_scene.scene_file_path
+	print("Global: Saved current scene: " + current_scene_path)
+	
+	# Save player position
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		player_position = player.global_position
+		print("Global: Saved player position: " + str(player_position))
+
+# Return to overworld after battle
+func return_to_overworld(battle_won = false):
+	print("Global: Returning to overworld. Battle won: " + str(battle_won))
+	
+	# Set flag to prevent re-triggering battles immediately
+	returning_from_battle = true
+	
+	# Load the previous scene
+	get_tree().change_scene_to_file(current_scene_path)
+	
+	# Wait for the scene to load
+	await get_tree().process_frame
+	
+	# Restore player position
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		player.global_position = player_position
+		print("Global: Restored player position: " + str(player_position))
+	
+	# If player won, remove the defeated enemy
+	if battle_won:
+		# Try to find the enemy by instance ID
+		var enemies = get_tree().get_nodes_in_group("enemies")
+		for enemy in enemies:
+			if enemy.get_instance_id() == enemy_instance_id:
+				print("Global: Removing defeated enemy")
+				enemy.queue_free()
+				break
+	
+	# Reset battle flag after a short delay
+	await get_tree().create_timer(0.5).timeout
+	returning_from_battle = false
 
 #var deck = [
 	#{
