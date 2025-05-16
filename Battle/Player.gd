@@ -21,6 +21,7 @@ var dexterity: int = 0
 @onready var block_icon = $BlockIcon
 @onready var block_label = $BlockLabel
 @onready var status_container = $StatusContainer
+@onready var health_bar = $HealthBar
 
 func _ready():
 	# Add to player group
@@ -30,6 +31,11 @@ func _ready():
 	update_health_display()
 	update_block_display()
 	update_status_display()
+	
+	# Initialize the health bar with player-specific color (blue)
+	if health_bar:
+		# Initialize health
+		health_bar.set_health(health, max_health)
 
 # Take damage with block reduction
 func take_damage(amount: int):
@@ -65,6 +71,9 @@ func take_damage(amount: int):
 	# Update UI
 	update_health_display()
 	
+	if health_bar:
+		health_bar.set_health(health, max_health)
+	
 	# Check for death
 	if health <= 0:
 		die()
@@ -96,6 +105,10 @@ func heal(amount: int):
 	health = min(health + amount, max_health)
 	emit_signal("health_changed", health, max_health)
 	update_health_display()
+	
+	# Add this after updating health_label
+	if health_bar:
+		health_bar.set_health(health, max_health)
 
 # Add weak status effect
 func add_weak(amount: int):

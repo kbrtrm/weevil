@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvd2l65i7q5l7"]
+[gd_scene load_steps=4 format=3 uid="uid://bvd2l65i7q5l7"]
 
 [ext_resource type="Script" uid="uid://bcmpuyx43x0s7" path="res://Battle/Player.gd" id="1_winow"]
 [ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="2_cpcn0"]
+[ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_cpcn0"]
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_winow")
@@ -31,3 +32,9 @@ theme_override_font_sizes/font_size = 8
 offset_top = 20.0
 offset_right = 40.0
 offset_bottom = 60.0
+
+[node name="HealthBar" parent="." instance=ExtResource("3_cpcn0")]
+offset_left = -40.0
+offset_top = 33.0
+offset_right = 40.0
+offset_bottom = 41.0

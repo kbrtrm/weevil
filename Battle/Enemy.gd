@@ -28,18 +28,22 @@ var strength: int = 0
 @onready var intent_icon = $IntentIcon
 @onready var intent_label = $IntentLabel
 @onready var status_container = $StatusContainer
+@onready var health_bar = $HealthBar
 
 func _ready():
 	# Add to enemies group
 	add_to_group("enemies")
 	
-	# Initialize health to max at start
-	health = max_health
-	
 	# Initialize UI
 	update_health_display()
 	update_block_display()
 	update_status_display()
+	
+		# Initialize health to max at start
+	health = max_health
+	
+	if health_bar:
+		health_bar.set_health(health, max_health)
 	
 	# Set initial intent
 	choose_intent()
@@ -79,6 +83,10 @@ func take_damage(amount: int):
 	
 	# Update UI
 	update_health_display()
+	
+	# Add this after updating health_label
+	if health_bar:
+		health_bar.set_health(health, max_health)
 	
 	# Check for death
 	if health <= 0:

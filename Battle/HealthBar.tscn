@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cubymfij3jg4j"]
+
+[ext_resource type="Script" uid="uid://6p4ymr0g1mit" path="res://Battle/HealthBar.gd" id="1_ebvxc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tax1m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dx14t"]
+bg_color = Color(0.80575, 0.19397, 0.278953, 1)
+
+[node name="HealthBar" type="ProgressBar"]
+custom_minimum_size = Vector2(80, 8)
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_tax1m")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dx14t")
+step = 1.0
+value = 50.0
+show_percentage = false
+script = ExtResource("1_ebvxc")
