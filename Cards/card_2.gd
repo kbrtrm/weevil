@@ -229,7 +229,7 @@ func apply_damage_effect(target, amount):
 		damage_popup.add_theme_font_size_override("font_size", 16)
 		
 		# Add to scene
-		get_tree().root.add_child(damage_popup)
+		target.add_child(damage_popup)  # Add to the target node instead of scene root
 		damage_popup.global_position = target.global_position + Vector2(0, -20)
 		
 		# Animate

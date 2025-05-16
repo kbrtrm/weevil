@@ -16,16 +16,26 @@ extends ProgressBar
 # Style references
 var fill_style: StyleBoxFlat
 var current_color_state: String = "normal"  # Keep track of current color state
+var is_player: bool = false  # Flag to identify if this is the player's health bar
 
 # Initialization
 func _ready():
-	# Get the fill style
-	fill_style = get("theme_override_styles/fill")
+	# CRITICAL FIX: Make a unique copy of the StyleBoxFlat resource
+	# This ensures each health bar has its own independent style
+	var original_style = get("theme_override_styles/fill")
+	if original_style:
+		# Create a fresh duplicate of the style
+		fill_style = original_style.duplicate()
+		# Apply the duplicated style back to the progress bar
+		set("theme_override_styles/fill", fill_style)
+		
+		# Store the initial normal color
+		normal_color = fill_style.bg_color
 	
-	if fill_style:
-		# Store the initial normal color if not already set
-		if normal_color == Color(0.886275, 0.294118, 0.294118, 1):  # If still default
-			normal_color = fill_style.bg_color
+	# Determine if this is a player health bar by checking parent
+	var parent = get_parent()
+	if parent and parent.is_in_group("player"):
+		is_player = true
 	
 	# Initial update
 	update_color()
@@ -41,7 +51,17 @@ func set_health(current: int, maximum: int):
 		
 		# Flash effect for damage if enabled and health is decreasing
 		if flash_on_damage and current < value:
-			if fill_style:
+			# Only flash if this is NOT a player health bar or if it's the player's turn
+			var battle_manager = find_battle_manager()
+			var is_player_turn = true  # Default assumption
+			
+			if battle_manager and "is_player_turn" in battle_manager:
+				is_player_turn = battle_manager.is_player_turn
+			
+			# Flash enemy bar when player's turn, flash player bar when enemy's turn
+			var should_flash = (is_player and not is_player_turn) or (not is_player and is_player_turn)
+			
+			if should_flash and fill_style:
 				# Store the current color before flashing
 				var current_color = fill_style.bg_color
 				
@@ -68,6 +88,15 @@ func set_health(current: int, maximum: int):
 		# Immediate change
 		value = current
 		update_color()
+
+# Helper function to find the battle manager
+func find_battle_manager():
+	var node = self
+	while node:
+		if node.has_method("get_enemy") and node.has_method("get_player"):
+			return node
+		node = node.get_parent()
+	return null
 
 # Update the color based on current health percentage
 func update_color():

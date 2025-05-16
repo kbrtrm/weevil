@@ -13,6 +13,6 @@ theme_override_font_sizes/font_size = 8
 theme_override_styles/background = SubResource("StyleBoxFlat_tax1m")
 theme_override_styles/fill = SubResource("StyleBoxFlat_dx14t")
 step = 1.0
-value = 50.0
+value = 100.0
 show_percentage = false
 script = ExtResource("1_ebvxc")
