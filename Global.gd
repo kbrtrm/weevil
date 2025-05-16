@@ -4,6 +4,8 @@ var deck = []
 var deck_initialized = false
 signal deck_initialized_signal
 
+var game_paused = false
+
 # Battle system variables
 var current_battle_enemies = []
 var player_position = Vector2.ZERO
@@ -28,6 +30,9 @@ func _ready():
 	
 	print("Global: CardDatabase initialized, now initializing deck...")
 	call_deferred("initialize_deck")
+	
+	# Debug all scenes after everything is loaded
+	call_deferred("debug_scenes")
 
 # Set up the player's starting deck
 func initialize_deck():
@@ -95,7 +100,7 @@ func initialize_deck():
 
 # Add a card to the deck by ID
 func add_card_to_deck(card_id):
-	print("Global: Adding card to deck: " + card_id)
+	#print("Global: Adding card to deck: " + card_id)
 	
 	var card_db = get_node("/root/CardDatabase")
 	if not card_db:
@@ -107,7 +112,7 @@ func add_card_to_deck(card_id):
 		# Create a copy of the card data for the deck
 		var deck_card = card_data.duplicate(true)
 		deck.append(deck_card)
-		print("Global: Successfully added: " + card_data.name)
+		#print("Global: Successfully added: " + card_data.name)
 		return true
 	else:
 		push_error("Failed to add card to deck, ID not found: " + card_id)
@@ -175,31 +180,84 @@ func return_to_overworld(battle_won = false):
 	# Set flag to prevent re-triggering battles immediately
 	returning_from_battle = true
 	
-	# Load the previous scene
+	# Pause all game movement
+	set_game_paused(true)
+	
+	# Create transition
+	var transition = load("res://Effects/BattleTransition.tscn").instantiate()
+	get_tree().root.add_child(transition)
+	
+	# Fade to black
+	transition.fade_out(0.5)
+	await transition.transition_halfway
+	
+	# Load the previous scene while black
+	print("Global: Changing back to overworld scene")
 	get_tree().change_scene_to_file(current_scene_path)
 	
-	# Wait for the scene to load
-	await get_tree().process_frame
+	# Wait for scene to initialize
+	await transition.wait(0.1)
 	
-	# Restore player position
-	var player = get_tree().get_first_node_in_group("player")
-	if player:
-		player.global_position = player_position
-		print("Global: Restored player position: " + str(player_position))
+	# Make sure transition is still valid
+	if is_instance_valid(transition) and transition.is_inside_tree():
+		print("Global: Transition still valid after scene change")
+		
+		# Restore player position
+		var player = get_tree().get_first_node_in_group("player")
+		if player:
+			player.global_position = player_position
+			print("Global: Restored player position: " + str(player_position))
+		
+		# If player won, remove the defeated enemy
+		if battle_won:
+			var enemies = get_tree().get_nodes_in_group("enemies")
+			for enemy in enemies:
+				var distance = enemy_position.distance_to(enemy.global_position)
+				if distance < 50:
+					print("Global: Removing enemy: " + enemy.name)
+					enemy.queue_free()
+					break
+		
+		# Fade in to show the overworld
+		transition.fade_in(0.5)
+		
+		# Clean up when done
+		await transition.transition_completed
+		transition.queue_free()
+	else:
+		print("Global: ERROR: Transition is no longer valid after scene change!")
 	
-	# If player won, remove the defeated enemy
-	if battle_won:
-		# Try to find the enemy by instance ID
-		var enemies = get_tree().get_nodes_in_group("enemies")
-		for enemy in enemies:
-			if enemy.get_instance_id() == enemy_instance_id:
-				print("Global: Removing defeated enemy")
-				enemy.queue_free()
-				break
-	
-	# Reset battle flag after a short delay
+	# At the end:
+	# Reset battle flag and unpause after a short delay
 	await get_tree().create_timer(0.5).timeout
 	returning_from_battle = false
+	set_game_paused(false)
+
+func debug_scenes():
+	# Wait for everything to load
+	await get_tree().process_frame
+	
+	# Find all combat initiation zones
+	var zones = get_tree().get_nodes_in_group("combat_zones")
+	print("Found " + str(zones.size()) + " combat zones")
+	
+	# If none found, check all nodes
+	if zones.size() == 0:
+		print("Searching for CombatInitiationZone nodes...")
+		var all_nodes = get_tree().get_nodes_in_group("*")
+		for node in all_nodes:
+			if "CombatInitiationZone" in node.name:
+				print("Found node: " + node.name)
+				print("  Script: " + str(node.get_script()))
+				print("  Collision layer: " + str(node.collision_layer))
+				print("  Collision mask: " + str(node.collision_mask))
+
+func set_game_paused(paused):
+	game_paused = paused
+	
+	# Pause physics processing for all relevant nodes
+	get_tree().call_group("players", "set_physics_process", !paused)
+	get_tree().call_group("enemies", "set_physics_process", !paused)
 
 #var deck = [
 	#{

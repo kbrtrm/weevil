@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b05m1gxkq1r40"]
+[gd_scene load_steps=20 format=3 uid="uid://b05m1gxkq1r40"]
 
 [ext_resource type="Script" uid="uid://djl8gkfu5bh2a" path="res://Enemies/Cig/Cig.gd" id="1_eb85k"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_3sml6"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://cp2owch1u80fw" path="res://Overlap/hurtbox.tscn" id="5_i4gn2"]
 [ext_resource type="PackedScene" uid="uid://cmsgl025o0h6t" path="res://Stats.tscn" id="6_ux6dl"]
 [ext_resource type="PackedScene" uid="uid://ohip8s50m1p4" path="res://Enemies/PlayerDetectionZone.tscn" id="7_yox6j"]
-[ext_resource type="PackedScene" uid="uid://cbp2nr157dqbi" path="res://Overlap/hitbox.tscn" id="8_rpx36"]
 [ext_resource type="PackedScene" uid="uid://cl1dof02i12ey" path="res://Enemies/CombatInitiationZone.tscn" id="9_arc6d"]
 [ext_resource type="PackedScene" uid="uid://d1roke5pysj1u" path="res://Overlap/SoftCollision.tscn" id="10_hx5s6"]
 [ext_resource type="PackedScene" uid="uid://fn8ny30lak10" path="res://Enemies/WanderController.tscn" id="11_ujcee"]
@@ -50,69 +49,11 @@ height = 22.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_tyo12"]
 radius = 83.006
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ia8km"]
-radius = 6.0
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_rplpv"]
 radius = 29.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7tsep"]
 radius = 3.0
-
-[sub_resource type="Animation" id="Animation_jt3f2"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/active")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_msvfk"]
-resource_name = "Start"
-length = 0.2
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/active")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_pfppw"]
-resource_name = "Stop"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/active")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_dghjm"]
-_data = {
-&"RESET": SubResource("Animation_jt3f2"),
-&"Start": SubResource("Animation_msvfk"),
-&"Stop": SubResource("Animation_pfppw")
-}
 
 [node name="Cig" type="CharacterBody2D"]
 collision_layer = 16
@@ -131,7 +72,6 @@ autoplay = "wiggle"
 frame_progress = 0.701929
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, 2)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_36s6n")
@@ -153,14 +93,6 @@ max_health = 2
 self_modulate = Color(1, 0.384314, 0.635294, 0.278431)
 shape = SubResource("CircleShape2D_tyo12")
 
-[node name="Hitbox" parent="." instance=ExtResource("8_rpx36")]
-collision_layer = 4
-
-[node name="CollisionShape2D" parent="Hitbox" index="0"]
-visible = false
-position = Vector2(0, -1)
-shape = SubResource("CircleShape2D_ia8km")
-
 [node name="CombatInitiationZone" parent="." instance=ExtResource("9_arc6d")]
 
 [node name="CollisionShape2D" parent="CombatInitiationZone" index="0"]
@@ -174,11 +106,6 @@ shape = SubResource("CircleShape2D_7tsep")
 
 [node name="WanderController" parent="." instance=ExtResource("11_ujcee")]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_dghjm")
-}
-
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_hurtbox_invincibility_ended"]
 [connection signal="invincibility_started" from="Hurtbox" to="." method="_on_hurtbox_invincibility_started"]
@@ -186,6 +113,5 @@ libraries = {
 
 [editable path="Hurtbox"]
 [editable path="PlayerDetectionZone"]
-[editable path="Hitbox"]
 [editable path="CombatInitiationZone"]
 [editable path="SoftCollision"]

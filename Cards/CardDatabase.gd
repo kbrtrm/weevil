@@ -8,13 +8,13 @@ var initialized = false
 signal database_initialized
 
 func _ready():
-	print("CardDatabase: _ready() called")
+	#print("CardDatabase: _ready() called")
 	# Load the card database
 	load_card_database()
 
 # Load the card database from JSON
 func load_card_database():
-	print("CardDatabase: Loading card database...")
+	#print("CardDatabase: Loading card database...")
 	
 	var file = FileAccess.open("res://Cards/card_database.json", FileAccess.READ)
 	if not file:

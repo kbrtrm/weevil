@@ -36,11 +36,19 @@ func _ready():
 	# Add to player group
 	add_to_group("player")
 	
+	# Debug collision settings
+	print("Player collision layer: " + str(collision_layer))
+	print("Player is on layer 2: " + str((collision_layer & 2) != 0))
+	
 	stats.no_health.connect(queue_free)
 	animtree.active = true
 	swordhitbox.knockback_vector = roll_vector
 
 func _process(_delta):
+	# Skip processing if game is paused
+	if Global.game_paused:
+		return
+		
 	match state:
 		MOVE:
 			move_state()

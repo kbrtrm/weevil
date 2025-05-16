@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://7tehfjnocg5r" path="res://Enemies/CombatInitiationZone.gd" id="1_wehhs"]
 
 [node name="CombatInitiationZone" type="Area2D"]
+collision_mask = 2
 script = ExtResource("1_wehhs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

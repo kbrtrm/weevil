@@ -450,7 +450,6 @@ shape = SubResource("CapsuleShape2D_gowjq")
 disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource("6_tlwiw")]
-visible = false
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]

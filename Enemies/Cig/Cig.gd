@@ -42,11 +42,27 @@ func _ready():
 	# Add to enemies group for tracking
 	add_to_group("enemies")
 	
-	# Connect the combat initiation signal
-	# If CombatInitiationZone is an Area2D, connect its body_entered signal
-	if combatInitiationZone is Area2D:
-		if !combatInitiationZone.body_entered.is_connected(_on_combat_initiation_zone_body_entered):
-			combatInitiationZone.body_entered.connect(_on_combat_initiation_zone_body_entered)
+		# Debug children nodes
+	print("\n=== CIG CHILDREN DEBUG ===")
+	print("Cig has " + str(get_child_count()) + " children")
+	for child in get_children():
+		var script_info = ""
+		if child.get_script():
+			script_info = " [Script: " + child.get_script().resource_path + "]"
+		print(" - " + child.name + " (" + child.get_class() + ")" + script_info)
+		
+		# If this is the CombatInitiationZone, examine it further
+		if child.name == "CombatInitiationZone":
+			print("   CombatInitiationZone details:")
+			print("   - Collision layer: " + str(child.collision_layer))
+			print("   - Collision mask: " + str(child.collision_mask))
+			print("   - Has signal connections: " + str(child.get_signal_connection_list("body_entered").size() > 0))
+			
+			# Try to manually connect the signal
+			if not child.body_entered.is_connected(_on_combat_initiation_zone_body_entered):
+				print("   - Manually connecting body_entered signal")
+				child.body_entered.connect(_on_combat_initiation_zone_body_entered)
+	print("=== END CIG CHILDREN DEBUG ===\n")
 
 func _physics_process(_delta):
 	velocity = velocity.move_toward(Vector2.ZERO, FRICTION)
@@ -103,9 +119,12 @@ func _on_combat_initiation_zone_body_entered(body):
 		print("Combat initiated with player!")
 		start_battle()
 		
-# Function to start the battle
 func start_battle():
 	battle_initiated = true
+	print("Cig: Starting battle...")
+	
+	# Pause all game movement
+	Global.set_game_paused(true)
 	
 	# Stop movement
 	state = IDLE
@@ -116,18 +135,34 @@ func start_battle():
 	
 	# Store enemy data
 	Global.current_battle_enemies = [enemy_data]
-	
-	# Store enemy instance ID for potential removal after battle
-	Global.enemy_instance_id = get_instance_id()
 	Global.enemy_position = global_position
 	
-	# Optional: Play pre-battle animation
-	animationPlayer.play("Start") 
-	await animationPlayer.animation_finished
+	# Create the transition
+	var transition = load("res://Effects/BattleTransition.tscn").instantiate()
+	get_tree().root.add_child(transition)
 	
-	# Change to battle scene
-	print("Changing to battle scene...")
+	# Fade to black
+	transition.fade_out(0.5)
+	await transition.transition_halfway
+	
+	print("Cig: Changing to battle scene...")
+	# Change scene when screen is black
 	get_tree().change_scene_to_packed(battle_scene)
+	
+	# Allow the scene to initialize
+	await transition.wait(0.1)
+	
+	# Make sure we can still reference the transition
+	if is_instance_valid(transition) and transition.is_inside_tree():
+		print("Cig: Transition still valid, fading in...")
+		# Fade from black to reveal the battle
+		transition.fade_in(0.5)
+		
+		# Clean up when done
+		await transition.transition_completed
+		transition.queue_free()
+	else:
+		print("Cig: ERROR: Transition is no longer valid after scene change!")
 
 func _on_hurtbox_area_entered(area):
 	stats.health -= area.damage
