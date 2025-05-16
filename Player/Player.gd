@@ -33,6 +33,9 @@ var stats = PlayerStats
 @onready var sprite = $Sprite2D
 
 func _ready():
+	# Add to player group
+	add_to_group("player")
+	
 	stats.no_health.connect(queue_free)
 	animtree.active = true
 	swordhitbox.knockback_vector = roll_vector
