@@ -1,3 +1,5 @@
+# Simplified Global.gd - Modified to remove transition and directly return to overworld
+
 extends Node
 
 var deck = []
@@ -75,7 +77,7 @@ func initialize_deck():
 	if add_card_to_deck("gum"):
 		success_count += 1
 		
-	# 1 Gum
+	# 1 Rubber band
 	if add_card_to_deck("rubber_band"):
 		success_count += 1
 
@@ -173,7 +175,7 @@ func save_overworld_state():
 		player_position = player.global_position
 		print("Global: Saved player position: " + str(player_position))
 
-# Return to overworld after battle
+# SIMPLIFIED: Direct scene change without transition
 func return_to_overworld(battle_won = false):
 	print("Global: Returning to overworld. Battle won: " + str(battle_won))
 	
@@ -183,51 +185,32 @@ func return_to_overworld(battle_won = false):
 	# Pause all game movement
 	set_game_paused(true)
 	
-	# Create transition
-	var transition = load("res://Effects/BattleTransition.tscn").instantiate()
-	get_tree().root.add_child(transition)
-	
-	# Fade to black
-	transition.fade_out(0.5)
-	await transition.transition_halfway
-	
-	# Load the previous scene while black
+	# Load the previous scene directly
 	print("Global: Changing back to overworld scene")
-	get_tree().change_scene_to_file(current_scene_path)
+	var err = get_tree().change_scene_to_file(current_scene_path)
+	if err != OK:
+		push_error("Failed to return to overworld scene! Error code: " + str(err))
 	
 	# Wait for scene to initialize
-	await transition.wait(0.1)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	
-	# Make sure transition is still valid
-	if is_instance_valid(transition) and transition.is_inside_tree():
-		print("Global: Transition still valid after scene change")
-		
-		# Restore player position
-		var player = get_tree().get_first_node_in_group("player")
-		if player:
-			player.global_position = player_position
-			print("Global: Restored player position: " + str(player_position))
-		
-		# If player won, remove the defeated enemy
-		if battle_won:
-			var enemies = get_tree().get_nodes_in_group("enemies")
-			for enemy in enemies:
-				var distance = enemy_position.distance_to(enemy.global_position)
-				if distance < 50:
-					print("Global: Removing enemy: " + enemy.name)
-					enemy.queue_free()
-					break
-		
-		# Fade in to show the overworld
-		transition.fade_in(0.5)
-		
-		# Clean up when done
-		await transition.transition_completed
-		transition.queue_free()
-	else:
-		print("Global: ERROR: Transition is no longer valid after scene change!")
+	# Restore player position
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		player.global_position = player_position
+		print("Global: Restored player position: " + str(player_position))
 	
-	# At the end:
+	# If player won, remove the defeated enemy
+	if battle_won:
+		var enemies = get_tree().get_nodes_in_group("enemies")
+		for enemy in enemies:
+			var distance = enemy_position.distance_to(enemy.global_position)
+			if distance < 50:
+				print("Global: Removing enemy: " + enemy.name)
+				enemy.queue_free()
+				break
+	
 	# Reset battle flag and unpause after a short delay
 	await get_tree().create_timer(0.5).timeout
 	returning_from_battle = false
@@ -258,72 +241,3 @@ func set_game_paused(paused):
 	# Pause physics processing for all relevant nodes
 	get_tree().call_group("players", "set_physics_process", !paused)
 	get_tree().call_group("enemies", "set_physics_process", !paused)
-
-#var deck = [
-	#{
-		#"name": "Penny",
-		#"desc": "Apply 2 [color=yellow]spark[/color]. Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Cards/penny.png"
-	#},
-	#{
-		#"name": "Penny",
-		#"desc": "Apply 2 [color=yellow]spark[/color]. Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Cards/penny.png"
-	#},
-	#{
-		#"name": "Wad of Gum",
-		#"desc": "Apply 2 [color=pink]sticky[/color]. Deal 8 damage.",
-		#"cost": 2,
-		#"art": "res://Cards/gum.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Pebble",
-		#"desc": "Deal 6 damage.",
-		#"cost": 1,
-		#"art": "res://Images/stone1.png"
-	#},
-	#{
-		#"name": "Paperclip",
-		#"desc": "Apply 2 [color=skyblue]weak[/color]. Deal 4 damage.",
-		#"cost": 0,
-		#"art": "res://Cards/paperclip-big.png"
-	#},
-	#{
-		#"name": "Paperclip",
-		#"desc": "Apply 2 [color=skyblue]weak[/color]. Deal 4 damage.",
-		#"cost": 0,
-		#"art": "res://Cards/paperclip-big.png"
-	#}
-#]

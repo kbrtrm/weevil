@@ -10,7 +10,7 @@ const EnemyDeathEffect = preload("res://Enemies/EnemyDeathEffect.tscn")
 @onready var wanderController = $WanderController
 @onready var animationPlayer = $AnimationPlayer
 
-# Add battle scene reference
+# Battle scene reference
 @export var battle_scene: PackedScene = preload("res://Cards/test.tscn")
 
 # Enemy data for battle
@@ -42,7 +42,7 @@ func _ready():
 	# Add to enemies group for tracking
 	add_to_group("enemies")
 	
-		# Debug children nodes
+	# Debug children nodes
 	print("\n=== CIG CHILDREN DEBUG ===")
 	print("Cig has " + str(get_child_count()) + " children")
 	for child in get_children():
@@ -98,7 +98,7 @@ func _physics_process(_delta):
 			if player != null:
 				var direction = global_position.direction_to(player.global_position)
 				velocity = velocity.move_toward(direction * MAX_SPEED, ACCEL)
-			sprite.flip_h = velocity.x > 0		
+			sprite.flip_h = velocity.x > 0        
 				
 	if softCollision.is_colliding():
 		velocity = velocity.move_toward(softCollision.get_push_vector() * MAX_SPEED, ACCEL)
@@ -137,32 +137,22 @@ func start_battle():
 	Global.current_battle_enemies = [enemy_data]
 	Global.enemy_position = global_position
 	
-	# Create the transition
-	var transition = load("res://Effects/BattleTransition.tscn").instantiate()
-	get_tree().root.add_child(transition)
-	
-	# Fade to black
-	transition.fade_out(0.5)
-	await transition.transition_halfway
-	
+	# SIMPLIFIED: Just directly change to the battle scene
 	print("Cig: Changing to battle scene...")
-	# Change scene when screen is black
-	get_tree().change_scene_to_packed(battle_scene)
 	
-	# Allow the scene to initialize
-	await transition.wait(0.1)
+	# Validate battle scene is loaded
+	if battle_scene == null:
+		push_error("Battle scene is not set!")
+		Global.set_game_paused(false)
+		battle_initiated = false
+		return
 	
-	# Make sure we can still reference the transition
-	if is_instance_valid(transition) and transition.is_inside_tree():
-		print("Cig: Transition still valid, fading in...")
-		# Fade from black to reveal the battle
-		transition.fade_in(0.5)
-		
-		# Clean up when done
-		await transition.transition_completed
-		transition.queue_free()
-	else:
-		print("Cig: ERROR: Transition is no longer valid after scene change!")
+	# Change scene immediately
+	var err = get_tree().change_scene_to_packed(battle_scene)
+	if err != OK:
+		push_error("Failed to change to battle scene! Error code: " + str(err))
+		Global.set_game_paused(false)
+		battle_initiated = false
 
 func _on_hurtbox_area_entered(area):
 	stats.health -= area.damage
