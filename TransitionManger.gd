@@ -14,8 +14,11 @@ func _ready():
 	# Make sure overlay is transparent and not blocking input initially
 	overlay.material.set_shader_parameter("circle_size", 1.0)
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	# Set our pause mode so we can continue running during pause
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
-# General scene transition
+# Modified change_scene to handle pausing
 func change_scene(target_scene: String, screen_point = null) -> void:
 	next_scene = target_scene
 	
@@ -30,6 +33,9 @@ func change_scene(target_scene: String, screen_point = null) -> void:
 	
 	overlay.material.set_shader_parameter("center", center)
 	
+	# Pause the game DURING transitions
+	get_tree().paused = true
+	
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
 	
@@ -38,12 +44,15 @@ func change_scene(target_scene: String, screen_point = null) -> void:
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
 	
+	# Unpause after transition
+	get_tree().paused = false
+	
 	# Allow input again after transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	emit_signal("transition_completed")
 
-# Combat-specific transition - starts combat
+# Modified start_combat to handle pausing
 func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 	next_scene = combat_scene
 	
@@ -54,6 +63,9 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 	var center = enemy_position / get_viewport().get_visible_rect().size
 	overlay.material.set_shader_parameter("center", center)
 	
+	# Pause the game DURING transitions
+	get_tree().paused = true
+	
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
 	
@@ -62,12 +74,15 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
 	
+	# Unpause after transition
+	get_tree().paused = false
+	
 	# Allow input again after transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	emit_signal("combat_started")
 
-# Combat-specific transition - ends combat and returns to previous scene
+# Modified end_combat to handle pausing
 func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
 	next_scene = world_scene
 	battle_won = was_battle_won
@@ -78,6 +93,9 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	# Center the transition on the enemy
 	var center = enemy_position / get_viewport().get_visible_rect().size
 	overlay.material.set_shader_parameter("center", center)
+	
+	# Pause the game DURING transitions
+	get_tree().paused = true
 	
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
@@ -95,6 +113,9 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
+	
+	# Unpause after transition
+	get_tree().paused = false
 	
 	# Allow input again after transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE

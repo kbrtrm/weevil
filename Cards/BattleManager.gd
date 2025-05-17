@@ -125,14 +125,20 @@ func end_turn():
 	
 # Add this method to handle battle completion
 func end_battle(player_won = true):
-		# Use the stored enemy position from when the battle started
+	# Use the stored enemy position from when the battle started
 	var enemy_position = Global.enemy_position
 	
 	# Get the overworld scene path from Global
 	var overworld_scene = Global.get_overworld_scene_path()
 	
+	# Log battle result for debugging
+	if player_won:
+		print("BattleManager: Battle won! Enemy will be removed.")
+	else:
+		print("BattleManager: Battle lost or abandoned.")
+	
 	# End the battle with transition effect
-	TransitionManager.end_combat(enemy_position, overworld_scene)
+	TransitionManager.end_combat(enemy_position, overworld_scene, player_won)
 
 # Modify discard_hand to properly return when complete
 func discard_hand():
