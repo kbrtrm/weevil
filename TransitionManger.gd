@@ -84,7 +84,8 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 
 # Modified end_combat to handle pausing
 func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
-	print("TransitionManager: End combat called, battle_won = " + str(battle_won))
+	# Fix the debug print to use the parameter instead of the class member
+	print("TransitionManager: End combat called, was_battle_won = " + str(was_battle_won))
 	
 	next_scene = world_scene
 	battle_won = was_battle_won
@@ -111,7 +112,7 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	# Call the Global function to set up the returned world
 	var global = get_node("/root/Global")
 	if global and global.has_method("setup_returned_world"):
-		global.setup_returned_world(battle_won)
+		global.setup_returned_world(was_battle_won)
 	
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished

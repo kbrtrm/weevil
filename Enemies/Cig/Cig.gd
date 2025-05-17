@@ -43,19 +43,23 @@ func _ready():
 	# Initialize unique ID system
 	init_unique_id()
 	
+	# THIS IS THE CRITICAL PART - CHECK IF ALREADY DEFEATED
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		var scene_path = get_tree().current_scene.scene_file_path
+		
+		print("Checking if enemy " + str(unique_id) + " is already defeated...")
+		if global.is_enemy_defeated(scene_path, unique_id):
+			print("Enemy " + str(unique_id) + " was previously defeated - REMOVING from scene")
+			queue_free()
+			return  # Very important - stop initialization
+		else:
+			print("Enemy " + str(unique_id) + " not found in defeated list, allowed to spawn")
+	
 	# Debug output
 	print("\n=== ENEMY INITIALIZATION DEBUG ===")
 	print("Enemy ID: " + str(unique_id))
 	print("Current scene path: " + get_tree().current_scene.scene_file_path)
-	
-	# Check if this enemy was previously defeated
-	if is_defeated():
-		# If defeated, immediately remove this enemy
-		print("Enemy " + str(unique_id) + " was previously defeated, removing")
-		queue_free()
-		return
-	else:
-		print("Enemy " + str(unique_id) + " not found in defeated list, spawning")
 	
 	# Continue with normal initialization for active enemies
 	state = pick_random_state([IDLE, WANDER])
@@ -138,19 +142,17 @@ func _on_combat_initiation_zone_body_entered(body):
 	if body.is_in_group("player") and !battle_initiated and !Global.returning_from_battle:
 		print("Combat initiated with player!")
 		
-		# Additional validation to ensure we have a valid ID
+		# Ensure we have a valid ID - it should already be set, but double check
 		if unique_id == -1:
-			print("WARNING: Enemy has invalid ID (-1)! Generating new ID before battle...")
-			init_unique_id()  # Try to fix the ID
-			
-			if unique_id == -1:
-				print("ERROR: Failed to generate valid ID! Creating emergency ID...")
-				unique_id = randi() % 1000 + 1000  # Emergency ID generation
+			print("WARNING: Enemy has no ID during combat initiation! Generating now...")
+			init_unique_id()
 		
 		# Store THIS enemy's unique ID and position in Global BEFORE starting battle
 		Global.enemy_position = global_position
 		Global.current_enemy_id = unique_id  # Store the enemy's unique ID
-		print("Cig: Stored initiating enemy ID " + str(unique_id) + " at position " + str(global_position))
+		
+		print("Cig: Starting combat with enemy ID " + str(unique_id) + " at position " + str(global_position))
+		print("Cig: Verify Global.current_enemy_id = " + str(Global.current_enemy_id))
 		
 		# Now start the battle
 		start_battle()
@@ -211,29 +213,38 @@ func _on_hurtbox_invincibility_started():
 func _on_hurtbox_invincibility_ended():
 	animationPlayer.play("Stop")
 
-# Initialize the unique ID system - either generate a new ID or reload existing one
+# Generate a deterministic ID based on position in the scene
+func generate_deterministic_id():
+	# Create a position-based component using grid coordinates (rounded position)
+	var grid_pos = Vector2(round(global_position.x / 10) * 10, round(global_position.y / 10) * 10)
+	var pos_component = int(grid_pos.x * 1000 + grid_pos.y)
+	
+	# Get scene path for additional uniqueness
+	var scene_path = get_tree().current_scene.scene_file_path
+	
+	# Combine both to create a unique but deterministic ID
+	var combined_hash = scene_path.hash() + pos_component
+	
+	# Ensure it's a positive number within reasonable range
+	var final_id = abs(combined_hash) % 100000
+	
+	print("Generated deterministic ID for enemy at " + str(global_position) + ": " + str(final_id))
+	return final_id
+
+# Modified init_unique_id function for better ID persistence
 func init_unique_id():
-	# Check if we already have a unique ID stored in metadata
-	if has_meta("unique_id"):
+	# First check if we already have an ID in metadata
+	if has_meta("unique_id") and get_meta("unique_id") != -1:
 		unique_id = get_meta("unique_id")
-		print("Cig: Loaded existing ID: " + str(unique_id))
-	else:
-		# Generate a new unique ID and store it
-		if Engine.has_singleton("Global"):
-			var global = Engine.get_singleton("Global")
-			unique_id = global.generate_enemy_id()
-			set_meta("unique_id", unique_id)
-			print("Cig: Generated new ID: " + str(unique_id))
-		else:
-			push_error("Global singleton not found!")
-			
-	# IMPORTANT: Make sure we never have an invalid ID
-	if unique_id == -1:
-		if Engine.has_singleton("Global"):
-			var global = Engine.get_singleton("Global")
-			unique_id = global.generate_enemy_id()
-			set_meta("unique_id", unique_id)
-			print("Cig: Generated new ID to replace invalid ID: " + str(unique_id))
+		print("Cig: Loaded existing ID from metadata: " + str(unique_id))
+		return
+		
+	# Generate and use a deterministic ID
+	unique_id = generate_deterministic_id()
+	
+	# Store ID in metadata
+	set_meta("unique_id", unique_id)
+	print("Cig: Set deterministic ID: " + str(unique_id))
 
 # Check if this enemy was previously defeated
 func is_defeated():

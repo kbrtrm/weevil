@@ -125,42 +125,39 @@ func end_turn():
 	
 # Add this method to handle battle completion
 func end_battle(player_won = true):
-	# Use the stored enemy position from when the battle started
+	# Get the stored enemy ID and position
+	var enemy_id = Global.current_enemy_id
 	var enemy_position = Global.enemy_position
-	
-	# Get the overworld scene path from Global
 	var overworld_scene = Global.get_overworld_scene_path()
 	
-	# Improved debugging
-	print("BattleManager.end_battle called:")
-	print("  - player_won: " + str(player_won))
-	print("  - enemy_position: " + str(enemy_position))
-	print("  - overworld_scene: " + str(overworld_scene))
-	print("  - current_enemy_id: " + str(Global.current_enemy_id))
+	# Enhanced debugging
+	print("\n=== BattleManager.end_battle ===")
+	print("player_won: " + str(player_won))
+	print("enemy_id: " + str(enemy_id))
+	print("enemy_position: " + str(enemy_position))
+	print("overworld_scene: " + str(overworld_scene))
 	
-	# Log battle result for debugging
 	if player_won:
 		print("BattleManager: Battle won! Enemy will be removed.")
 		
-		# IMPORTANT: Mark the enemy as defeated in Global
-		# This ensures it doesn't reappear when returning to the overworld
-		if Global.current_enemy_id != -1:
-			print("BattleManager: Marking enemy " + str(Global.current_enemy_id) + " as defeated")
-			Global.mark_enemy_defeated(overworld_scene, Global.current_enemy_id)
+		# CRITICAL: Mark the enemy as defeated in Global
+		if enemy_id != -1:
+			print("BattleManager: Marking enemy " + str(enemy_id) + " as defeated")
+			Global.mark_enemy_defeated(overworld_scene, enemy_id)
 			
-			# Debug the defeated enemies list after marking
-			print("Global.defeated_enemies contents after marking:")
-			for path in Global.defeated_enemies:
-				print("  Scene: " + path)
-				print("  Defeated IDs: " + str(Global.defeated_enemies[path]))
+			# Double-check that the enemy was actually marked
+			if Global.is_enemy_defeated(overworld_scene, enemy_id):
+				print("BattleManager: Successfully verified enemy " + str(enemy_id) + " is marked as defeated")
+			else:
+				print("BattleManager: WARNING - Failed to mark enemy as defeated! Check implementation.")
 		else:
 			print("BattleManager: WARNING - No valid enemy ID to mark as defeated!")
-			print("BattleManager: This enemy will not be removed from the overworld.")
 	else:
-		print("BattleManager: Battle lost or abandoned.")
+		print("BattleManager: Battle lost.")
 	
 	# End the battle with transition effect
 	TransitionManager.end_combat(enemy_position, overworld_scene, player_won)
+	print("=== End BattleManager.end_battle ===\n")
 
 # Modify discard_hand to properly return when complete
 func discard_hand():

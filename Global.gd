@@ -20,11 +20,17 @@ var returning_from_battle = false
 var next_enemy_id = 100  # Counter for generating unique IDs
 var current_enemy_id = -1  # ID of the enemy currently in battle
 var defeated_enemies = {} # Dictionary to store defeated enemies by scene path and ID
+var instance_id_to_unique_id = {}  # Maps Godot instance IDs to our unique enemy IDs
 
 var player_properties = null  # Will be populated by the Player's store_properties_to_global function
 
 func _ready():
 	print("Global: _ready() called")
+	
+	# VERY IMPORTANT: Load game state first, before anything else
+	print("Global: Loading game state...")
+	load_game_state()
+	print("Global: After loading, defeated_enemies = " + str(defeated_enemies))
 	
 	# First, check if CardDatabase exists
 	if not has_node("/root/CardDatabase"):
@@ -206,6 +212,7 @@ func return_to_overworld(battle_won = false):
 
 # Enhanced setup_returned_world in Global.gd for better enemy handling
 func setup_returned_world(battle_won):
+	print("Global.setup_returned_world called with battle_won = " + str(battle_won))
 	# Restore player position
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
@@ -257,27 +264,57 @@ func generate_enemy_id():
 	print("Global: Generated new enemy ID: " + str(id))
 	return id
 
-# CONSOLIDATED: Mark an enemy as defeated (using only the defeated_enemies dictionary)
+# Modify the mark_enemy_defeated function for better debugging
 func mark_enemy_defeated(scene_path, enemy_id):
+	print("Global.mark_enemy_defeated called:")
+	print("  - Scene path: " + scene_path) 
+	print("  - Enemy ID: " + str(enemy_id))
+	
+	# Initialize the array if needed
 	if not defeated_enemies.has(scene_path):
 		defeated_enemies[scene_path] = []
 	
+	# Add the ID if not already there
 	if not enemy_id in defeated_enemies[scene_path]:
 		defeated_enemies[scene_path].append(enemy_id)
-		print("Global: Marked enemy " + str(enemy_id) + " as defeated in " + scene_path)
+		print("Global: Enemy " + str(enemy_id) + " marked as defeated in " + scene_path)
 		
-		# Save game state when an enemy is defeated (optional)
-		# This ensures defeated enemies remain defeated across game sessions
+		# Print the current state of the defeated_enemies dictionary
+		print("Current defeated_enemies state:")
+		for path in defeated_enemies:
+			print("  Scene: " + path)
+			print("  IDs: " + str(defeated_enemies[path]))
+		
+		# Save game state
 		save_game_state()
+	else:
+		print("Global: Enemy " + str(enemy_id) + " was already marked as defeated")
 
-# Check if an enemy is defeated
+# Enhanced check for defeated enemies with better debugging
 func is_enemy_defeated(scene_path, enemy_id):
+	print("Global.is_enemy_defeated: Checking if enemy " + str(enemy_id) + " is defeated in " + scene_path)
+	
+	# Debug the current state
+	print("  Current defeated_enemies content:")
+	for path in defeated_enemies:
+		print("    Scene: " + path)
+		print("    IDs: " + str(defeated_enemies[path]))
+	
+	# Check if scene path exists
 	if not defeated_enemies.has(scene_path):
+		print("  Result: Scene path not found")
 		return false
 	
-	return enemy_id in defeated_enemies[scene_path]
+	# Check if ID is in the array for that scene
+	var id_list = defeated_enemies[scene_path]
+	if id_list is Array and enemy_id in id_list:
+		print("  Result: Enemy " + str(enemy_id) + " IS in the defeated list")
+		return true
+	else:
+		print("  Result: Enemy " + str(enemy_id) + " is NOT in the defeated list")
+		return false
 
-# Save game state to persist defeated enemies across sessions
+# Ensure save/load game state works properly
 func save_game_state():
 	# Create a dictionary to save
 	var save_dict = {
@@ -291,24 +328,45 @@ func save_game_state():
 		save_file.store_var(save_dict)
 		save_file.close()
 		print("Global: Game state saved successfully")
+		print("Global: Saved " + str(defeated_enemies.size()) + " scene paths with defeated enemies")
 	else:
-		print("Global: Failed to save game state")
+		print("Global: Failed to save game state - " + str(FileAccess.get_open_error()))
 
-# Load game state to restore defeated enemies across sessions
+# Enhanced load game state with better error handling
 func load_game_state():
 	if FileAccess.file_exists("user://savegame.save"):
 		var save_file = FileAccess.open("user://savegame.save", FileAccess.READ)
 		if save_file:
-			var save_dict = save_file.get_var()
+			var json_error = OK
+			
+			# Safely load the save data
+			var save_dict = save_file.get_var(json_error)
 			save_file.close()
 			
+			if json_error != OK:
+				print("Global: Error loading save file: " + str(json_error))
+				return
+			
 			# Restore saved data
-			if save_dict.has("defeated_enemies"):
-				defeated_enemies = save_dict.defeated_enemies
-			if save_dict.has("next_enemy_id"):
-				next_enemy_id = save_dict.next_enemy_id
-				
-			print("Global: Game state loaded successfully")
-			print("Global: Loaded " + str(defeated_enemies.size()) + " defeated enemy records")
+			if save_dict is Dictionary:
+				if save_dict.has("defeated_enemies"):
+					defeated_enemies = save_dict.defeated_enemies
+				if save_dict.has("next_enemy_id"):
+					next_enemy_id = save_dict.next_enemy_id
+					
+				print("Global: Game state loaded successfully")
+				print("Global: Loaded " + str(defeated_enemies.size()) + " scene paths with defeated enemies")
+			else:
+				print("Global: Save file has invalid format")
+		else:
+			print("Global: Could not open save file - " + str(FileAccess.get_open_error()))
 	else:
 		print("Global: No save file found")
+		
+	if defeated_enemies.size() > 0:
+		print("Global: Loaded defeated enemies for " + str(defeated_enemies.size()) + " scenes")
+		for scene in defeated_enemies:
+			print("  Scene: " + scene)
+			print("  Defeated enemies: " + str(defeated_enemies[scene]))
+	else:
+		print("Global: No defeated enemies loaded (empty list)")
