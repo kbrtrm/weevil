@@ -137,6 +137,9 @@ func start_battle():
 	Global.current_battle_enemies = [enemy_data]
 	Global.enemy_position = global_position
 	
+	# Get this enemy's position for centering the transition
+	var enemy_position = global_position
+	
 	# SIMPLIFIED: Just directly change to the battle scene
 	print("Cig: Changing to battle scene...")
 	
@@ -147,12 +150,12 @@ func start_battle():
 		battle_initiated = false
 		return
 	
-	# Change scene immediately
-	var err = get_tree().change_scene_to_packed(battle_scene)
-	if err != OK:
-		push_error("Failed to change to battle scene! Error code: " + str(err))
-		Global.set_game_paused(false)
-		battle_initiated = false
+	# Use TransitionManager for the circle wipe centered on this enemy
+	print("Cig: Starting battle transition...")
+	
+	# Using our TransitionManager to handle the scene change with the circle effect
+	# The scene change is triggered from within the TransitionManager
+	TransitionManager.start_combat(enemy_position, battle_scene.resource_path)
 
 func _on_hurtbox_area_entered(area):
 	stats.health -= area.damage

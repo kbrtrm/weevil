@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://ckf4qpmikscgt"]
+
+[ext_resource type="Script" uid="uid://dhyvtkq45oiht" path="res://TransitionManger.gd" id="1_ta0wc"]
+[ext_resource type="Shader" uid="uid://lyixj4hpvgci" path="res://TransitionManager.gdshader" id="2_tboso"]
+
+[sub_resource type="Animation" id="Animation_77tgl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/ColorRect:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_g4jkt"]
+resource_name = "rpg_transition_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/ColorRect:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_rp7tt"]
+resource_name = "rpg_transition_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/ColorRect:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g4jkt"]
+_data = {
+&"RESET": SubResource("Animation_77tgl"),
+&"rpg_transition_in": SubResource("Animation_rp7tt"),
+&"rpg_transition_out": SubResource("Animation_g4jkt")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kecst"]
+shader = ExtResource("2_tboso")
+shader_parameter/circle_size = 0.0
+shader_parameter/center = Vector2(0.5, 0.5)
+
+[node name="Node" type="Node"]
+script = ExtResource("1_ta0wc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_g4jkt")
+}
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_kecst")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

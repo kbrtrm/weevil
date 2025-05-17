@@ -268,14 +268,17 @@ func die():
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color(1, 1, 1, 0), 1.0)
 	
-	# When animation is done, end the battle
+	# When animation is done, end the battle with our transition
 	tween.tween_callback(func():
 		# Find the battle manager to end the battle
 		var battle_manager = get_parent()
 		if battle_manager and battle_manager.has_method("end_battle"):
 			battle_manager.end_battle(true)  # true = player won
 		else:
-			queue_free()
+			# If we can't find the battle manager, call Global directly
+			var global = get_node("/root/Global")
+			if global and global.has_method("return_to_overworld"):
+				global.return_to_overworld(true)  # true = player won
 	)
 
 # Update the health display

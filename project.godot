@@ -19,9 +19,9 @@ config/icon="res://Images/icon.svg"
 
 PlayerStats="*res://Player/PlayerStats.tscn"
 State="*res://state.gd"
-SceneManager="*res://addons/scene_manager/SceneManager.tscn"
 Global="*res://Global.gd"
 CardDatabase="*res://Cards/CardDatabase.gd"
+TransitionManager="*res://TransitionManager.tscn"
 
 [dialogue_manager]
 
@@ -45,10 +45,6 @@ movie_writer/mjpeg_quality=1.0
 movie_writer/movie_file="/Users/kb/Documents/weevil_clips/gameplay.avi"
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/scene_manager/plugin.cfg")
 
 [gui]
 

@@ -175,7 +175,7 @@ func save_overworld_state():
 		player_position = player.global_position
 		print("Global: Saved player position: " + str(player_position))
 
-# SIMPLIFIED: Direct scene change without transition
+# Modified return_to_overworld function in Global.gd
 func return_to_overworld(battle_won = false):
 	print("Global: Returning to overworld. Battle won: " + str(battle_won))
 	
@@ -185,16 +185,17 @@ func return_to_overworld(battle_won = false):
 	# Pause all game movement
 	set_game_paused(true)
 	
-	# Load the previous scene directly
-	print("Global: Changing back to overworld scene")
-	var err = get_tree().change_scene_to_file(current_scene_path)
-	if err != OK:
-		push_error("Failed to return to overworld scene! Error code: " + str(err))
+	# Get the center position for the transition - use enemy_position for the center
+	var center_position = enemy_position
 	
-	# Wait for scene to initialize
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# Tell TransitionManager to handle the scene transition
+	TransitionManager.end_combat(center_position, current_scene_path, battle_won)
 	
+	# Note: The rest of this function's original code will be handled by TransitionManager
+	# TransitionManager will call our setup_returned_world function after the transition completes
+
+# New function to be called by TransitionManager after transition completes
+func setup_returned_world(battle_won):
 	# Restore player position
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
@@ -241,3 +242,7 @@ func set_game_paused(paused):
 	# Pause physics processing for all relevant nodes
 	get_tree().call_group("players", "set_physics_process", !paused)
 	get_tree().call_group("enemies", "set_physics_process", !paused)
+	
+func get_overworld_scene_path() -> String:
+	# Return the path to your overworld scene
+	return "res://testing_ground.tscn" # Adjust this path to match your game structure
