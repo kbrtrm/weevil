@@ -84,6 +84,8 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 
 # Modified end_combat to handle pausing
 func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
+	print("TransitionManager: End combat called, battle_won = " + str(battle_won))
+	
 	next_scene = world_scene
 	battle_won = was_battle_won
 	

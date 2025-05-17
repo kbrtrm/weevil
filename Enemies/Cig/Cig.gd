@@ -38,9 +38,15 @@ enum {
 
 var state = WANDER
 
+# Enhance the _ready function with better debugging
 func _ready():
 	# Initialize unique ID system
 	init_unique_id()
+	
+	# Debug output
+	print("\n=== ENEMY INITIALIZATION DEBUG ===")
+	print("Enemy ID: " + str(unique_id))
+	print("Current scene path: " + get_tree().current_scene.scene_file_path)
 	
 	# Check if this enemy was previously defeated
 	if is_defeated():
@@ -48,14 +54,16 @@ func _ready():
 		print("Enemy " + str(unique_id) + " was previously defeated, removing")
 		queue_free()
 		return
+	else:
+		print("Enemy " + str(unique_id) + " not found in defeated list, spawning")
 	
+	# Continue with normal initialization for active enemies
 	state = pick_random_state([IDLE, WANDER])
 	
 	# Add to enemies group for tracking
 	add_to_group("enemies")
 	
 	# Debug children nodes
-	print("\n=== CIG CHILDREN DEBUG ===")
 	print("Cig has " + str(get_child_count()) + " children")
 	for child in get_children():
 		var script_info = ""
@@ -74,7 +82,7 @@ func _ready():
 			if not child.body_entered.is_connected(_on_combat_initiation_zone_body_entered):
 				print("   - Manually connecting body_entered signal")
 				child.body_entered.connect(_on_combat_initiation_zone_body_entered)
-	print("=== END CIG CHILDREN DEBUG ===\n")
+	print("=== END ENEMY INITIALIZATION DEBUG ===\n")
 
 func _physics_process(_delta):
 	velocity = velocity.move_toward(Vector2.ZERO, FRICTION)
@@ -129,6 +137,15 @@ func _on_combat_initiation_zone_body_entered(body):
 	# Check if it's the player and battle isn't already triggered
 	if body.is_in_group("player") and !battle_initiated and !Global.returning_from_battle:
 		print("Combat initiated with player!")
+		
+		# Additional validation to ensure we have a valid ID
+		if unique_id == -1:
+			print("WARNING: Enemy has invalid ID (-1)! Generating new ID before battle...")
+			init_unique_id()  # Try to fix the ID
+			
+			if unique_id == -1:
+				print("ERROR: Failed to generate valid ID! Creating emergency ID...")
+				unique_id = randi() % 1000 + 1000  # Emergency ID generation
 		
 		# Store THIS enemy's unique ID and position in Global BEFORE starting battle
 		Global.enemy_position = global_position
@@ -209,6 +226,14 @@ func init_unique_id():
 			print("Cig: Generated new ID: " + str(unique_id))
 		else:
 			push_error("Global singleton not found!")
+			
+	# IMPORTANT: Make sure we never have an invalid ID
+	if unique_id == -1:
+		if Engine.has_singleton("Global"):
+			var global = Engine.get_singleton("Global")
+			unique_id = global.generate_enemy_id()
+			set_meta("unique_id", unique_id)
+			print("Cig: Generated new ID to replace invalid ID: " + str(unique_id))
 
 # Check if this enemy was previously defeated
 func is_defeated():

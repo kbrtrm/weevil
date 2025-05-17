@@ -273,12 +273,16 @@ func die():
 		# Find the battle manager to end the battle
 		var battle_manager = get_parent()
 		if battle_manager and battle_manager.has_method("end_battle"):
+			print("Enemy: Calling battle_manager.end_battle(true)")
 			battle_manager.end_battle(true)  # true = player won
 		else:
 			# If we can't find the battle manager, call Global directly
+			print("Enemy: Could not find battle_manager, calling Global directly")
 			var global = get_node("/root/Global")
 			if global and global.has_method("return_to_overworld"):
 				global.return_to_overworld(true)  # true = player won
+			else:
+				print("ERROR: Could not find Global or return_to_overworld method!")
 	)
 
 # Update the health display

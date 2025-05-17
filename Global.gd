@@ -1,4 +1,4 @@
-# Simplified Global.gd - Modified to remove transition and directly return to overworld
+# Global.gd - Modified to clean up enemy tracking
 
 extends Node
 
@@ -16,9 +16,8 @@ var enemy_position = Vector2.ZERO
 var enemy_instance_id = 0
 var returning_from_battle = false
 
-# Enemy tracking system
-var defeated_enemy_registry = {}  # Dictionary that maps scene paths to arrays of defeated enemy IDs
-var next_enemy_id = 1  # Counter for generating unique IDs
+# Enemy tracking system - CONSOLIDATED APPROACH
+var next_enemy_id = 100  # Counter for generating unique IDs
 var current_enemy_id = -1  # ID of the enemy currently in battle
 var defeated_enemies = {} # Dictionary to store defeated enemies by scene path and ID
 
@@ -110,8 +109,6 @@ func initialize_deck():
 
 # Add a card to the deck by ID
 func add_card_to_deck(card_id):
-	#print("Global: Adding card to deck: " + card_id)
-	
 	var card_db = get_node("/root/CardDatabase")
 	if not card_db:
 		push_error("CardDatabase not found!")
@@ -122,7 +119,6 @@ func add_card_to_deck(card_id):
 		# Create a copy of the card data for the deck
 		var deck_card = card_data.duplicate(true)
 		deck.append(deck_card)
-		#print("Global: Successfully added: " + card_data.name)
 		return true
 	else:
 		push_error("Failed to add card to deck, ID not found: " + card_id)
@@ -208,7 +204,6 @@ func return_to_overworld(battle_won = false):
 	# Note: The rest of this function's original code will be handled by TransitionManager
 	# TransitionManager will call our setup_returned_world function after the transition completes
 
-# New function to be called by TransitionManager after transition completes
 # Enhanced setup_returned_world in Global.gd for better enemy handling
 func setup_returned_world(battle_won):
 	# Restore player position
@@ -217,55 +212,8 @@ func setup_returned_world(battle_won):
 		player.global_position = player_position
 		print("Global: Restored player position: " + str(player_position))
 	
-	# If player won, remove the defeated enemy
-	if battle_won:
-		print("Global: Battle won, looking for enemy to remove at position: " + str(enemy_position))
-		print("Global: Enemy ID to remove: " + str(current_enemy_id))
-		
-		var enemies = get_tree().get_nodes_in_group("enemies")
-		print("Global: Found " + str(enemies.size()) + " enemies in scene")
-		
-		# First try to find by ID if we have one
-		var found_by_id = false
-		if current_enemy_id != -1:
-			for enemy in enemies:
-				if enemy.has_meta("unique_id") and enemy.get_meta("unique_id") == current_enemy_id:
-					print("Global: Found enemy by ID: " + str(current_enemy_id))
-					enemy.queue_free()
-					
-					# Register as defeated for persistence
-					register_defeated_enemy(current_scene_path, current_enemy_id)
-					found_by_id = true
-					break
-		
-		# If we didn't find by ID, fall back to position-based matching
-		if not found_by_id:
-			var closest_enemy = null
-			var closest_distance = 999999.0
-			
-			# Find the enemy closest to the stored enemy position
-			for enemy in enemies:
-				var distance = enemy_position.distance_to(enemy.global_position)
-				print("Global: Enemy " + enemy.name + " at distance " + str(distance))
-				
-				if distance < closest_distance:
-					closest_distance = distance
-					closest_enemy = enemy
-			
-			# Delete the closest enemy if it's within a reasonable range
-			if closest_enemy and closest_distance < 100:
-				print("Global: Removing enemy by position: " + closest_enemy.name)
-				
-				# Get the enemy's unique ID if available for registration
-				if closest_enemy.has_meta("unique_id"):
-					var enemy_id = closest_enemy.get_meta("unique_id")
-					register_defeated_enemy(current_scene_path, enemy_id)
-				
-				closest_enemy.queue_free()
-			else:
-				print("Global: No matching enemy found near position: " + str(enemy_position))
-	else:
-		print("Global: Battle was lost or abandoned")
+	# Note: We no longer mark the enemy as defeated here
+	# This is now handled directly in BattleManager.end_battle
 	
 	# Reset battle flag and unpause after a short delay
 	await get_tree().create_timer(0.5).timeout
@@ -306,28 +254,61 @@ func get_overworld_scene_path() -> String:
 func generate_enemy_id():
 	var id = next_enemy_id
 	next_enemy_id += 1
+	print("Global: Generated new enemy ID: " + str(id))
 	return id
 
-# Function to register an enemy as defeated
-func register_defeated_enemy(scene_path, enemy_id):
-	if not scene_path in defeated_enemy_registry:
-		defeated_enemy_registry[scene_path] = []
-	
-	if not enemy_id in defeated_enemy_registry[scene_path]:
-		defeated_enemy_registry[scene_path].append(enemy_id)
-		print("Global: Registered enemy ID " + str(enemy_id) + " as defeated in " + scene_path)
-
-# Function to mark an enemy as defeated
+# CONSOLIDATED: Mark an enemy as defeated (using only the defeated_enemies dictionary)
 func mark_enemy_defeated(scene_path, enemy_id):
 	if not defeated_enemies.has(scene_path):
 		defeated_enemies[scene_path] = []
 	
 	if not enemy_id in defeated_enemies[scene_path]:
 		defeated_enemies[scene_path].append(enemy_id)
+		print("Global: Marked enemy " + str(enemy_id) + " as defeated in " + scene_path)
+		
+		# Save game state when an enemy is defeated (optional)
+		# This ensures defeated enemies remain defeated across game sessions
+		save_game_state()
 
-# Function to check if an enemy is defeated
+# Check if an enemy is defeated
 func is_enemy_defeated(scene_path, enemy_id):
 	if not defeated_enemies.has(scene_path):
 		return false
 	
 	return enemy_id in defeated_enemies[scene_path]
+
+# Save game state to persist defeated enemies across sessions
+func save_game_state():
+	# Create a dictionary to save
+	var save_dict = {
+		"defeated_enemies": defeated_enemies,
+		"next_enemy_id": next_enemy_id
+	}
+	
+	# Save to file
+	var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
+	if save_file:
+		save_file.store_var(save_dict)
+		save_file.close()
+		print("Global: Game state saved successfully")
+	else:
+		print("Global: Failed to save game state")
+
+# Load game state to restore defeated enemies across sessions
+func load_game_state():
+	if FileAccess.file_exists("user://savegame.save"):
+		var save_file = FileAccess.open("user://savegame.save", FileAccess.READ)
+		if save_file:
+			var save_dict = save_file.get_var()
+			save_file.close()
+			
+			# Restore saved data
+			if save_dict.has("defeated_enemies"):
+				defeated_enemies = save_dict.defeated_enemies
+			if save_dict.has("next_enemy_id"):
+				next_enemy_id = save_dict.next_enemy_id
+				
+			print("Global: Game state loaded successfully")
+			print("Global: Loaded " + str(defeated_enemies.size()) + " defeated enemy records")
+	else:
+		print("Global: No save file found")

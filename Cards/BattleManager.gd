@@ -131,11 +131,31 @@ func end_battle(player_won = true):
 	# Get the overworld scene path from Global
 	var overworld_scene = Global.get_overworld_scene_path()
 	
+	# Improved debugging
+	print("BattleManager.end_battle called:")
+	print("  - player_won: " + str(player_won))
+	print("  - enemy_position: " + str(enemy_position))
+	print("  - overworld_scene: " + str(overworld_scene))
+	print("  - current_enemy_id: " + str(Global.current_enemy_id))
+	
 	# Log battle result for debugging
 	if player_won:
 		print("BattleManager: Battle won! Enemy will be removed.")
-		# Mark the enemy as defeated in Global
-		Global.mark_enemy_defeated(overworld_scene, Global.current_enemy_id)
+		
+		# IMPORTANT: Mark the enemy as defeated in Global
+		# This ensures it doesn't reappear when returning to the overworld
+		if Global.current_enemy_id != -1:
+			print("BattleManager: Marking enemy " + str(Global.current_enemy_id) + " as defeated")
+			Global.mark_enemy_defeated(overworld_scene, Global.current_enemy_id)
+			
+			# Debug the defeated enemies list after marking
+			print("Global.defeated_enemies contents after marking:")
+			for path in Global.defeated_enemies:
+				print("  Scene: " + path)
+				print("  Defeated IDs: " + str(Global.defeated_enemies[path]))
+		else:
+			print("BattleManager: WARNING - No valid enemy ID to mark as defeated!")
+			print("BattleManager: This enemy will not be removed from the overworld.")
 	else:
 		print("BattleManager: Battle lost or abandoned.")
 	
