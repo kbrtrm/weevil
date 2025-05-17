@@ -15,3 +15,6 @@ position = Vector2(311, 173)
 
 [node name="Cig" parent="." instance=ExtResource("3_71d8t")]
 position = Vector2(166, 178)
+
+[node name="Cig2" parent="." instance=ExtResource("3_71d8t")]
+position = Vector2(527, 178)

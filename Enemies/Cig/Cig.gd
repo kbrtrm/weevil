@@ -22,6 +22,8 @@ const EnemyDeathEffect = preload("res://Enemies/EnemyDeathEffect.tscn")
 
 # Flag to prevent multiple battle initiations
 var battle_initiated = false
+# Unique ID
+var unique_id = -1
 
 @export var MAX_SPEED = 120
 @export var ACCEL = 12
@@ -37,6 +39,9 @@ enum {
 var state = WANDER
 
 func _ready():
+	# Initialize unique ID system
+	init_unique_id()
+	
 	state = pick_random_state([IDLE, WANDER])
 	
 	# Add to enemies group for tracking
@@ -112,18 +117,16 @@ func pick_random_state(state_list):
 	state_list.shuffle()
 	return state_list.pop_front()
 	
-# Add this function to handle combat initiation
+# Modify the combat initiation function to store the enemy ID
 func _on_combat_initiation_zone_body_entered(body):
 	# Check if it's the player and battle isn't already triggered
 	if body.is_in_group("player") and !battle_initiated and !Global.returning_from_battle:
 		print("Combat initiated with player!")
 		
 		# Store THIS enemy's unique ID and position in Global BEFORE starting battle
-		if Engine.has_singleton("Global"):
-			var global = Engine.get_singleton("Global")
-			global.enemy_position = global_position
-			global.current_enemy_id = unique_id  # Make sure we're storing the ID
-			print("Cig: Stored initiating enemy ID " + str(unique_id) + " at position " + str(global_position))
+		Global.enemy_position = global_position
+		Global.current_enemy_id = unique_id  # Store the enemy's unique ID
+		print("Cig: Stored initiating enemy ID " + str(unique_id) + " at position " + str(global_position))
 		
 		# Now start the battle
 		start_battle()
@@ -183,3 +186,31 @@ func _on_hurtbox_invincibility_started():
 
 func _on_hurtbox_invincibility_ended():
 	animationPlayer.play("Stop")
+
+# Initialize the unique ID system - either generate a new ID or reload existing one
+func init_unique_id():
+	# Check if we already have a unique ID stored in metadata
+	if has_meta("unique_id"):
+		unique_id = get_meta("unique_id")
+		print("Cig: Loaded existing ID: " + str(unique_id))
+	else:
+		# Generate a new unique ID and store it
+		if Engine.has_singleton("Global"):
+			var global = Engine.get_singleton("Global")
+			unique_id = global.generate_enemy_id()
+			set_meta("unique_id", unique_id)
+			print("Cig: Generated new ID: " + str(unique_id))
+		else:
+			push_error("Global singleton not found!")
+
+# Check if this enemy was previously defeated
+func is_defeated():
+	if unique_id == -1:
+		return false
+	
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		var scene_path = get_tree().current_scene.scene_file_path
+		return global.is_enemy_defeated(scene_path, unique_id)
+	
+	return false

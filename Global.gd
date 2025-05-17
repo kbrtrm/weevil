@@ -16,6 +16,11 @@ var enemy_position = Vector2.ZERO
 var enemy_instance_id = 0
 var returning_from_battle = false
 
+# Enemy tracking system
+var defeated_enemy_registry = {}  # Dictionary that maps scene paths to arrays of defeated enemy IDs
+var next_enemy_id = 1  # Counter for generating unique IDs
+var current_enemy_id = -1  # ID of the enemy currently in battle
+
 var player_properties = null  # Will be populated by the Player's store_properties_to_global function
 
 func _ready():
@@ -295,3 +300,25 @@ func set_game_paused(paused):
 func get_overworld_scene_path() -> String:
 	# Return the path to your overworld scene
 	return "res://testing_ground.tscn" # Adjust this path to match your game structure
+
+# Function to generate a unique ID for an enemy
+func generate_enemy_id():
+	var id = next_enemy_id
+	next_enemy_id += 1
+	return id
+
+# Function to register an enemy as defeated
+func register_defeated_enemy(scene_path, enemy_id):
+	if not scene_path in defeated_enemy_registry:
+		defeated_enemy_registry[scene_path] = []
+	
+	if not enemy_id in defeated_enemy_registry[scene_path]:
+		defeated_enemy_registry[scene_path].append(enemy_id)
+		print("Global: Registered enemy ID " + str(enemy_id) + " as defeated in " + scene_path)
+
+# Function to check if an enemy ID is already defeated in a specific scene
+func is_enemy_defeated(scene_path, enemy_id):
+	if not scene_path in defeated_enemy_registry:
+		return false
+	
+	return enemy_id in defeated_enemy_registry[scene_path]

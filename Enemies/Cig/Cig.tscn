@@ -58,12 +58,6 @@ radius = 3.0
 [node name="Cig" type="CharacterBody2D"]
 collision_layer = 16
 script = ExtResource("1_eb85k")
-battle_scene = null
-enemy_data = null
-MAX_SPEED = null
-ACCEL = null
-FRICTION = null
-WANDER_TARGET_RANGE = null
 
 [node name="Terb-shadow" type="Sprite2D" parent="."]
 position = Vector2(0, 4)
