@@ -42,6 +42,13 @@ func _ready():
 	# Initialize unique ID system
 	init_unique_id()
 	
+	# Check if this enemy was previously defeated
+	if is_defeated():
+		# If defeated, immediately remove this enemy
+		print("Enemy " + str(unique_id) + " was previously defeated, removing")
+		queue_free()
+		return
+	
 	state = pick_random_state([IDLE, WANDER])
 	
 	# Add to enemies group for tracking

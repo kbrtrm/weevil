@@ -134,6 +134,8 @@ func end_battle(player_won = true):
 	# Log battle result for debugging
 	if player_won:
 		print("BattleManager: Battle won! Enemy will be removed.")
+		# Mark the enemy as defeated in Global
+		Global.mark_enemy_defeated(overworld_scene, Global.current_enemy_id)
 	else:
 		print("BattleManager: Battle lost or abandoned.")
 	

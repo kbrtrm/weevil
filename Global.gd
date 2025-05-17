@@ -20,6 +20,7 @@ var returning_from_battle = false
 var defeated_enemy_registry = {}  # Dictionary that maps scene paths to arrays of defeated enemy IDs
 var next_enemy_id = 1  # Counter for generating unique IDs
 var current_enemy_id = -1  # ID of the enemy currently in battle
+var defeated_enemies = {} # Dictionary to store defeated enemies by scene path and ID
 
 var player_properties = null  # Will be populated by the Player's store_properties_to_global function
 
@@ -316,9 +317,17 @@ func register_defeated_enemy(scene_path, enemy_id):
 		defeated_enemy_registry[scene_path].append(enemy_id)
 		print("Global: Registered enemy ID " + str(enemy_id) + " as defeated in " + scene_path)
 
-# Function to check if an enemy ID is already defeated in a specific scene
+# Function to mark an enemy as defeated
+func mark_enemy_defeated(scene_path, enemy_id):
+	if not defeated_enemies.has(scene_path):
+		defeated_enemies[scene_path] = []
+	
+	if not enemy_id in defeated_enemies[scene_path]:
+		defeated_enemies[scene_path].append(enemy_id)
+
+# Function to check if an enemy is defeated
 func is_enemy_defeated(scene_path, enemy_id):
-	if not scene_path in defeated_enemy_registry:
+	if not defeated_enemies.has(scene_path):
 		return false
 	
-	return enemy_id in defeated_enemy_registry[scene_path]
+	return enemy_id in defeated_enemies[scene_path]
