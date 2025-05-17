@@ -16,6 +16,8 @@ var enemy_position = Vector2.ZERO
 var enemy_instance_id = 0
 var returning_from_battle = false
 
+var player_properties = null  # Will be populated by the Player's store_properties_to_global function
+
 func _ready():
 	print("Global: _ready() called")
 	
@@ -163,7 +165,7 @@ func create_fallback_deck():
 	for i in range(4):
 		deck.append_array(initial_cards.duplicate())
 
-# Save overworld state before entering a battle
+# Simplified save_overworld_state in Global.gd
 func save_overworld_state():
 	# Save current scene
 	current_scene_path = get_tree().current_scene.scene_file_path
@@ -174,6 +176,12 @@ func save_overworld_state():
 	if player:
 		player_position = player.global_position
 		print("Global: Saved player position: " + str(player_position))
+		
+		# Store player properties directly through the player's method
+		if player.has_method("store_properties_to_global"):
+			player.store_properties_to_global()
+		else:
+			print("Global: Warning - Player doesn't have store_properties_to_global method!")
 
 # Modified return_to_overworld function in Global.gd
 func return_to_overworld(battle_won = false):
@@ -195,6 +203,7 @@ func return_to_overworld(battle_won = false):
 	# TransitionManager will call our setup_returned_world function after the transition completes
 
 # New function to be called by TransitionManager after transition completes
+# Enhanced setup_returned_world in Global.gd for better enemy handling
 func setup_returned_world(battle_won):
 	# Restore player position
 	var player = get_tree().get_first_node_in_group("player")
@@ -204,13 +213,53 @@ func setup_returned_world(battle_won):
 	
 	# If player won, remove the defeated enemy
 	if battle_won:
+		print("Global: Battle won, looking for enemy to remove at position: " + str(enemy_position))
+		print("Global: Enemy ID to remove: " + str(current_enemy_id))
+		
 		var enemies = get_tree().get_nodes_in_group("enemies")
-		for enemy in enemies:
-			var distance = enemy_position.distance_to(enemy.global_position)
-			if distance < 50:
-				print("Global: Removing enemy: " + enemy.name)
-				enemy.queue_free()
-				break
+		print("Global: Found " + str(enemies.size()) + " enemies in scene")
+		
+		# First try to find by ID if we have one
+		var found_by_id = false
+		if current_enemy_id != -1:
+			for enemy in enemies:
+				if enemy.has_meta("unique_id") and enemy.get_meta("unique_id") == current_enemy_id:
+					print("Global: Found enemy by ID: " + str(current_enemy_id))
+					enemy.queue_free()
+					
+					# Register as defeated for persistence
+					register_defeated_enemy(current_scene_path, current_enemy_id)
+					found_by_id = true
+					break
+		
+		# If we didn't find by ID, fall back to position-based matching
+		if not found_by_id:
+			var closest_enemy = null
+			var closest_distance = 999999.0
+			
+			# Find the enemy closest to the stored enemy position
+			for enemy in enemies:
+				var distance = enemy_position.distance_to(enemy.global_position)
+				print("Global: Enemy " + enemy.name + " at distance " + str(distance))
+				
+				if distance < closest_distance:
+					closest_distance = distance
+					closest_enemy = enemy
+			
+			# Delete the closest enemy if it's within a reasonable range
+			if closest_enemy and closest_distance < 100:
+				print("Global: Removing enemy by position: " + closest_enemy.name)
+				
+				# Get the enemy's unique ID if available for registration
+				if closest_enemy.has_meta("unique_id"):
+					var enemy_id = closest_enemy.get_meta("unique_id")
+					register_defeated_enemy(current_scene_path, enemy_id)
+				
+				closest_enemy.queue_free()
+			else:
+				print("Global: No matching enemy found near position: " + str(enemy_position))
+	else:
+		print("Global: Battle was lost or abandoned")
 	
 	# Reset battle flag and unpause after a short delay
 	await get_tree().create_timer(0.5).timeout

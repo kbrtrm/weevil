@@ -8,6 +8,7 @@
 script = ExtResource("1_winow")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
 texture = ExtResource("2_cpcn0")
 
 [node name="HealthLabel" type="Label" parent="."]

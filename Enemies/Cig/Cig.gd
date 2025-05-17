@@ -16,7 +16,7 @@ const EnemyDeathEffect = preload("res://Enemies/EnemyDeathEffect.tscn")
 # Enemy data for battle
 @export var enemy_data: Dictionary = {
 	"name": "Ciggy", 
-	"max_health": 22,
+	"max_health": 12,
 	"base_damage": 5
 }
 
@@ -117,6 +117,15 @@ func _on_combat_initiation_zone_body_entered(body):
 	# Check if it's the player and battle isn't already triggered
 	if body.is_in_group("player") and !battle_initiated and !Global.returning_from_battle:
 		print("Combat initiated with player!")
+		
+		# Store THIS enemy's unique ID and position in Global BEFORE starting battle
+		if Engine.has_singleton("Global"):
+			var global = Engine.get_singleton("Global")
+			global.enemy_position = global_position
+			global.current_enemy_id = unique_id  # Make sure we're storing the ID
+			print("Cig: Stored initiating enemy ID " + str(unique_id) + " at position " + str(global_position))
+		
+		# Now start the battle
 		start_battle()
 		
 func start_battle():
@@ -130,17 +139,16 @@ func start_battle():
 	state = IDLE
 	velocity = Vector2.ZERO
 	
-	# Save game state
+	# Save game state - don't overwrite enemy info that was already stored
 	Global.save_overworld_state()
 	
-	# Store enemy data
+	# Store enemy data - but DON'T overwrite position and ID that were already set
 	Global.current_battle_enemies = [enemy_data]
-	Global.enemy_position = global_position
 	
 	# Get this enemy's position for centering the transition
 	var enemy_position = global_position
 	
-	# SIMPLIFIED: Just directly change to the battle scene
+	# SIMPLIFIED: Just directly change to the battle scene...
 	print("Cig: Changing to battle scene...")
 	
 	# Validate battle scene is loaded

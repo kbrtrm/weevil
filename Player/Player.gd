@@ -36,6 +36,9 @@ func _ready():
 	# Add to player group
 	add_to_group("player")
 	
+	# Load properties from Global if available
+	load_properties_from_global()
+	
 	# Debug collision settings
 	print("Player collision layer: " + str(collision_layer))
 	print("Player is on layer 2: " + str((collision_layer & 2) != 0))
@@ -145,3 +148,50 @@ func _on_hurtbox_invincibility_started():
 
 func _on_hurtbox_invincibility_ended():
 	blinkAnimation.play("Stop")
+	
+# Function to store all important properties in the Global singleton
+func store_properties_to_global():
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		
+		# Create or update the player_properties dictionary in Global
+		if not "player_properties" in global:
+			global.player_properties = {}
+		
+		# Store all relevant properties
+		global.player_properties = {
+			"MAX_SPEED": MAX_SPEED,
+			"ACCEL": ACCEL,
+			"FRICTION": FRICTION,
+			"ROLL_SPEED": ROLL_SPEED,
+			"state": state,
+			# Add other properties as needed
+		}
+		
+		print("Player: Stored properties to Global")
+		
+# Function to load properties from Global
+func load_properties_from_global():
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		
+		# Check if the global properties exist
+		if "player_properties" in global and global.player_properties != null:
+			# Load each property
+			if "MAX_SPEED" in global.player_properties:
+				MAX_SPEED = global.player_properties.MAX_SPEED
+				
+			if "ACCEL" in global.player_properties:
+				ACCEL = global.player_properties.ACCEL
+				
+			if "FRICTION" in global.player_properties:
+				FRICTION = global.player_properties.FRICTION
+				print("Player: Loaded FRICTION = " + str(FRICTION))
+				
+			if "ROLL_SPEED" in global.player_properties:
+				ROLL_SPEED = global.player_properties.ROLL_SPEED
+				
+			if "state" in global.player_properties:
+				state = global.player_properties.state
+			
+			print("Player: Loaded properties from Global")

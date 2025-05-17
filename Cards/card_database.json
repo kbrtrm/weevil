@@ -43,7 +43,7 @@
 	  "cost": 1,
 	  "description": "Deal 4 damage.\nApply 4 vulnerable.",
 	  "effects": [
-		{"type": "damage", "value": 1, "target": "enemy"},
+		{"type": "damage", "value": 4, "target": "enemy"},
 		{"type": "vulnerable", "value": 4, "target": "enemy"}
 	  ],
 	  "rarity": "common",

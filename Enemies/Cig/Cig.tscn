@@ -50,7 +50,7 @@ height = 22.0
 radius = 83.006
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rplpv"]
-radius = 29.0
+radius = 8.24621
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7tsep"]
 radius = 3.0
@@ -58,6 +58,12 @@ radius = 3.0
 [node name="Cig" type="CharacterBody2D"]
 collision_layer = 16
 script = ExtResource("1_eb85k")
+battle_scene = null
+enemy_data = null
+MAX_SPEED = null
+ACCEL = null
+FRICTION = null
+WANDER_TARGET_RANGE = null
 
 [node name="Terb-shadow" type="Sprite2D" parent="."]
 position = Vector2(0, 4)
@@ -96,6 +102,7 @@ shape = SubResource("CircleShape2D_tyo12")
 [node name="CombatInitiationZone" parent="." instance=ExtResource("9_arc6d")]
 
 [node name="CollisionShape2D" parent="CombatInitiationZone" index="0"]
+position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_rplpv")
 
 [node name="SoftCollision" parent="." instance=ExtResource("10_hx5s6")]
