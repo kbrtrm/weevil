@@ -13,4 +13,4 @@ func _ready():
 	if spawn_point_name.is_empty():
 		push_warning("SpawnPoint has no name set!")
 	else:
-		print("spawned")
+		print("SpawnPoint: '" + spawn_point_name + "' registered at " + str(global_position))

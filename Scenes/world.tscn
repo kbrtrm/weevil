@@ -2500,7 +2500,7 @@ collision_mask = 3
 position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_s5esn")
 
-[node name="Player" parent="YSort" instance=ExtResource("1_c3ret")]
+[node name="Player" parent="YSort" groups=["player"] instance=ExtResource("1_c3ret")]
 position = Vector2(308, 68)
 
 [node name="PointLight2D" parent="YSort/Player" index="0"]
@@ -2509,6 +2509,10 @@ texture_scale = 0.42
 
 [node name="RemoteTransform2D" parent="YSort/Player" index="16"]
 remote_path = NodePath("../../../Camera2D")
+
+[node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
+position = Vector2(497, 123)
+spawn_point_name = "auto_world_main"
 
 [node name="Stone1" type="Sprite2D" parent="YSort"]
 position = Vector2(416, 99)
@@ -3240,10 +3244,6 @@ position = Vector2(470, 90)
 visible = false
 position = Vector2(324, 114)
 texture = ExtResource("28_uwreq")
-
-[node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
-position = Vector2(497, 123)
-spawn_point_name = "auto_world_main"
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

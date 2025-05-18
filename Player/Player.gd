@@ -50,10 +50,13 @@ func _ready():
 	# Check if we need to position at a spawn point
 	if Engine.has_singleton("Global"):
 		var global = Engine.get_singleton("Global")
+		print("Player._ready: Global.next_spawn_point = " + global.next_spawn_point)
 		if global.next_spawn_point != "":
-			# Spawn point handling will be done by Global.handle_player_spawn()
-			# Just wait until it completes
+			# Wait one frame to make sure spawn points are registered
 			await get_tree().process_frame
+			# Call handle_player_spawn
+			print("Player._ready: Calling handle_player_spawn()")
+			global.handle_player_spawn()
 
 func _process(_delta):
 	# Skip processing if game is paused

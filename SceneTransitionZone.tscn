@@ -7,6 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rtdvq"]
 
 [node name="Area2D" type="Area2D"]
+collision_layer = 2
 script = ExtResource("1_aybfj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -16,6 +17,7 @@ shape = SubResource("RectangleShape2D_rtdvq")
 texture = ExtResource("2_plvvo")
 
 [node name="InteractionHint" type="Label" parent="."]
+visible = false
 offset_left = -7.0
 offset_top = 14.0
 offset_right = 33.0

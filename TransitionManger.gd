@@ -18,8 +18,15 @@ func _ready():
 	# Set our pause mode so we can continue running during pause
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-# Modified change_scene to handle pausing
-func change_scene(target_scene: String, screen_point = null) -> void:
+# Modified change_scene to handle pausing and spawn points
+func change_scene(target_scene: String, screen_point = null, spawn_point_name: String = "") -> void:
+	# Store spawn point info in Global
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		if spawn_point_name != "":
+			global.next_spawn_point = spawn_point_name
+			print("TransitionManager: Setting next_spawn_point to " + spawn_point_name)
+		
 	next_scene = target_scene
 	
 	# Block input during transition

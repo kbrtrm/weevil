@@ -41,6 +41,7 @@ func _on_body_exited(body):
 		# Hide interaction hint
 		hide_interaction_hint()
 
+# In SceneTransitionZone.gd's trigger_transition method
 func trigger_transition():
 	# Prevent multiple transitions
 	if not can_transition:
@@ -58,15 +59,24 @@ func trigger_transition():
 	var player_pos = get_player_position()
 	if Engine.has_singleton("TransitionManager"):
 		var transition_manager = Engine.get_singleton("TransitionManager")
-		transition_manager.change_scene(target_scene, player_pos)
 		
-		# Store destination info in Global
+		# Pass both the player position and spawn point name
+		transition_manager.change_scene(target_scene, player_pos, spawn_point_name)
+		
+		# Also set directly in Global as a backup
 		if Engine.has_singleton("Global"):
 			var global = Engine.get_singleton("Global")
 			global.next_spawn_point = spawn_point_name
+			print("SceneTransitionZone: Also set Global.next_spawn_point to " + spawn_point_name)
 	else:
 		# Fallback if TransitionManager not available
 		push_error("TransitionManager singleton not found!")
+		
+		# Set in Global for fallback
+		if Engine.has_singleton("Global"):
+			var global = Engine.get_singleton("Global")
+			global.next_spawn_point = spawn_point_name
+			
 		get_tree().change_scene_to_file(target_scene)
 
 func store_player_state():

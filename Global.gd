@@ -431,23 +431,35 @@ func restore_player_state_after_transition():
 		# Clear transition data
 		scene_transition_data.clear()
 
-# Handle player spawning in a new scene
 func handle_player_spawn():
+	print("Global.handle_player_spawn called! next_spawn_point = '" + next_spawn_point + "'")
+	
 	if next_spawn_point.is_empty():
 		print("Global: No spawn point specified, using default")
 		return false
 		
 	print("Global: Looking for spawn point: " + next_spawn_point)
 	
+	# Wait a frame to make sure everything is loaded
+	await get_tree().process_frame
+	
 	# Find the matching spawn point
 	var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+	print("Global: Found " + str(spawn_points.size()) + " spawn points")
+	
 	for spawn in spawn_points:
+		print("Global: Found spawn point: '" + spawn.spawn_point_name + "' at position " + str(spawn.global_position))
+		
 		if spawn.spawn_point_name == next_spawn_point:
 			# Position the player at this spawn point
 			var player = get_tree().get_first_node_in_group("player")
 			if player:
-				print("Global: Positioning player at spawn point: " + next_spawn_point)
+				print("Global: Found player at " + str(player.global_position))
+				print("Global: Moving player to spawn point '" + next_spawn_point + "' at " + str(spawn.global_position))
+				
 				player.global_position = spawn.global_position + spawn.adjust_position
+				
+				print("Global: Player moved to " + str(player.global_position))
 				
 				# Set player facing direction if applicable
 				if "facing_direction" in player and spawn.spawn_direction != Vector2.ZERO:
@@ -459,7 +471,9 @@ func handle_player_spawn():
 				# Clear spawn point
 				next_spawn_point = ""
 				return true
+			else:
+				print("Global: ERROR - Player not found!")
 				
-	print("Global: Warning - Could not find spawn point: " + next_spawn_point)
+	print("Global: WARNING - Spawn point '" + next_spawn_point + "' not found!")
 	next_spawn_point = ""
 	return false

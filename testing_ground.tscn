@@ -22,5 +22,7 @@ position = Vector2(521, 183)
 
 [node name="Area2D" parent="." instance=ExtResource("4_nxusl")]
 position = Vector2(341, 48)
+collision_layer = 3
+collision_mask = 3
 target_scene = "res://Scenes/world.tscn"
 spawn_point_name = "auto_world_main"
