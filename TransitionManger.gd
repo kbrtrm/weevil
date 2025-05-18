@@ -26,7 +26,7 @@ func change_scene(target_scene: String, screen_point = null, spawn_point_name: S
 		if spawn_point_name != "":
 			global.next_spawn_point = spawn_point_name
 			print("TransitionManager: Setting next_spawn_point to " + spawn_point_name)
-		
+	
 	next_scene = target_scene
 	
 	# Block input during transition
@@ -46,8 +46,21 @@ func change_scene(target_scene: String, screen_point = null, spawn_point_name: S
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
 	
+	# Change the scene
 	get_tree().change_scene_to_file(next_scene)
 	
+	# CRITICAL: Wait longer for the scene to be fully loaded and all nodes to register
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().create_timer(0.1).timeout  # Add a small delay
+	
+	# Try to position the player at the spawn point
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		print("TransitionManager: Calling handle_player_spawn()")
+		global.handle_player_spawn()
+	
+	# Continue with the transition animation
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
 	

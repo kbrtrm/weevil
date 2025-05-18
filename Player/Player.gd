@@ -33,28 +33,33 @@ var stats = PlayerStats
 @onready var sprite = $Sprite2D
 
 func _ready():
-	# Add to player group
-	add_to_group("player")
-	
-	# Load properties from Global if available
-	load_properties_from_global()
+	# Make sure we're in the player group for easier finding
+	if not is_in_group("player"):
+		add_to_group("player")
+		print("Player: Added to 'player' group")
 	
 	# Debug collision settings
 	print("Player collision layer: " + str(collision_layer))
 	print("Player is on layer 2: " + str((collision_layer & 2) != 0))
 	
+	# Connect signals
 	stats.no_health.connect(queue_free)
 	animtree.active = true
 	swordhitbox.knockback_vector = roll_vector
 	
+	# Load properties from Global if available
+	load_properties_from_global()
+	
+	# IMPORTANT: Wait a short moment before checking spawn points
+	# This ensures other nodes like spawn points are initialized first
+	await get_tree().create_timer(0.1).timeout
+	
 	# Check if we need to position at a spawn point
 	if Engine.has_singleton("Global"):
 		var global = Engine.get_singleton("Global")
-		print("Player._ready: Global.next_spawn_point = " + global.next_spawn_point)
+		print("Player._ready: Global.next_spawn_point = '" + global.next_spawn_point + "'")
+		
 		if global.next_spawn_point != "":
-			# Wait one frame to make sure spawn points are registered
-			await get_tree().process_frame
-			# Call handle_player_spawn
 			print("Player._ready: Calling handle_player_spawn()")
 			global.handle_player_spawn()
 
@@ -75,7 +80,39 @@ func _process(_delta):
 			
 		JUMP:
 			jump_state()
+
+func check_for_spawn():
+	# Give everything time to load
+	await get_tree().process_frame
+	
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		print("Player: Checking global.next_spawn_point: '" + global.next_spawn_point + "'")
+		
+		if global.next_spawn_point != "":
+			print("Player: Found spawn point to use: '" + global.next_spawn_point + "'")
 			
+			# Look up the spawn point
+			var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+			print("Player: Found " + str(spawn_points.size()) + " spawn points")
+			
+			for spawn in spawn_points:
+				print("Player: Checking spawn point '" + spawn.spawn_point_name + "'")
+				
+				if spawn.spawn_point_name == global.next_spawn_point:
+					print("Player: Moving to spawn point position: " + str(spawn.global_position))
+					global_position = spawn.global_position + spawn.adjust_position
+					print("Player: New position: " + str(global_position))
+					
+					## Set player facing direction if applicable
+					#if spawn.spawn_direction != Vector2.ZERO:
+						#facing_direction = spawn.spawn_direction
+					
+					# Clear the spawn point name so it's not used again
+					global.next_spawn_point = ""
+					return
+			
+			print("Player: ERROR - Couldn't find spawn point named '" + global.next_spawn_point + "'")			
 			
 func _unhandled_input(_event: InputEvent):
 	if Input.is_action_just_pressed("ui_accept"):
@@ -206,3 +243,9 @@ func load_properties_from_global():
 				state = global.player_properties.state
 			
 			print("Player: Loaded properties from Global")
+
+# Add this to Player.gd to help debug spawn issues
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		# This happens when the player is about to be deleted
+		print("Player: Being deleted - this is normal during scene changes")
