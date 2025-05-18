@@ -82,7 +82,7 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 	
 	emit_signal("combat_started")
 
-# Modified end_combat to handle pausing
+# Modified end_combat to handle pausing and notify EnemiesManager
 func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
 	# Fix the debug print to use the parameter instead of the class member
 	print("TransitionManager: End combat called, was_battle_won = " + str(was_battle_won))
@@ -102,7 +102,6 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
-	
 	get_tree().change_scene_to_file(next_scene)
 	
 	# Wait for scene to be ready
@@ -117,6 +116,14 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
 	
+	# Tell EnemiesManager to scan for defeated enemies if battle was won
+	if was_battle_won and Engine.has_singleton("EnemiesManager"):
+		var enemies_manager = Engine.get_singleton("EnemiesManager")
+		# Call this after a slight delay to ensure the scene is fully loaded
+		get_tree().create_timer(0.1).timeout.connect(func(): 
+			enemies_manager.remove_defeated_enemies()
+		)
+	
 	# Unpause after transition
 	get_tree().paused = false
 	
@@ -124,3 +131,50 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	emit_signal("combat_ended")
+
+# Room transition function
+func change_room(source_position: Vector2, target_scene: String) -> void:
+	print("TransitionManager: Changing room to " + target_scene)
+	
+	# Store player state before transition
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		global.store_player_state_for_transition()
+	
+	# Similar to your existing change_scene function
+	next_scene = target_scene
+	
+	# Block input during transition
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	
+	# Set the center point of the transition 
+	var center = source_position / get_viewport().get_visible_rect().size
+	overlay.material.set_shader_parameter("center", center)
+	
+	# Pause the game DURING transitions
+	get_tree().paused = true
+	
+	$AnimationPlayer.play("rpg_transition_out")
+	await $AnimationPlayer.animation_finished
+	
+	get_tree().change_scene_to_file(next_scene)
+	
+	# Wait for scene to be ready
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	# Position player at spawn point
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		global.handle_player_spawn()
+	
+	$AnimationPlayer.play("rpg_transition_in")
+	await $AnimationPlayer.animation_finished
+	
+	# Unpause after transition
+	get_tree().paused = false
+	
+	# Allow input again after transition
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	emit_signal("transition_completed")

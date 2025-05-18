@@ -11,7 +11,10 @@ var game_paused = false
 # Battle system variables
 var current_battle_enemies = []
 var player_position = Vector2.ZERO
-var current_scene_path = ""
+# With a more robust tracking system:
+var previous_scene_path = ""  # Scene before battle
+var current_scene_path = ""   # Current scene
+
 var enemy_position = Vector2.ZERO
 var enemy_instance_id = 0
 var returning_from_battle = false
@@ -23,6 +26,10 @@ var defeated_enemies = {} # Dictionary to store defeated enemies by scene path a
 var instance_id_to_unique_id = {}  # Maps Godot instance IDs to our unique enemy IDs
 
 var player_properties = null  # Will be populated by the Player's store_properties_to_global function
+
+# Room transition variables
+var next_spawn_point = ""  # Name of spawn point to use in next scene
+var scene_transition_data = {}  # Store data between scenes
 
 func _ready():
 	print("Global: _ready() called")
@@ -175,9 +182,11 @@ func create_fallback_deck():
 
 # Simplified save_overworld_state in Global.gd
 func save_overworld_state():
-	# Save current scene
-	current_scene_path = get_tree().current_scene.scene_file_path
-	print("Global: Saved current scene: " + current_scene_path)
+	# Store current scene as the scene to return to after battle
+	previous_scene_path = get_tree().current_scene.scene_file_path
+	current_scene_path = previous_scene_path
+	
+	print("Global: Saved previous scene: " + previous_scene_path)
 	
 	# Save player position
 	var player = get_tree().get_first_node_in_group("player")
@@ -194,6 +203,7 @@ func save_overworld_state():
 # Modified return_to_overworld function in Global.gd
 func return_to_overworld(battle_won = false):
 	print("Global: Returning to overworld. Battle won: " + str(battle_won))
+	print("Global: Will return to scene: " + previous_scene_path)
 	
 	# Set flag to prevent re-triggering battles immediately
 	returning_from_battle = true
@@ -205,7 +215,8 @@ func return_to_overworld(battle_won = false):
 	var center_position = enemy_position
 	
 	# Tell TransitionManager to handle the scene transition
-	TransitionManager.end_combat(center_position, current_scene_path, battle_won)
+	# Use the previous_scene_path instead of a hardcoded path
+	TransitionManager.end_combat(center_position, previous_scene_path, battle_won)
 	
 	# Note: The rest of this function's original code will be handled by TransitionManager
 	# TransitionManager will call our setup_returned_world function after the transition completes
@@ -370,3 +381,85 @@ func load_game_state():
 			print("  Defeated enemies: " + str(defeated_enemies[scene]))
 	else:
 		print("Global: No defeated enemies loaded (empty list)")
+
+# Get all defeated enemies for a scene
+func get_defeated_enemies_for_scene(scene_path: String) -> Array:
+	if defeated_enemies.has(scene_path):
+		return defeated_enemies[scene_path]
+	return []
+
+# Check if any enemies are defeated in a scene
+func has_defeated_enemies(scene_path: String) -> bool:
+	return defeated_enemies.has(scene_path) and defeated_enemies[scene_path].size() > 0
+
+# Get total count of defeated enemies
+func get_total_defeated_enemies() -> int:
+	var count = 0
+	for scene in defeated_enemies:
+		count += defeated_enemies[scene].size()
+	return count
+
+# Store player state for transitions
+func store_player_state_for_transition():
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		# Store basic information
+		scene_transition_data["velocity"] = player.velocity if "velocity" in player else Vector2.ZERO
+		scene_transition_data["state"] = player.state if "state" in player else 0
+		
+		# Store other data as needed
+		# Call player's own storage method if available
+		if player.has_method("store_transition_data"):
+			var player_data = player.store_transition_data()
+			for key in player_data:
+				scene_transition_data[key] = player_data[key]
+
+# Restore player state after transition
+func restore_player_state_after_transition():
+	var player = get_tree().get_first_node_in_group("player")
+	if player and scene_transition_data.size() > 0:
+		# Restore basic information
+		if "velocity" in scene_transition_data and "velocity" in player:
+			player.velocity = scene_transition_data["velocity"]
+		if "state" in scene_transition_data and "state" in player:
+			player.state = scene_transition_data["state"]
+			
+		# Call player's own restore method if available
+		if player.has_method("restore_transition_data"):
+			player.restore_transition_data(scene_transition_data)
+			
+		# Clear transition data
+		scene_transition_data.clear()
+
+# Handle player spawning in a new scene
+func handle_player_spawn():
+	if next_spawn_point.is_empty():
+		print("Global: No spawn point specified, using default")
+		return false
+		
+	print("Global: Looking for spawn point: " + next_spawn_point)
+	
+	# Find the matching spawn point
+	var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+	for spawn in spawn_points:
+		if spawn.spawn_point_name == next_spawn_point:
+			# Position the player at this spawn point
+			var player = get_tree().get_first_node_in_group("player")
+			if player:
+				print("Global: Positioning player at spawn point: " + next_spawn_point)
+				player.global_position = spawn.global_position + spawn.adjust_position
+				
+				# Set player facing direction if applicable
+				if "facing_direction" in player and spawn.spawn_direction != Vector2.ZERO:
+					player.facing_direction = spawn.spawn_direction
+					
+				# Restore player state
+				restore_player_state_after_transition()
+				
+				# Clear spawn point
+				next_spawn_point = ""
+				return true
+				
+	print("Global: Warning - Could not find spawn point: " + next_spawn_point)
+	next_spawn_point = ""
+	return false

@@ -46,6 +46,14 @@ func _ready():
 	stats.no_health.connect(queue_free)
 	animtree.active = true
 	swordhitbox.knockback_vector = roll_vector
+	
+	# Check if we need to position at a spawn point
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		if global.next_spawn_point != "":
+			# Spawn point handling will be done by Global.handle_player_spawn()
+			# Just wait until it completes
+			await get_tree().process_frame
 
 func _process(_delta):
 	# Skip processing if game is paused

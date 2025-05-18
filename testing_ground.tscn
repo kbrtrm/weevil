@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfclpv7nguuy6"]
+[gd_scene load_steps=5 format=3 uid="uid://cfclpv7nguuy6"]
 
 [ext_resource type="PackedScene" uid="uid://bv1l6ncr2ys7m" path="res://Objects/FlowerForget.tscn" id="1_1aoan"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_q4otm"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="3_71d8t"]
+[ext_resource type="PackedScene" uid="uid://b8lfe5ctipqw1" path="res://SceneTransitionZone.tscn" id="4_nxusl"]
 
 [node name="TestingGround" type="Node2D"]
 y_sort_enabled = true
@@ -14,7 +15,12 @@ position = Vector2(346, 175)
 position = Vector2(311, 173)
 
 [node name="Cig" parent="." instance=ExtResource("3_71d8t")]
-position = Vector2(166, 178)
+position = Vector2(168, 195)
 
 [node name="Cig2" parent="." instance=ExtResource("3_71d8t")]
-position = Vector2(527, 178)
+position = Vector2(521, 183)
+
+[node name="Area2D" parent="." instance=ExtResource("4_nxusl")]
+position = Vector2(341, 48)
+target_scene = "res://Scenes/world.tscn"
+spawn_point_name = "auto_world_main"

@@ -20,8 +20,10 @@ config/icon="res://Images/icon.svg"
 PlayerStats="*res://Player/PlayerStats.tscn"
 State="*res://state.gd"
 Global="*res://Global.gd"
+EnemiesManager="*res://Enemies/EnemiesManager.gd"
 CardDatabase="*res://Cards/CardDatabase.gd"
 TransitionManager="*res://TransitionManager.tscn"
+DebugTools="*res://DebugTools.gd"
 
 [dialogue_manager]
 

@@ -9,8 +9,3 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
-
-func _on_door_body_entered(body):
-#	load_scene()
-	if body == player: 
-		SceneManager.change_scene("res://Scenes/InsidePot.tscn", { "pattern": "fade", "speed": 4})

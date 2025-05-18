@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8lfe5ctipqw1"]
+
+[ext_resource type="Script" uid="uid://bfu8jrnx5m0dc" path="res://SceneTransitionZone.gd" id="1_aybfj"]
+[ext_resource type="Texture2D" uid="uid://rfilo8owm8l0" path="res://Images/acorn.png" id="2_plvvo"]
+[ext_resource type="FontFile" uid="uid://slaafm6ilf8n" path="res://Themes/click3x5.ttf" id="3_1cpre"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rtdvq"]
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_aybfj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rtdvq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_plvvo")
+
+[node name="InteractionHint" type="Label" parent="."]
+offset_left = -7.0
+offset_top = 14.0
+offset_right = 33.0
+offset_bottom = 36.0
+theme_override_fonts/font = ExtResource("3_1cpre")
+theme_override_font_sizes/font_size = 8
+text = "Open"

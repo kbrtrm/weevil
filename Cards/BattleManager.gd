@@ -124,11 +124,12 @@ func end_turn():
 	start_turn()
 	
 # Add this method to handle battle completion
+# Add this method to handle battle completion
 func end_battle(player_won = true):
 	# Get the stored enemy ID and position
 	var enemy_id = Global.current_enemy_id
 	var enemy_position = Global.enemy_position
-	var overworld_scene = Global.get_overworld_scene_path()
+	var overworld_scene = Global.previous_scene_path
 	
 	# Enhanced debugging
 	print("\n=== BattleManager.end_battle ===")

@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://cf8lk5738a1g1" path="res://Images/PathTileset.png" id="3_q1bir"]
 [ext_resource type="Texture2D" uid="uid://47mrx0k4e88g" path="res://Images/diagonal-tilemap-DIRTPATHex.png" id="4_84in7"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_gtfkr"]
+[ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="6_dt0r1"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="7_a1hen"]
 [ext_resource type="PackedScene" uid="uid://c7c5k8l6omof5" path="res://UI/HealthUI.tscn" id="8_entl1"]
-[ext_resource type="Texture2D" uid="uid://dov8l1r1ie1dw" path="res://Images/cig.png" id="8_krn53"]
 [ext_resource type="TileSet" uid="uid://d0ugsh4q0nbit" path="res://Scenes/WallShadows.tres" id="9_fn36g"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_hqgvk"]
 [ext_resource type="PackedScene" uid="uid://df1dqbsyv1vha" path="res://Objects/PassThruObject.tscn" id="12_xqqty"]
@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
 [ext_resource type="PackedScene" uid="uid://cefaj3xu83cnx" path="res://Objects/FlowerWeed.tscn" id="26_fx2x1"]
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
+[ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="27_qebug"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
@@ -2392,9 +2393,6 @@ sources/0 = SubResource("TileSetAtlasSource_g7tg8")
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5esn"]
 radius = 8.06226
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8ke18"]
-radius = 4.12311
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_8s6nn"]
 
 [node name="World" type="Node2D"]
@@ -2452,6 +2450,9 @@ layer_0/tile_data = PackedInt32Array(393224, 0, 0, 393223, 0, 0, 262153, 0, 0, 2
 z_index = 3
 y_sort_enabled = true
 position = Vector2(-96, 68)
+
+[node name="Cig" parent="YSort" instance=ExtResource("6_dt0r1")]
+position = Vector2(410, 101)
 
 [node name="PathTileMap" type="TileMap" parent="YSort"]
 visible = false
@@ -2713,24 +2714,6 @@ region_rect = Rect2(16, 32, 32, 32)
 
 [node name="MushroomTall9" parent="YSort" instance=ExtResource("16_a4syf")]
 position = Vector2(428, 92)
-
-[node name="Ciggy" type="CharacterBody2D" parent="YSort"]
-y_sort_enabled = true
-position = Vector2(308, 138)
-
-[node name="Sprite2D" type="Sprite2D" parent="YSort/Ciggy"]
-y_sort_enabled = true
-position = Vector2(0, -1)
-texture = ExtResource("7_a1hen")
-offset = Vector2(0, 2)
-
-[node name="Cig" type="Sprite2D" parent="YSort/Ciggy"]
-texture = ExtResource("8_krn53")
-offset = Vector2(0, -8)
-hframes = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Ciggy"]
-shape = SubResource("CircleShape2D_8ke18")
 
 [node name="MushroomTall" parent="YSort" instance=ExtResource("22_qn5d2")]
 position = Vector2(422, 103)
@@ -3257,6 +3240,10 @@ position = Vector2(470, 90)
 visible = false
 position = Vector2(324, 114)
 texture = ExtResource("28_uwreq")
+
+[node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
+position = Vector2(497, 123)
+spawn_point_name = "auto_world_main"
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

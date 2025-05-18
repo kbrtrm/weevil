@@ -43,50 +43,32 @@ func _ready():
 	# Initialize unique ID system
 	init_unique_id()
 	
-	# THIS IS THE CRITICAL PART - CHECK IF ALREADY DEFEATED
-	if Engine.has_singleton("Global"):
-		var global = Engine.get_singleton("Global")
+	# IMMEDIATELY check if defeated before doing ANYTHING else
+	var is_defeated = false
+	if has_node("/root/Global"):
+		var global = get_node("/root/Global")
 		var scene_path = get_tree().current_scene.scene_file_path
 		
-		print("Checking if enemy " + str(unique_id) + " is already defeated...")
-		if global.is_enemy_defeated(scene_path, unique_id):
-			print("Enemy " + str(unique_id) + " was previously defeated - REMOVING from scene")
-			queue_free()
-			return  # Very important - stop initialization
-		else:
-			print("Enemy " + str(unique_id) + " not found in defeated list, allowed to spawn")
+		# Check if this enemy is in the defeated list
+		if global.has_method("is_enemy_defeated") and global.is_enemy_defeated(scene_path, unique_id):
+			print("Cig " + str(unique_id) + ": I am already defeated, removing myself")
+			is_defeated = true
 	
-	# Debug output
-	print("\n=== ENEMY INITIALIZATION DEBUG ===")
-	print("Enemy ID: " + str(unique_id))
-	print("Current scene path: " + get_tree().current_scene.scene_file_path)
+	if is_defeated:
+		# If defeated, make invisible immediately and queue_free
+		modulate.a = 0  # Make completely transparent
+		visible = false # Hide the sprite
+		queue_free()
+		return
 	
-	# Continue with normal initialization for active enemies
+	# Only continue if not defeated
+	add_to_group("enemies")
 	state = pick_random_state([IDLE, WANDER])
 	
-	# Add to enemies group for tracking
-	add_to_group("enemies")
-	
-	# Debug children nodes
-	print("Cig has " + str(get_child_count()) + " children")
-	for child in get_children():
-		var script_info = ""
-		if child.get_script():
-			script_info = " [Script: " + child.get_script().resource_path + "]"
-		print(" - " + child.name + " (" + child.get_class() + ")" + script_info)
-		
-		# If this is the CombatInitiationZone, examine it further
-		if child.name == "CombatInitiationZone":
-			print("   CombatInitiationZone details:")
-			print("   - Collision layer: " + str(child.collision_layer))
-			print("   - Collision mask: " + str(child.collision_mask))
-			print("   - Has signal connections: " + str(child.get_signal_connection_list("body_entered").size() > 0))
-			
-			# Try to manually connect the signal
-			if not child.body_entered.is_connected(_on_combat_initiation_zone_body_entered):
-				print("   - Manually connecting body_entered signal")
-				child.body_entered.connect(_on_combat_initiation_zone_body_entered)
-	print("=== END ENEMY INITIALIZATION DEBUG ===\n")
+	# Connect CombatInitiationZone signal if needed
+	var combat_zone = get_node_or_null("CombatInitiationZone")
+	if combat_zone and !combat_zone.body_entered.is_connected(_on_combat_initiation_zone_body_entered):
+		combat_zone.body_entered.connect(_on_combat_initiation_zone_body_entered)
 
 func _physics_process(_delta):
 	velocity = velocity.move_toward(Vector2.ZERO, FRICTION)

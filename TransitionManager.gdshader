@@ -9,12 +9,12 @@ void fragment() {
     scaled_UV.y *= ratio;
     vec2 center_scaled = center;
     center_scaled.y *= ratio;
-    
+
     float dist = distance(scaled_UV, center_scaled);
-    
+
     // For transition in: circle_size goes from 0.0 to 1.0
     // For transition out: circle_size goes from 1.0 to 0.0
     float alpha = step(circle_size, dist);
-    
+
     COLOR = vec4(COLOR.rgb, alpha);
 }
