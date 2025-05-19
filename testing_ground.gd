@@ -8,7 +8,7 @@ func _ready() -> void:
 	
 	# Set limits based on your scene's needs
 	if camera:
-		camera.set_limits(0, 0, 1000, 600)  # Example values
+		camera.set_limits(0, 0, 640, 360)  # Example values
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
