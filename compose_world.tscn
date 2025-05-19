@@ -3,10 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="1_wohcj"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="4_2gv34"]
 [ext_resource type="PackedScene" uid="uid://df1dqbsyv1vha" path="res://Objects/PassThruObject.tscn" id="5_gnpe6"]
-[ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="6_eghpg"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="6_j883h"]
 [ext_resource type="PackedScene" uid="uid://crt0f0jmm103n" path="res://Objects/TallPassThruObject.tscn" id="6_kif3f"]
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="7_dkpmx"]
+[ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="7_eghpg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kif3f"]
 texture = ExtResource("1_wohcj")
@@ -51,13 +51,4 @@ position = Vector2(500, 133)
 [node name="TallPassThruObject" parent="YSort" instance=ExtResource("6_kif3f")]
 position = Vector2(252, 110)
 
-[node name="Camera2D" parent="." instance=ExtResource("6_eghpg")]
-position = Vector2(212, 136)
-
-[node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(-116, -48)
-
-[node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(724, 404)
-
-[editable path="Camera2D"]
+[node name="PlayerFollowCamera" parent="." instance=ExtResource("7_eghpg")]

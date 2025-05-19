@@ -1,13 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://cfclpv7nguuy6"]
+[gd_scene load_steps=8 format=3 uid="uid://cfclpv7nguuy6"]
 
 [ext_resource type="PackedScene" uid="uid://bv1l6ncr2ys7m" path="res://Objects/FlowerForget.tscn" id="1_1aoan"]
+[ext_resource type="Script" uid="uid://bf8tqjj5uiprc" path="res://testing_ground.gd" id="1_alr7o"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_q4otm"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="3_71d8t"]
 [ext_resource type="PackedScene" uid="uid://b8lfe5ctipqw1" path="res://SceneTransitionZone.tscn" id="4_nxusl"]
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="5_ytm02"]
+[ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="6_1phy5"]
 
 [node name="TestingGround" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_alr7o")
 
 [node name="MushroomTall" parent="." instance=ExtResource("1_1aoan")]
 position = Vector2(346, 175)
@@ -31,3 +34,6 @@ spawn_point_name = "auto_tg2"
 [node name="Marker2D" parent="." instance=ExtResource("5_ytm02")]
 position = Vector2(272, 99)
 spawn_point_name = "auto_from_2"
+
+[node name="Camera2D" parent="." instance=ExtResource("6_1phy5")]
+position = Vector2(321, 181)

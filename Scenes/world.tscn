@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_nwgro"]
-[ext_resource type="PackedScene" uid="uid://cply18t2tgyq4" path="res://Player/PlayerCamera.tscn" id="2_bhbb1"]
 [ext_resource type="Texture2D" uid="uid://cf8lk5738a1g1" path="res://Images/PathTileset.png" id="3_q1bir"]
 [ext_resource type="Texture2D" uid="uid://47mrx0k4e88g" path="res://Images/diagonal-tilemap-DIRTPATHex.png" id="4_84in7"]
 [ext_resource type="Texture2D" uid="uid://cpdgaji6ahust" path="res://Images/dirt-tiles-w-puds.png" id="4_gtfkr"]
@@ -29,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="27_qebug"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
+[ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="29_qebug"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ua1v"]
 texture = ExtResource("4_gtfkr")
@@ -2428,15 +2428,6 @@ offset = Vector2(0, -8)
 region_enabled = true
 region_rect = Rect2(112, 16, 16, 16)
 
-[node name="Camera2D" parent="." instance=ExtResource("2_bhbb1")]
-position = Vector2(212, 136)
-
-[node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(20, 20)
-
-[node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(604, 324)
-
 [node name="CliffShadows" type="TileMap" parent="."]
 z_index = 2
 y_sort_enabled = true
@@ -3266,11 +3257,8 @@ shape = SubResource("CircleShape2D_8s6nn")
 [node name="PauseMenu" parent="CanvasLayer2" instance=ExtResource("26_llsrg")]
 visible = false
 
-[connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
-[connection signal="area_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_entered"]
-[connection signal="area_exited" from="ZoomArea" to="Camera2D" method="_on_zoom_area_area_exited"]
-[connection signal="body_entered" from="ZoomArea" to="Camera2D" method="_on_zoom_area_body_entered"]
-[connection signal="body_exited" from="ZoomArea" to="Camera2D" method="_on_zoom_area_body_exited"]
+[node name="PlayerFollowCamera" parent="." instance=ExtResource("29_qebug")]
 
-[editable path="Camera2D"]
+[connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
+
 [editable path="YSort/Pot"]

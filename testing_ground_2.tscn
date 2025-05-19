@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bblwp35aeieyt"]
+[gd_scene load_steps=5 format=3 uid="uid://bblwp35aeieyt"]
 
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="1_loylw"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="2_dj6vd"]
 [ext_resource type="PackedScene" uid="uid://b8lfe5ctipqw1" path="res://SceneTransitionZone.tscn" id="3_u2gp2"]
+[ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="4_ajaf5"]
 
 [node name="TestingGround2" type="Node2D"]
 
@@ -19,3 +20,5 @@ collision_layer = 3
 collision_mask = 3
 target_scene = "res://testing_ground.tscn"
 spawn_point_name = "auto_from_2"
+
+[node name="Camera2D" parent="." instance=ExtResource("4_ajaf5")]
