@@ -186,9 +186,10 @@ func save_overworld_state():
 	previous_scene_path = get_tree().current_scene.scene_file_path
 	current_scene_path = previous_scene_path
 	
-	print("Global: Saved previous scene: " + previous_scene_path)
+	print("Global: Saving overworld state")
+	print("Global: Scene path: " + previous_scene_path)
 	
-	# Save player position
+	# Find player by group to be more reliable
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player_position = player.global_position
@@ -199,6 +200,8 @@ func save_overworld_state():
 			player.store_properties_to_global()
 		else:
 			print("Global: Warning - Player doesn't have store_properties_to_global method!")
+	else:
+		push_error("Global: Failed to find player when saving overworld state!")
 
 # Modified return_to_overworld function in Global.gd
 func return_to_overworld(battle_won = false):

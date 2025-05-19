@@ -30,7 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="27_qebug"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csf07"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ua1v"]
 texture = ExtResource("4_gtfkr")
 0:0/0 = 0
 1:0/0 = 0
@@ -41,12 +41,12 @@ texture = ExtResource("4_gtfkr")
 6:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_sd735"]
-sources/3 = SubResource("TileSetAtlasSource_csf07")
+sources/3 = SubResource("TileSetAtlasSource_3ua1v")
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_m4ggl"]
 tile_data = PackedInt32Array(131072, 0, 0, 196608, 0, 2, 65537, 589824, 4, 131073, 589824, 1, 196609, 655360, 5, 2, 589824, 4, 65538, 589824, 1, 131074, 655360, 5, 3, 655360, 4, 65539, 655360, 5)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pd4ve"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qebug"]
 texture = ExtResource("3_q1bir")
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -369,7 +369,7 @@ texture = ExtResource("3_q1bir")
 0:4/0 = 0
 7:5/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uqw4q"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o2rbt"]
 texture = ExtResource("4_84in7")
 0:0/0 = 0
 1:0/0 = 0
@@ -2376,11 +2376,11 @@ texture = ExtResource("4_84in7")
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "AutoTile"
 terrain_set_0/terrain_0/color = Color(0.603922, 0.266667, 0.227451, 1)
-sources/0 = SubResource("TileSetAtlasSource_pd4ve")
-sources/1 = SubResource("TileSetAtlasSource_uqw4q")
+sources/0 = SubResource("TileSetAtlasSource_qebug")
+sources/1 = SubResource("TileSetAtlasSource_o2rbt")
 pattern_0 = SubResource("TileMapPattern_m4ggl")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7tg8"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1vso6"]
 texture = ExtResource("20_f1fvu")
 0:0/0 = 0
 1:0/0 = 0
@@ -2388,7 +2388,7 @@ texture = ExtResource("20_f1fvu")
 3:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_2m5mm"]
-sources/0 = SubResource("TileSetAtlasSource_g7tg8")
+sources/0 = SubResource("TileSetAtlasSource_1vso6")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5esn"]
 radius = 8.06226
@@ -2432,10 +2432,10 @@ region_rect = Rect2(112, 16, 16, 16)
 position = Vector2(212, 136)
 
 [node name="TopLeft" parent="Camera2D/Limits" index="0"]
-position = Vector2(-44, -36)
+position = Vector2(20, 20)
 
 [node name="BottomRight" parent="Camera2D/Limits" index="1"]
-position = Vector2(668, 396)
+position = Vector2(604, 324)
 
 [node name="CliffShadows" type="TileMap" parent="."]
 z_index = 2
@@ -2501,10 +2501,6 @@ shape = SubResource("CircleShape2D_s5esn")
 
 [node name="Player2" parent="YSort" groups=["player"] instance=ExtResource("1_c3ret")]
 position = Vector2(354, 120)
-
-[node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
-position = Vector2(497, 123)
-spawn_point_name = "auto_world_main"
 
 [node name="Stone1" type="Sprite2D" parent="YSort"]
 position = Vector2(416, 99)
@@ -3236,6 +3232,9 @@ position = Vector2(470, 90)
 visible = false
 position = Vector2(324, 114)
 texture = ExtResource("28_uwreq")
+
+[node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
+position = Vector2(500, 133)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

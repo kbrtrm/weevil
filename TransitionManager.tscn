@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://ckf4qpmikscgt"]
 
-[ext_resource type="Script" uid="uid://dhyvtkq45oiht" path="res://TransitionManger.gd" id="1_ta0wc"]
+[ext_resource type="Script" uid="uid://dhyvtkq45oiht" path="res://TransitionManager.gd" id="1_ta0wc"]
 [ext_resource type="Shader" uid="uid://lyixj4hpvgci" path="res://TransitionManager.gdshader" id="2_tboso"]
 
 [sub_resource type="Animation" id="Animation_77tgl"]

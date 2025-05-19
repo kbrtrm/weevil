@@ -33,6 +33,8 @@ var stats = PlayerStats
 @onready var sprite = $Sprite2D
 
 func _ready():
+	print("Player: _ready() called")
+	print("Player: Initial position = " + str(global_position))
 	# Make sure we're in the player group for easier finding
 	if not is_in_group("player"):
 		add_to_group("player")
@@ -62,6 +64,9 @@ func _ready():
 		if global.next_spawn_point != "":
 			print("Player._ready: Calling handle_player_spawn()")
 			global.handle_player_spawn()
+	
+	# Place this at the end of _ready()
+	print("Player: Final position after _ready = " + str(global_position))
 
 func _process(_delta):
 	# Skip processing if game is paused
@@ -249,3 +254,35 @@ func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		# This happens when the player is about to be deleted
 		print("Player: Being deleted - this is normal during scene changes")
+
+## Debug marker to show player position
+#func add_position_debug_marker():
+	#var marker = Sprite2D.new()
+	##marker.texture = preload("res://icon.png")  # Use any small icon
+	#marker.scale = Vector2(0.25, 0.25)
+	#marker.position = Vector2(0, -20)  # Offset above player
+	#marker.modulate = Color(1, 0, 0)  # Red marker
+	#marker.z_index = 1000  # Always on top
+	#add_child(marker)
+	#
+	## Add the actual position as text
+	#var pos_label = Label.new()
+	#pos_label.position = Vector2(-40, 10)
+	#pos_label.text = str(global_position.x).pad_decimals(1) + ", " + str(global_position.y).pad_decimals(1)
+	#pos_label.add_theme_color_override("font_color", Color(1, 1, 0))  # Yellow text
+	#pos_label.add_theme_font_size_override("font_size", 8)
+	#marker.add_child(pos_label)
+	#
+	## Update position label every frame
+	#pos_label.set_process(true)
+	#pos_label.process_mode = Node.PROCESS_MODE_ALWAYS
+	#pos_label.set_script(load("res://temp_position_label.gd"))
+
+
+func _on_button_pressed() -> void:
+	if Engine.has_singleton("TransitionManager"):
+		var transition_manager = Engine.get_singleton("TransitionManager")
+		transition_manager.change_scene("res://path/to/your/other_scene.tscn", global_position, "test_spawn")
+		print("Transition triggered directly")
+	else:
+		print("TransitionManager not found as singleton!")

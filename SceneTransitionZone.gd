@@ -26,6 +26,7 @@ func _process(_delta):
 	if player_inside and can_transition:
 		# Detect any interaction input if configured, otherwise auto-transition
 		if (Input.is_action_just_pressed("interact") or spawn_point_name.begins_with("auto_")):
+			print("CALLIING TRANSITION")
 			trigger_transition()
 
 func _on_body_entered(body):
@@ -66,7 +67,7 @@ func trigger_transition():
 	var player_pos = get_player_position()
 	if Engine.has_singleton("TransitionManager"):
 		var transition_manager = Engine.get_singleton("TransitionManager")
-		
+		print("From ZONE:" + transition_manager)
 		# Pass both the player position and spawn point name
 		transition_manager.change_scene(target_scene, player_pos, spawn_point_name)
 	else:

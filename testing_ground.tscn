@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfclpv7nguuy6"]
+[gd_scene load_steps=6 format=3 uid="uid://cfclpv7nguuy6"]
 
 [ext_resource type="PackedScene" uid="uid://bv1l6ncr2ys7m" path="res://Objects/FlowerForget.tscn" id="1_1aoan"]
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_q4otm"]
 [ext_resource type="PackedScene" uid="uid://b05m1gxkq1r40" path="res://Enemies/Cig/Cig.tscn" id="3_71d8t"]
 [ext_resource type="PackedScene" uid="uid://b8lfe5ctipqw1" path="res://SceneTransitionZone.tscn" id="4_nxusl"]
+[ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="5_ytm02"]
 
 [node name="TestingGround" type="Node2D"]
 y_sort_enabled = true
@@ -11,7 +12,7 @@ y_sort_enabled = true
 [node name="MushroomTall" parent="." instance=ExtResource("1_1aoan")]
 position = Vector2(346, 175)
 
-[node name="Player" parent="." instance=ExtResource("1_q4otm")]
+[node name="Player" parent="." groups=["player"] instance=ExtResource("1_q4otm")]
 position = Vector2(311, 173)
 
 [node name="Cig" parent="." instance=ExtResource("3_71d8t")]
@@ -21,8 +22,12 @@ position = Vector2(168, 195)
 position = Vector2(521, 183)
 
 [node name="Area2D" parent="." instance=ExtResource("4_nxusl")]
-position = Vector2(341, 48)
+position = Vector2(311, 133)
 collision_layer = 3
 collision_mask = 3
-target_scene = "res://Scenes/world.tscn"
-spawn_point_name = "auto_world_main"
+target_scene = "res://testing_ground_2.tscn"
+spawn_point_name = "auto_tg2"
+
+[node name="Marker2D" parent="." instance=ExtResource("5_ytm02")]
+position = Vector2(272, 99)
+spawn_point_name = "auto_from_2"

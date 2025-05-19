@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bblwp35aeieyt"]
+
+[ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="1_loylw"]
+[ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="2_dj6vd"]
+[ext_resource type="PackedScene" uid="uid://b8lfe5ctipqw1" path="res://SceneTransitionZone.tscn" id="3_u2gp2"]
+
+[node name="TestingGround2" type="Node2D"]
+
+[node name="Marker2D" parent="." groups=["spawn_points"] instance=ExtResource("1_loylw")]
+position = Vector2(79, 294)
+spawn_point_name = "auto_tg2"
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("2_dj6vd")]
+position = Vector2(136, 56)
+
+[node name="Area2D" parent="." instance=ExtResource("3_u2gp2")]
+position = Vector2(171, 80)
+collision_layer = 3
+collision_mask = 3
+target_scene = "res://testing_ground.tscn"
+spawn_point_name = "auto_from_2"

@@ -58,6 +58,9 @@ func change_scene(target_scene: String, screen_point = null, spawn_point_name: S
 	if Engine.has_singleton("Global"):
 		var global = Engine.get_singleton("Global")
 		print("TransitionManager: Calling handle_player_spawn()")
+		print("TransitionManager: About to call handle_player_spawn()")
+		print("TransitionManager: Current scene path = " + get_tree().current_scene.scene_file_path)	
+		await get_tree().create_timer(0.5).timeout
 		global.handle_player_spawn()
 	
 	# Continue with the transition animation
@@ -112,9 +115,17 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	
 	# Block input during transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	 
+	# Get player position from Global instead of using enemy_position
+	var transition_center = enemy_position
+	if Engine.has_singleton("Global"):
+		var global = Engine.get_singleton("Global")
+		if global.player_position != Vector2.ZERO:
+			transition_center = global.player_position
+			print("TransitionManager: Using saved player position for transition: " + str(transition_center))
 	
-	# Center the transition on the enemy
-	var center = enemy_position / get_viewport().get_visible_rect().size
+	# Center the transition on the player/enemy position
+	var center = transition_center / get_viewport().get_visible_rect().size
 	overlay.material.set_shader_parameter("center", center)
 	
 	# Pause the game DURING transitions
