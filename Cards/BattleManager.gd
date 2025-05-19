@@ -122,13 +122,26 @@ func end_turn():
 	
 	# Start the next turn
 	start_turn()
+
+# Helper function to convert world position to screen position
+func get_screen_position(world_pos: Vector2) -> Vector2:
+	# Get the current camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera:
+		# If no camera, use the global position directly
+		return world_pos
 	
-# Add this method to handle battle completion
-# Add this method to handle battle completion
+	# Convert global position to screen position
+	var viewport_transform = get_viewport().get_canvas_transform()
+	var screen_pos = viewport_transform * world_pos
+	
+	return screen_pos
+
+# Modified end_battle function in BattleManager.gd
 func end_battle(player_won = true):
 	# Get the stored enemy ID and position
 	var enemy_id = Global.current_enemy_id
-	var enemy_position = Global.enemy_position
+	var enemy_position = Global.enemy_position  # This is the global position in the overworld
 	var overworld_scene = Global.previous_scene_path
 	
 	# Enhanced debugging
@@ -156,8 +169,13 @@ func end_battle(player_won = true):
 	else:
 		print("BattleManager: Battle lost.")
 	
-	# End the battle with transition effect
-	TransitionManager.end_combat(enemy_position, overworld_scene, player_won)
+	# Since we can't modify Global directly, let's use a position that makes sense for the battle scene
+	# Calculate center of screen
+	var screen_position = get_viewport().get_visible_rect().size / 2
+	print("BattleManager: Using screen center for transition: " + str(screen_position))
+	
+	# End the battle with transition effect using the screen position
+	TransitionManager.end_combat(screen_position, overworld_scene, player_won)
 	print("=== End BattleManager.end_battle ===\n")
 
 # Modify discard_hand to properly return when complete

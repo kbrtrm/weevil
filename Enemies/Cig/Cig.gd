@@ -8,7 +8,7 @@ extends CharacterBody2D
 const EnemyDeathEffect = preload("res://Enemies/EnemyDeathEffect.tscn")
 @onready var softCollision = $SoftCollision
 @onready var wanderController = $WanderController
-@onready var animationPlayer = $AnimationPlayer
+@onready var animationPlayer = $AnimationPlayer if has_node("AnimationPlayer") else null
 
 # Battle scene reference
 @export var battle_scene: PackedScene = preload("res://Cards/test.tscn")
@@ -129,6 +129,9 @@ func _on_combat_initiation_zone_body_entered(body):
 			print("WARNING: Enemy has no ID during combat initiation! Generating now...")
 			init_unique_id()
 		
+		# Get the enemy's position in screen coordinates
+		var screen_position = get_screen_position()
+		
 		# Store THIS enemy's unique ID and position in Global BEFORE starting battle
 		Global.enemy_position = global_position
 		Global.current_enemy_id = unique_id  # Store the enemy's unique ID
@@ -137,9 +140,23 @@ func _on_combat_initiation_zone_body_entered(body):
 		print("Cig: Verify Global.current_enemy_id = " + str(Global.current_enemy_id))
 		
 		# Now start the battle
-		start_battle()
+		start_battle(screen_position)
+
+# Add this helper function to Cig.gd
+func get_screen_position() -> Vector2:
+	# Get the current camera
+	var camera = get_viewport().get_camera_2d()
+	if not camera:
+		return global_position  # Fallback to global position if no camera
+	
+	# Convert global position to screen position using the camera transform
+	var viewport_transform = get_viewport().get_canvas_transform()
+	var screen_pos = viewport_transform * global_position
+	
+	return screen_pos
 		
-func start_battle():
+# Modify start_battle to accept the screen position
+func start_battle(screen_position: Vector2 = Vector2.ZERO):
 	battle_initiated = true
 	print("Cig: Starting battle...")
 	
@@ -156,10 +173,12 @@ func start_battle():
 	# Store enemy data - but DON'T overwrite position and ID that were already set
 	Global.current_battle_enemies = [enemy_data]
 	
-	# Get this enemy's position for centering the transition
-	var enemy_position = global_position
+	# Use the screen position for the transition
+	var transition_position = screen_position
+	if transition_position == Vector2.ZERO:
+		# Fallback to converting global position if no screen position provided
+		transition_position = get_screen_position()
 	
-	# SIMPLIFIED: Just directly change to the battle scene...
 	print("Cig: Changing to battle scene...")
 	
 	# Validate battle scene is loaded
@@ -169,12 +188,10 @@ func start_battle():
 		battle_initiated = false
 		return
 	
-	# Use TransitionManager for the circle wipe centered on this enemy
-	print("Cig: Starting battle transition...")
+	print("Cig: Starting battle transition with screen position: " + str(transition_position))
 	
-	# Using our TransitionManager to handle the scene change with the circle effect
-	# The scene change is triggered from within the TransitionManager
-	TransitionManager.start_combat(enemy_position, battle_scene.resource_path)
+	# Use TransitionManager for the circle wipe centered on this enemy's SCREEN position
+	TransitionManager.start_combat(transition_position, battle_scene.resource_path)
 
 func _on_hurtbox_area_entered(area):
 	stats.health -= area.damage
@@ -189,11 +206,11 @@ func _on_stats_no_health():
 	get_parent().add_child(enemyDeathEffect)
 	enemyDeathEffect.global_position = global_position
 
-func _on_hurtbox_invincibility_started():
-	animationPlayer.play("Start")
-
-func _on_hurtbox_invincibility_ended():
-	animationPlayer.play("Stop")
+#func _on_hurtbox_invincibility_started():
+	#animationPlayer.play("Start")
+#
+#func _on_hurtbox_invincibility_ended():
+	#animationPlayer.play("Stop")
 
 # Generate a deterministic ID based on position in the scene
 func generate_deterministic_id():

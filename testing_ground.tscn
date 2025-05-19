@@ -37,3 +37,4 @@ spawn_point_name = "auto_from_2"
 
 [node name="Camera2D" parent="." instance=ExtResource("6_1phy5")]
 position = Vector2(321, 181)
+default_zoom = Vector2(1, 1)

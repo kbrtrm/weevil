@@ -67,10 +67,17 @@ func _ready():
 	
 	# Place this at the end of _ready()
 	print("Player: Final position after _ready = " + str(global_position))
+	$AnimationPlayer.animation_finished.connect(_on_animation_finished)
 
 func _process(_delta):
 	# Skip processing if game is paused
 	if Global.game_paused:
+		return
+		
+	# Check for stuck states and reset if needed
+	if state == ROLL and not animstate.is_playing():
+		print("Player: Detected stuck ROLL state, resetting to MOVE")
+		reset_state()
 		return
 		
 	match state:
@@ -125,7 +132,21 @@ func _unhandled_input(_event: InputEvent):
 		if actionables.size() > 0:
 			actionables[0].action()
 			return
+# Add this function to Player.gd
+func reset_state():
+	# Reset to default state
+	state = MOVE
 	
+	# Stop all movement
+	velocity = Vector2.ZERO
+	
+	# Ensure animations are in the right state
+	animstate.travel("Idle")
+	
+	# Reset any other state variables as needed
+	# For example, if you have attack_in_progress, rolling, etc.
+	
+	print("Player: State reset to MOVE")	
 	
 func move_state():
 	var input_vector = Vector2.ZERO
@@ -286,3 +307,10 @@ func _on_button_pressed() -> void:
 		print("Transition triggered directly")
 	else:
 		print("TransitionManager not found as singleton!")
+
+# Add this function to Player.gd
+func _on_animation_finished(anim_name):
+	if anim_name == "Roll":
+		roll_animation_finished()
+	elif anim_name == "Attack":
+		attack_animation_finished()
