@@ -76,15 +76,32 @@ func change_scene(target_scene: String, screen_point = null, spawn_point_name: S
 	emit_signal("transition_completed")
 
 # Modified start_combat to handle pausing
-func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
+func start_combat(screen_position: Vector2, combat_scene: String) -> void:
 	next_scene = combat_scene
 	
 	# Block input during transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	
-	# Center the transition on the enemy
-	var center = enemy_position / get_viewport().get_visible_rect().size
+	# Get the viewport size
+	var viewport_size = get_viewport().get_visible_rect().size
+	
+	# Convert screen position to UV coordinates (0-1 range)
+	var center = screen_position / viewport_size
+	
+	# Get current camera zoom
+	var camera = get_viewport().get_camera_2d()
+	var camera_zoom = Vector2(1, 1)
+	if camera:
+		camera_zoom = camera.zoom
+	
+	# Debug info
+	print("TransitionManager: Combat transition at screen position: ", screen_position)
+	print("TransitionManager: UV coordinates: ", center)
+	print("TransitionManager: Camera zoom: ", camera_zoom)
+	
+	# Update shader parameters
 	overlay.material.set_shader_parameter("center", center)
+	overlay.material.set_shader_parameter("camera_zoom", camera_zoom)
 	
 	# Pause the game DURING transitions
 	get_tree().paused = true
@@ -105,9 +122,8 @@ func start_combat(enemy_position: Vector2, combat_scene: String) -> void:
 	
 	emit_signal("combat_started")
 
-# Modified end_combat to handle pausing and notify EnemiesManager
-func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
-	# Fix the debug print to use the parameter instead of the class member
+# Modified end_combat function in TransitionManager.gd
+func end_combat(screen_position: Vector2, world_scene: String, was_battle_won: bool = false) -> void:
 	print("TransitionManager: End combat called, was_battle_won = " + str(was_battle_won))
 	
 	next_scene = world_scene
@@ -115,39 +131,77 @@ func end_combat(enemy_position: Vector2, world_scene: String, was_battle_won: bo
 	
 	# Block input during transition
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	 
-	# Get player position from Global instead of using enemy_position
-	var transition_center = enemy_position
-	if Engine.has_singleton("Global"):
-		var global = Engine.get_singleton("Global")
-		if global.player_position != Vector2.ZERO:
-			transition_center = global.player_position
-			print("TransitionManager: Using saved player position for transition: " + str(transition_center))
 	
-	# Center the transition on the player/enemy position
-	var center = transition_center / get_viewport().get_visible_rect().size
+	# For transition OUT of battle, use center of screen as starting point
+	var viewport_size = get_viewport().get_visible_rect().size
+	var center = screen_position / viewport_size
+	
+	# Get camera zoom
+	var camera = get_viewport().get_camera_2d()
+	var camera_zoom = Vector2(1, 1)
+	if camera:
+		camera_zoom = camera.zoom
+	
+	# Debug info
+	print("TransitionManager: End combat transition centered at: ", center)
+	print("TransitionManager: Camera zoom: ", camera_zoom)
+	
+	# Update shader parameters
 	overlay.material.set_shader_parameter("center", center)
+	overlay.material.set_shader_parameter("camera_zoom", camera_zoom)
 	
 	# Pause the game DURING transitions
 	get_tree().paused = true
 	
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
+	
+	# Store the enemy position for the overworld transition
+	var enemy_position = Vector2.ZERO
+	if Engine.has_singleton("Global"):
+		enemy_position = Global.enemy_position
+	
+	# Change scene to overworld
 	get_tree().change_scene_to_file(next_scene)
 	
 	# Wait for scene to be ready
 	await get_tree().process_frame
 	await get_tree().process_frame
 	
+	# After we've loaded the overworld, calculate where the enemy was
+	if enemy_position != Vector2.ZERO:
+		# Now we're in the overworld with a camera
+		var world_camera = get_viewport().get_camera_2d()
+		if world_camera:
+			# Convert the world position of the enemy to screen coordinates
+			var viewport_transform = get_viewport().get_canvas_transform()
+			var enemy_screen_pos = viewport_transform * enemy_position
+			
+			# Update the center for the transition in
+			center = enemy_screen_pos / viewport_size
+			overlay.material.set_shader_parameter("center", center)
+			
+			print("TransitionManager: Updated center for transition in: ", center)
+	
 	# Call the Global function to set up the returned world
-	var global = get_node("/root/Global")
-	if global and global.has_method("setup_returned_world"):
-		global.setup_returned_world(was_battle_won)
+	if Engine.has_singleton("Global") and Global.has_method("setup_returned_world"):
+		Global.setup_returned_world(was_battle_won)
+		
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		# Reset to MOVE state if not already
+		if "state" in player and player.state != player.MOVE:
+			player.state = player.MOVE
+			print("TransitionManager: Force reset player state to MOVE")
+		
+		# Reset velocity
+		if "velocity" in player:
+			player.velocity = Vector2.ZERO
 	
 	$AnimationPlayer.play("rpg_transition_in")
 	await $AnimationPlayer.animation_finished
 	
-	# Tell EnemiesManager to scan for defeated enemies if battle was won
+	# Handle enemy cleanup after transition is complete
 	if was_battle_won and Engine.has_singleton("EnemiesManager"):
 		var enemies_manager = Engine.get_singleton("EnemiesManager")
 		# Call this after a slight delay to ensure the scene is fully loaded
