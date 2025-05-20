@@ -56,14 +56,27 @@ func _ready():
 	# This ensures other nodes like spawn points are initialized first
 	await get_tree().create_timer(0.1).timeout
 	
-	# Check if we need to position at a spawn point
+	# Check for spawn points
 	if Engine.has_singleton("Global"):
 		var global = Engine.get_singleton("Global")
-		print("Player._ready: Global.next_spawn_point = '" + global.next_spawn_point + "'")
+		var spawn_name = global.next_spawn_point
 		
-		if global.next_spawn_point != "":
-			print("Player._ready: Calling handle_player_spawn()")
-			global.handle_player_spawn()
+		if spawn_name != "":
+			print("Player: Need to spawn at '" + spawn_name + "', looking for spawn point")
+			
+			# Find matching spawn point
+			var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+			for spawn in spawn_points:
+				if spawn.spawn_point_name == spawn_name:
+					print("Player: Found spawn point '" + spawn_name + "' at " + str(spawn.global_position))
+					global_position = spawn.global_position
+					
+					# Apply any adjust_position value
+					if "adjust_position" in spawn:
+						global_position += spawn.adjust_position
+					
+					print("Player: Positioned at spawn point: " + str(global_position))
+					break
 	
 	# Place this at the end of _ready()
 	print("Player: Final position after _ready = " + str(global_position))
@@ -217,7 +230,7 @@ func store_properties_to_global():
 			"ACCEL": ACCEL,
 			"FRICTION": FRICTION,
 			"ROLL_SPEED": ROLL_SPEED,
-			"state": state,
+			#"state": state,
 			# Add other properties as needed
 		}
 		
