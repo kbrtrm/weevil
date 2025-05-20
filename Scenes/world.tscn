@@ -3258,6 +3258,7 @@ shape = SubResource("CircleShape2D_8s6nn")
 visible = false
 
 [node name="PlayerFollowCamera" parent="." instance=ExtResource("29_qebug")]
+default_zoom = Vector2(1, 1)
 
 [connection signal="body_entered" from="YSort/Pot/Door" to="." method="_on_door_body_entered"]
 

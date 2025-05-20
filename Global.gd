@@ -30,6 +30,7 @@ var player_properties = null  # Will be populated by the Player's store_properti
 # Room transition variables
 var next_spawn_point = ""  # Name of spawn point to use in next scene
 var scene_transition_data = {}  # Store data between scenes
+var transition_screen_position = Vector2.ZERO
 
 func _ready():
 	print("Global: _ready() called")
@@ -224,14 +225,28 @@ func return_to_overworld(battle_won = false):
 	# Note: The rest of this function's original code will be handled by TransitionManager
 	# TransitionManager will call our setup_returned_world function after the transition completes
 
-# Enhanced setup_returned_world in Global.gd for better enemy handling
+# Enhanced setup_returned_world in Global.gd
 func setup_returned_world(battle_won):
 	print("Global.setup_returned_world called with battle_won = " + str(battle_won))
-	# Restore player position
+	
+	# Find the player by group
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
+		# Restore player position
 		player.global_position = player_position
 		print("Global: Restored player position: " + str(player_position))
+		
+		# IMPORTANT: Reset player state to MOVE
+		if "state" in player:
+			player.state = player.MOVE  # Reset to MOVE state
+			print("Global: Reset player state to MOVE")
+		
+		# Reset velocity to zero
+		if "velocity" in player:
+			player.velocity = Vector2.ZERO
+			print("Global: Reset player velocity to zero")
+	else:
+		print("Global: Player not found when setting up returned world!")
 	
 	# Note: We no longer mark the enemy as defeated here
 	# This is now handled directly in BattleManager.end_battle
