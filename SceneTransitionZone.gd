@@ -1,4 +1,4 @@
-# SceneTransitionZone.gd
+# SceneTransitionZone.gd - updated to use SpawnManager
 extends Area2D
 
 @export var target_scene: String = ""  # Path to scene to transition to
@@ -8,6 +8,7 @@ extends Area2D
 
 var player_inside: bool = false
 var can_transition: bool = true
+var transition_cooldown_timer: float = 0.0
 
 func _ready():
 	# Connect signals
@@ -21,16 +22,21 @@ func _ready():
 	if target_scene.is_empty():
 		push_warning("SceneTransitionZone has no target scene set!")
 
-func _process(_delta):
+func _process(delta):
+	# Handle cooldown
+	if transition_cooldown_timer > 0:
+		transition_cooldown_timer -= delta
+		
 	# Only check for transition key if player is inside the zone
-	if player_inside and can_transition:
+	if player_inside and can_transition and transition_cooldown_timer <= 0:
 		# Detect any interaction input if configured, otherwise auto-transition
-		if (Input.is_action_just_pressed("interact") or spawn_point_name.begins_with("auto_")):
-			print("CALLIING TRANSITION")
+		if Input.is_action_just_pressed("interact") or spawn_point_name.begins_with("auto_"):
+			print("SceneTransitionZone: Triggering transition to " + target_scene)
 			trigger_transition()
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):
+		print("SceneTransitionZone: Player entered transition zone for " + target_scene)
 		player_inside = true
 		# Show interaction hint if needed
 		if not spawn_point_name.begins_with("auto_"):
@@ -38,50 +44,40 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
+		print("SceneTransitionZone: Player exited transition zone")
 		player_inside = false
 		# Hide interaction hint
 		hide_interaction_hint()
 
-# In SceneTransitionZone.gd's trigger_transition method
-# In SceneTransitionZone.gd
 func trigger_transition():
 	# Prevent multiple transitions
 	if not can_transition:
 		return
 		
+	print("SceneTransitionZone: Starting transition to " + target_scene + " at spawn point " + spawn_point_name)
+	
+	# Set cooldown and prevent multiple transitions
 	can_transition = false
+	transition_cooldown_timer = transition_delay
 	
-	# Store player's current velocity and state to restore after transition
-	store_player_state()
+	# CRITICAL: Tell the SpawnManager what spawn point to use
+	if Engine.has_singleton("SpawnManager"):
+		var spawn_manager = Engine.get_singleton("SpawnManager")
+		spawn_manager.prepare_transition(spawn_point_name)
+		print("SceneTransitionZone: Told SpawnManager to use spawn point: " + spawn_point_name)
 	
-	# Initiate transition
-	print("SceneTransitionZone: Transitioning to " + target_scene + " at spawn point " + spawn_point_name)
-	
-	# Set the spawn point in Global FIRST, before calling TransitionManager
-	if Engine.has_singleton("Global"):
-		var global = Engine.get_singleton("Global")
-		global.next_spawn_point = spawn_point_name
-		print("SceneTransitionZone: Set Global.next_spawn_point to " + spawn_point_name)
-	
-	# Call transition manager to handle the scene change
+	# Get player position for transition effect center
 	var player_pos = get_player_position()
+	
+	# Call TransitionManager to handle the scene change
 	if Engine.has_singleton("TransitionManager"):
 		var transition_manager = Engine.get_singleton("TransitionManager")
-		print("From ZONE:" + transition_manager)
-		# Pass both the player position and spawn point name
+		print("SceneTransitionZone: Calling TransitionManager.change_scene()")
 		transition_manager.change_scene(target_scene, player_pos, spawn_point_name)
 	else:
 		# Fallback if TransitionManager not available
 		push_error("TransitionManager singleton not found!")
 		get_tree().change_scene_to_file(target_scene)
-
-func store_player_state():
-	var player = get_player()
-	if player and Engine.has_singleton("Global"):
-		var global = Engine.get_singleton("Global")
-		# Store relevant player state
-		if player.has_method("store_properties_to_global"):
-			player.store_properties_to_global()
 
 func get_player():
 	return get_tree().get_first_node_in_group("player")
@@ -94,7 +90,6 @@ func get_player_position():
 
 func show_interaction_hint():
 	# Show a visual indicator that player can interact
-	# This could be an icon, text prompt, or animation
 	var interaction_hint = get_node_or_null("InteractionHint")
 	if interaction_hint:
 		interaction_hint.visible = true

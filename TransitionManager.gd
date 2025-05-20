@@ -18,14 +18,17 @@ func _ready():
 	# Set our pause mode so we can continue running during pause
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-# Modified change_scene to handle pausing and spawn points
+# TransitionManager.gd - Updated change_scene method
 func change_scene(target_scene: String, screen_point = null, spawn_point_name: String = "") -> void:
-	# Store spawn point info in Global
+	print("TransitionManager: Starting scene change to " + target_scene + " with spawn point '" + spawn_point_name + "'")
+	
+	# Store spawn point info globally for the new scene to access
 	if Engine.has_singleton("Global"):
 		var global = Engine.get_singleton("Global")
 		if spawn_point_name != "":
 			global.next_spawn_point = spawn_point_name
-			print("TransitionManager: Setting next_spawn_point to " + spawn_point_name)
+			# Also store in TransitionManager as backup
+			print("TransitionManager: Setting spawn point to: " + spawn_point_name)
 	
 	next_scene = target_scene
 	
@@ -46,22 +49,40 @@ func change_scene(target_scene: String, screen_point = null, spawn_point_name: S
 	$AnimationPlayer.play("rpg_transition_out")
 	await $AnimationPlayer.animation_finished
 	
+	print("TransitionManager: Changing to scene: " + target_scene)
+	print("TransitionManager: Target spawn point: " + spawn_point_name)
+	
 	# Change the scene
-	get_tree().change_scene_to_file(next_scene)
+	get_tree().change_scene_to_file(target_scene)
 	
-	# CRITICAL: Wait longer for the scene to be fully loaded and all nodes to register
+	# Need to wait for the scene to fully load
+	# We'll use multiple frames and a timer
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await get_tree().create_timer(0.1).timeout  # Add a small delay
+	await get_tree().create_timer(0.1).timeout
 	
-	# Try to position the player at the spawn point
-	if Engine.has_singleton("Global"):
+	# Try to move the player to the spawn point
+	if Engine.has_singleton("Global") and spawn_point_name != "":
 		var global = Engine.get_singleton("Global")
-		print("TransitionManager: Calling handle_player_spawn()")
-		print("TransitionManager: About to call handle_player_spawn()")
-		print("TransitionManager: Current scene path = " + get_tree().current_scene.scene_file_path)	
-		await get_tree().create_timer(0.5).timeout
-		global.handle_player_spawn()
+		
+		# Call handle_player_spawn and wait for it to complete
+		print("TransitionManager: After scene change, calling handle_player_spawn for '" + spawn_point_name + "'")
+		var success = await global.handle_player_spawn()
+		print("TransitionManager: handle_player_spawn result: " + str(success))
+		
+		# Fallback - try direct positioning
+		if not success:
+			print("TransitionManager: Trying direct player positioning fallback")
+			var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+			var player = get_tree().get_first_node_in_group("player")
+			
+			if player and spawn_points.size() > 0:
+				for spawn in spawn_points:
+					if spawn.spawn_point_name == spawn_point_name:
+						print("TransitionManager: Found spawn point, moving player directly")
+						player.global_position = spawn.global_position
+						print("TransitionManager: Player moved to " + str(player.global_position))
+						break
 	
 	# Continue with the transition animation
 	$AnimationPlayer.play("rpg_transition_in")

@@ -449,69 +449,86 @@ func restore_player_state_after_transition():
 		# Clear transition data
 		scene_transition_data.clear()
 
+# Add this function to Global.gd or replace the existing one
 func handle_player_spawn():
 	print("Global.handle_player_spawn called! next_spawn_point = '" + next_spawn_point + "'")
 	
 	if next_spawn_point.is_empty():
-		print("Global: No spawn point specified, using default")
-		return false
+		# Check if we have a fallback in scene_transition_data
+		if scene_transition_data.has("target_spawn"):
+			next_spawn_point = scene_transition_data["target_spawn"]
+			print("Global: Using fallback spawn point from transition data: " + next_spawn_point)
+		else:
+			print("Global: No spawn point specified, using default")
+			return false
 		
 	print("Global: Looking for spawn point: '" + next_spawn_point + "'")
 	
-	# IMPORTANT: Give the scene time to fully load and register all spawn points
-	# Try multiple times with increasing delays
-	var retry_count = 0
-	var max_retries = 5
+	# Get all spawn points right away
+	var spawn_points = get_tree().get_nodes_in_group("spawn_points")
+	print("Global: Found " + str(spawn_points.size()) + " spawn points")
 	
-	while retry_count < max_retries:
-		# Wait for scene to process
-		await get_tree().process_frame
+	# Directly teleport player to spawn point if found
+	var found_spawn = false
+	for spawn in spawn_points:
+		print("Global: Checking spawn point '" + spawn.spawn_point_name + "' against target '" + next_spawn_point + "'")
 		
-		# Find all spawn points
-		var spawn_points = get_tree().get_nodes_in_group("spawn_points")
-		print("Global: Found " + str(spawn_points.size()) + " spawn points (attempt " + str(retry_count + 1) + ")")
-		
-		if spawn_points.size() > 0:
-			# List all available spawn points
-			for spawn in spawn_points:
-				print("Global: Available spawn point: '" + spawn.spawn_point_name + "' at position " + str(spawn.global_position))
+		if spawn.spawn_point_name == next_spawn_point:
+			var player = get_tree().get_first_node_in_group("player")
+			if player:
+				print("Global: Found matching spawn point at " + str(spawn.global_position))
+				print("Global: Moving player from " + str(player.global_position) + " to " + str(spawn.global_position))
 				
-				# Check if this is our target spawn point
+				# Directly teleport player to spawn point
+				player.global_position = spawn.global_position
+				
+				# Apply any adjustments from the spawn point
+				if "adjust_position" in spawn and spawn.adjust_position != Vector2.ZERO:
+					player.global_position += spawn.adjust_position
+				
+				# Set facing direction if applicable
+				if "facing_direction" in player and "spawn_direction" in spawn and spawn.spawn_direction != Vector2.ZERO:
+					player.facing_direction = spawn.spawn_direction
+				
+				print("Global: Final player position: " + str(player.global_position))
+				found_spawn = true
+				break
+			else:
+				print("Global: ERROR - Player not found!")
+	
+	# If spawn point wasn't found immediately, try again after a short delay
+	if not found_spawn:
+		print("Global: Spawn point not found immediately, will try again after delay")
+		get_tree().create_timer(0.2).timeout.connect(func():
+			# Try again with delay
+			var spawn_points_retry = get_tree().get_nodes_in_group("spawn_points")
+			print("Global: RETRY - Found " + str(spawn_points_retry.size()) + " spawn points")
+			
+			for spawn in spawn_points_retry:
+				print("Global: RETRY - Checking spawn point '" + spawn.spawn_point_name + "' against target '" + next_spawn_point + "'")
+				
 				if spawn.spawn_point_name == next_spawn_point:
-					# Position the player at this spawn point
 					var player = get_tree().get_first_node_in_group("player")
 					if player:
-						print("Global: Found player at " + str(player.global_position))
-						print("Global: Moving player to spawn point '" + next_spawn_point + "' at " + str(spawn.global_position))
+						print("Global: RETRY - Found matching spawn point at " + str(spawn.global_position))
+						print("Global: RETRY - Moving player from " + str(player.global_position) + " to " + str(spawn.global_position))
 						
-						player.global_position = spawn.global_position + spawn.adjust_position
+						# Directly teleport player to spawn point
+						player.global_position = spawn.global_position
 						
-						print("Global: Player moved to " + str(player.global_position))
+						# Apply any adjustments
+						if "adjust_position" in spawn and spawn.adjust_position != Vector2.ZERO:
+							player.global_position += spawn.adjust_position
 						
-						# Set player facing direction if applicable
-						if "facing_direction" in player and spawn.spawn_direction != Vector2.ZERO:
-							player.facing_direction = spawn.spawn_direction
-							
-						# Restore player state
-						restore_player_state_after_transition()
-						
-						# Clear spawn point
-						next_spawn_point = ""
-						return true
+						print("Global: RETRY - Final player position: " + str(player.global_position))
+						break
 					else:
-						print("Global: ERROR - Player not found!")
-						
-			# If we found spawn points but not the one we're looking for, wait a bit more
-			await get_tree().create_timer(0.05 * (retry_count + 1)).timeout
-			retry_count += 1
-		else:
-			# No spawn points found yet, wait a bit longer
-			await get_tree().create_timer(0.1 * (retry_count + 1)).timeout
-			retry_count += 1
+						print("Global: RETRY - ERROR - Player not found!")
+		)
 	
-	print("Global: WARNING - Spawn point '" + next_spawn_point + "' not found after " + str(max_retries) + " attempts!")
+	# Clear spawn point name after using it
 	next_spawn_point = ""
-	return false
+	return found_spawn
 
 # Add this to Global.gd
 func _notification(what):
