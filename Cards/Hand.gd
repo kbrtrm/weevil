@@ -109,6 +109,7 @@ func draw_card(count: int = 1):
 		# Set properties
 		card.card_name = card_data.name
 		card.card_cost = card_data.cost if "cost" in card_data else 1
+		card.card_type = card_data.type if "type" in card_data else ""
 		
 		# Handle different description property names
 		if "description" in card_data:

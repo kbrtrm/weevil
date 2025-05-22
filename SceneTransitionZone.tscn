@@ -1,20 +1,23 @@
 [gd_scene load_steps=5 format=3 uid="uid://b8lfe5ctipqw1"]
 
 [ext_resource type="Script" uid="uid://bfu8jrnx5m0dc" path="res://SceneTransitionZone.gd" id="1_aybfj"]
-[ext_resource type="Texture2D" uid="uid://rfilo8owm8l0" path="res://Images/acorn.png" id="2_plvvo"]
+[ext_resource type="Texture2D" uid="uid://0dnoqatv37ea" path="res://hole.png" id="2_aybfj"]
 [ext_resource type="FontFile" uid="uid://slaafm6ilf8n" path="res://Themes/click3x5.ttf" id="3_1cpre"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rtdvq"]
+size = Vector2(20, 9)
 
 [node name="Area2D" type="Area2D"]
 collision_layer = 2
 script = ExtResource("1_aybfj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_rtdvq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_plvvo")
+scale = Vector2(0.760001, 0.68)
+texture = ExtResource("2_aybfj")
 
 [node name="InteractionHint" type="Label" parent="."]
 visible = false

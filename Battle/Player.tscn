@@ -1,15 +1,74 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvd2l65i7q5l7"]
+[gd_scene load_steps=12 format=3 uid="uid://bvd2l65i7q5l7"]
 
 [ext_resource type="Script" uid="uid://bcmpuyx43x0s7" path="res://Battle/Player.gd" id="1_winow"]
-[ext_resource type="Texture2D" uid="uid://b22fvylhc72ak" path="res://Images/terb-isolated.png" id="2_cpcn0"]
+[ext_resource type="Texture2D" uid="uid://dnr07eb28kkqo" path="res://Images/big-terb-battle-idle-sheet-bob.png" id="2_cpcn0"]
 [ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_cpcn0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qo5y"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(0, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do4v5"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(34, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0ps1"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(68, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_doo5m"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(102, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jt2v3"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(136, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wukul"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(170, 0, 34, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1cto"]
+atlas = ExtResource("2_cpcn0")
+region = Rect2(204, 0, 34, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bcyfd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3qo5y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do4v5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s0ps1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_doo5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jt2v3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wukul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b1cto")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="Player" type="Node2D" groups=["player"]]
 script = ExtResource("1_winow")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
-texture = ExtResource("2_cpcn0")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -11)
+sprite_frames = SubResource("SpriteFrames_bcyfd")
+autoplay = "default"
+frame_progress = 0.737078
 
 [node name="HealthLabel" type="Label" parent="."]
 offset_top = 20.0

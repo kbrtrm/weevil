@@ -7,12 +7,14 @@ const CARD_SIZE = Vector2(90, 124)
 @export var card_name: String = ""
 @export_multiline var card_desc: String = ""
 @export var card_art: Texture2D = null
+@export var card_type: String = ""
 
 # References to nodes
 var cost_label: Label
 var name_label: Label
 var description_label: RichTextLabel
 var art_texture: TextureRect
+var type_texture: Sprite2D
 
 # Drag and drop state
 var draggable = true
@@ -23,6 +25,7 @@ var original_z_index = 0
 var drag_offset = Vector2.ZERO
 
 @onready var hover_highlight = $Panel/HoverHighlight
+@onready var type_bg = $Panel/TypeBG
 
 # Called when the node enters the scene tree
 func _ready() -> void:
@@ -33,6 +36,7 @@ func _ready() -> void:
 	name_label = find_child("Name")
 	description_label = find_child("RichTextLabel")
 	art_texture = find_child("CardArt")
+	type_texture = find_child("TypeBG")
 	
 	# Set properties
 	if cost_label:
@@ -43,11 +47,28 @@ func _ready() -> void:
 		description_label.text = card_desc
 	if art_texture and card_art:
 		art_texture.texture = card_art
+	if type_texture:
+		if card_type == "attack":
+			type_texture.frame = 0
+		elif card_type == "skill":
+			type_texture.frame = 1
 	
 	# Make sure Area2D is pickable
-	var area = $Panel/Area2D
+	var area = get_node_or_null("Panel/Area2D")
 	if area:
 		area.input_pickable = true
+		print("Card: Found Area2D node and set input_pickable = true")
+	else:
+		print("Card: WARNING - Area2D node not found! Card will not be draggable.")
+
+	# Debug: Print what nodes we actually found
+	print("Card: Available nodes in card:")
+	print("  - cost_label: ", cost_label != null)
+	print("  - name_label: ", name_label != null)
+	print("  - description_label: ", description_label != null)
+	print("  - art_texture: ", art_texture != null)
+	print("  - type_texture: ", type_texture != null)
+	print("  - hover_highlight: ", hover_highlight != null)
 
 # Center the pivot point
 func center_pivot():

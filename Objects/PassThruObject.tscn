@@ -95,7 +95,7 @@ shape = SubResource("RectangleShape2D_h6i4s")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_r0i0g")
+&"": SubResource("AnimationLibrary_r0i0g")
 }
 
 [connection signal="body_entered" from="WiggleDetect" to="." method="_on_wiggle_detect_body_entered"]

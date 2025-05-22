@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmixqagkkfphp"]
+[gd_scene load_steps=11 format=3 uid="uid://bmixqagkkfphp"]
 
 [ext_resource type="Texture2D" uid="uid://tyrmc4walymm" path="res://Cards/card-front-bg.png" id="1_75krv"]
 [ext_resource type="Script" uid="uid://cvktnho8lcaxb" path="res://Cards/card_2.gd" id="1_yot0q"]
 [ext_resource type="Texture2D" uid="uid://rfilo8owm8l0" path="res://Images/acorn.png" id="2_62fgo"]
 [ext_resource type="Texture2D" uid="uid://cjlrchdvw72rh" path="res://Cards/cost-bg.png" id="2_yot0q"]
 [ext_resource type="Texture2D" uid="uid://uu5wl8vuhsk0" path="res://Cards/paperclip-big.png" id="3_62fgo"]
+[ext_resource type="Texture2D" uid="uid://2muenrlslip3" path="res://Images/types.png" id="4_b3uvy"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="4_km0ui"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b3uvy"]
@@ -60,6 +61,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_75krv")
+
+[node name="TypeBG" type="Sprite2D" parent="Panel"]
+position = Vector2(45, 26)
+texture = ExtResource("4_b3uvy")
+hframes = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 custom_minimum_size = Vector2(14, 15)
