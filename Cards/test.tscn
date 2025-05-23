@@ -101,7 +101,7 @@ text = "End Turn"
 position = Vector2(215, 94)
 
 [node name="Enemy" parent="." instance=ExtResource("12_qiokm")]
-position = Vector2(416, 92)
+position = Vector2(416, 94)
 
 [connection signal="input_event" from="Hand/DeckStatus/DeckArea2D" to="Hand" method="_on_deck_area_2d_input_event"]
 [connection signal="card_played" from="DropTarget" to="CardManager" method="_on_drop_target_card_played"]

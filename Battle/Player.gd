@@ -21,7 +21,7 @@ var dexterity: int = 0
 @onready var block_icon = $BlockIcon
 @onready var block_label = $BlockLabel
 @onready var status_container = $StatusContainer
-@onready var health_bar = $HealthBar
+@onready var health_bar = $HealthBarContainer/HealthBar
 
 func _ready():
 	# Add to player group
@@ -180,10 +180,13 @@ func update_health_display():
 
 func update_block_display():
 	if block_label:
-		block_label.text = str(int(block))
-		
-		# Show icon only if we have block
-		block_icon.visible = block > 0
+		if block > 0:
+			block_label.text = str(int(block))
+			block_label.visible = true
+			# Show icon only if we have block
+			block_icon.visible = block > 0
+		else:
+			block_label.visible = false
 
 # Player.gd - Updated update_status_display function
 func update_status_display():

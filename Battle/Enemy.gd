@@ -28,19 +28,21 @@ var strength: int = 0
 @onready var intent_icon = $IntentIcon
 @onready var intent_label = $IntentLabel
 @onready var status_container = $StatusContainer
-@onready var health_bar = $HealthBar
+@onready var health_bar = $HealthBarContainer/HealthBar
 
 func _ready():
 	# Add to enemies group
 	add_to_group("enemies")
+	
+	# Initialize health to max at start
+	health = max_health
 	
 	# Initialize UI
 	update_health_display()
 	update_block_display()
 	update_status_display()
 	
-		# Initialize health to max at start
-	health = max_health
+	
 	
 	if health_bar:
 		health_bar.set_health(health, max_health)
@@ -293,7 +295,11 @@ func update_health_display():
 # Update the block display
 func update_block_display():
 	if block_label:
-		block_label.text = str(block)
+		if block > 0:
+			block_label.text = str(block)
+			block_label.visible = true
+		else:
+			block_label.visible = false
 	
 	if block_icon:
 		block_icon.visible = block > 0

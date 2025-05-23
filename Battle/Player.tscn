@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bvd2l65i7q5l7"]
+[gd_scene load_steps=14 format=3 uid="uid://bvd2l65i7q5l7"]
 
 [ext_resource type="Script" uid="uid://bcmpuyx43x0s7" path="res://Battle/Player.gd" id="1_winow"]
 [ext_resource type="Texture2D" uid="uid://dnr07eb28kkqo" path="res://Images/big-terb-battle-idle-sheet-bob.png" id="2_cpcn0"]
+[ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="3_3qo5y"]
 [ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_cpcn0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3qo5y"]
@@ -61,6 +62,23 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qo5y"]
+bg_color = Color(0.619608, 0.619608, 0.619608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+anti_aliasing = false
+
 [node name="Player" type="Node2D" groups=["player"]]
 script = ExtResource("1_winow")
 
@@ -70,31 +88,57 @@ sprite_frames = SubResource("SpriteFrames_bcyfd")
 autoplay = "default"
 frame_progress = 0.737078
 
-[node name="HealthLabel" type="Label" parent="."]
-offset_top = 20.0
-offset_right = 1.0
-offset_bottom = 31.0
-theme_override_font_sizes/font_size = 8
-
 [node name="BlockIcon" type="TextureRect" parent="."]
 offset_left = -30.0
 offset_right = 10.0
 offset_bottom = 40.0
-
-[node name="BlockLabel" type="Label" parent="."]
-offset_left = -20.0
-offset_top = 20.0
-offset_right = 20.0
-offset_bottom = 62.0
-theme_override_font_sizes/font_size = 8
 
 [node name="StatusContainer" type="HBoxContainer" parent="."]
 offset_top = 20.0
 offset_right = 40.0
 offset_bottom = 60.0
 
-[node name="HealthBar" parent="." instance=ExtResource("3_cpcn0")]
+[node name="HealthBarContainer" type="Panel" parent="."]
+custom_minimum_size = Vector2(80, 4)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -40.0
 offset_top = 33.0
 offset_right = 40.0
-offset_bottom = 41.0
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3qo5y")
+
+[node name="HealthBar" parent="HealthBarContainer" instance=ExtResource("3_cpcn0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flash_on_damage = false
+normal_color = Color(0.866667, 0.0980392, 0.113725, 1)
+low_health_color = Color(0.909804, 0.494118, 0.192157, 1)
+critical_health_color = Color(0.994515, 0.842221, 0, 1)
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_left = -11.0
+offset_top = 29.0
+offset_right = 13.0
+offset_bottom = 40.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_3qo5y")
+theme_override_font_sizes/font_size = 8
+text = "35/35"
+horizontal_alignment = 1
+
+[node name="BlockLabel" type="Label" parent="."]
+offset_left = 37.0
+offset_top = 30.0
+offset_right = 77.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 8
+text = "5	"
