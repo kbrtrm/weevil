@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://ky5v7xxep70b"]
+
+[ext_resource type="PackedScene" uid="uid://bmixqagkkfphp" path="res://Cards/Card2.tscn" id="1_3vmbw"]
+[ext_resource type="Texture2D" uid="uid://x3duxi030nxj" path="res://Images/spinning-pebble.png" id="2_6rhcu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0q3a"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(1, 1, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wx061"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26llc"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsxq1"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sx1f7"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lg2sa"]
+atlas = ExtResource("2_6rhcu")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ysdmq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wx061")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26llc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qsxq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sx1f7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lg2sa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Card" parent="." instance=ExtResource("1_3vmbw")]
+position = Vector2(260, 99)
+
+[node name="CardArt" parent="Card/Panel/VBoxContainer/MarginContainer" index="0"]
+visible = false
+texture = SubResource("AtlasTexture_j0q3a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Card/Panel/VBoxContainer/MarginContainer" index="1"]
+position = Vector2(45, 28)
+sprite_frames = SubResource("SpriteFrames_ysdmq")
+autoplay = "default"
+frame_progress = 0.558679
+
+[editable path="Card"]
