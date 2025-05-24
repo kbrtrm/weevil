@@ -24,6 +24,10 @@ var original_rotation = 0.0
 var original_z_index = 0
 var drag_offset = Vector2.ZERO
 
+# Selection state
+var is_selected = false
+var selected_z_index = 500  # Higher than normal cards but lower than dragged
+
 @onready var hover_highlight = $Panel/HoverHighlight
 @onready var type_bg = $Panel/TypeBG
 
@@ -76,15 +80,24 @@ func center_pivot():
 	for child in get_children():
 		child.position -= half_size
 
-# Hover effect
-func set_highlight(state: bool):
+# Hover and selection effect
+func set_highlight(state: bool, is_selection: bool = false):
 	if hover_highlight:
 		hover_highlight.visible = state
+		
+		# Different highlight color for selection vs hover
+		if state and is_selection:
+			# Selection highlight - maybe a different color or stronger glow
+			hover_highlight.modulate = Color(1.0, 0.8, 0.2, 1.0)  # Golden selection
+		else:
+			# Regular hover highlight
+			hover_highlight.modulate = Color(1.0, 1.0, 1.0, 1.0)  # White hover
 
 # Called when mouse enters the card
 func _on_area_2d_mouse_entered():
-	# Only highlight if not currently dragging
-	if not being_dragged:
+	print("Card: Mouse entered card: ", card_name)
+	# Only highlight if not currently dragging AND not already selected
+	if not being_dragged and not is_selected:
 		set_highlight(true)
 		
 		# Notify hand about hover
@@ -94,8 +107,9 @@ func _on_area_2d_mouse_entered():
 
 # Called when mouse exits the card
 func _on_area_2d_mouse_exited():
-	# Only turn off highlight if not being dragged
-	if not being_dragged:
+	print("Card: Mouse exited card: ", card_name)
+	# Only turn off highlight if not being dragged AND not selected
+	if not being_dragged and not is_selected:
 		set_highlight(false)
 		
 		# Notify hand about hover end
@@ -139,7 +153,7 @@ func end_drag():
 		global_position = original_position
 		rotation = original_rotation
 		z_index = original_z_index
-		set_highlight(false)
+		select_card()
 
 # Update position while dragging
 func _process(delta):
@@ -576,3 +590,33 @@ func create_particle_effect(position, effect_type):
 	# Remove after animation
 	tween.tween_callback(func(): effect_popup.queue_free())
 	
+# Select the card (ready to play state)
+func select_card():
+	if not draggable:
+		return
+		
+	is_selected = true
+	z_index = selected_z_index
+	set_highlight(true, true)  # Show selection highlight
+	
+	# Notify hand about selection
+	var hand = get_parent()
+	if hand and hand.has_method("on_card_selected"):
+		hand.on_card_selected(self)
+	
+	print("Card selected: ", card_name)
+
+# Deselect the card
+func deselect_card():
+	if not is_selected:
+		return
+		
+	is_selected = false
+	z_index = original_z_index
+	set_highlight(false)  # Turn off highlight when deselected
+	
+	print("Card deselected: ", card_name)
+
+# Check if this card is selected
+func is_card_selected() -> bool:
+	return is_selected

@@ -209,7 +209,7 @@ func remove_card_from_hand(card):
 		arrange_cards()
 		update_ui()
 
-# Input handling for card dragging
+# Input handling for card dragging and keyboard/controller navigation
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -224,6 +224,36 @@ func _input(event: InputEvent) -> void:
 				if card.being_dragged:
 					card.end_drag()
 					break
+	
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		# Right-click to deselect all cards
+		deselect_all_cards()
+	
+	# Handle input actions (works for keyboard AND controller)
+	if Input.is_action_just_pressed("ui_left"):
+		select_previous_card()
+	elif Input.is_action_just_pressed("ui_right"):
+		select_next_card()
+	elif Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select"):
+		play_selected_card()
+	elif Input.is_action_just_pressed("ui_cancel"):
+		deselect_all_cards()
+	elif Input.is_action_just_pressed("end_turn"):
+		end_turn()
+	
+	# Handle number keys for direct card selection (keyboard only)
+	elif event is InputEventKey and event.pressed:
+		match event.keycode:
+			KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9:
+				var card_number = event.keycode - KEY_1
+				if card_number < cards_in_hand.size():
+					deselect_all_cards()
+					cards_in_hand[card_number].select_card()
+			KEY_0:
+				var card_number = 9
+				if card_number < cards_in_hand.size():
+					deselect_all_cards()
+					cards_in_hand[card_number].select_card()
 
 # Handle card drag started
 func on_card_drag_started(card):
@@ -239,15 +269,14 @@ func on_card_drag_ended(card, drop_position):
 	
 	if drop_target:
 		# Valid drop - emit signal on the drop target
-		# This will be handled by CardManager's _on_card_played
 		if drop_target.has_signal("card_played"):
 			drop_target.emit_signal("card_played", card)
 		else:
-			# Fallback if no signal - return card to hand without shaking
-			return_card_to_hand(card, false)
+			# Fallback - return to hand and select
+			return_card_to_hand_and_select(card)
 	else:
-		# Invalid drop - return to hand without shaking
-		return_card_to_hand(card, false)
+		# Invalid drop - return to hand and select
+		return_card_to_hand_and_select(card)
 
 # Helper function to return a card to its original position in hand
 # Added a parameter to control whether the card should shake
@@ -435,7 +464,7 @@ func get_drop_target_at_position(position):
 
 # Handle card hover
 func on_card_hovered(card):
-	if card_being_dragged:
+	if card_being_dragged or card.is_selected:
 		return
 		
 	hovered_card = get_top_card_at_position(get_global_mouse_position())
@@ -443,7 +472,7 @@ func on_card_hovered(card):
 
 # Handle card unhover
 func on_card_unhovered(card):
-	if card_being_dragged:
+	if card_being_dragged or card.is_selected:
 		return
 		
 	# Short delay to prevent flickering
@@ -454,18 +483,20 @@ func on_card_unhovered(card):
 
 # Update highlights for all cards
 func update_all_highlights():
-	# Clear all highlights first
+	# Clear all highlights first, but preserve selected cards
 	for card in cards_in_hand:
 		if is_instance_valid(card) and card.has_method("set_highlight"):
-			card.set_highlight(false)
+			# Only clear highlight if card is not selected
+			if not card.is_selected:
+				card.set_highlight(false)
 	
-	# Set highlight for dragged or hovered card
+	# Set highlight for dragged card (highest priority)
 	if card_being_dragged and card_being_dragged.has_method("set_highlight"):
 		card_being_dragged.set_highlight(true)
-	elif hovered_card and hovered_card.has_method("set_highlight"):
+	# Set highlight for selected cards (second priority)
+	elif hovered_card and hovered_card.has_method("set_highlight") and not hovered_card.is_selected:
+		# Only highlight hovered card if it's not already selected
 		hovered_card.set_highlight(true)
-
-
 
 func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
@@ -624,3 +655,192 @@ func play_reshuffle_effect():
 		
 		# Clean up after animation
 		tween.tween_callback(func(): temp_sprite.queue_free())
+
+# Return card to hand position and select it
+func return_card_to_hand_and_select(card):
+	# Make sure card is still in the cards_in_hand array
+	if not card in cards_in_hand:
+		cards_in_hand.append(card)
+	
+	# Calculate what the rotation should be based on the card's position in the hand
+	var card_index = cards_in_hand.find(card)
+	var num_cards = cards_in_hand.size()
+	var proper_rotation = 0.0
+	
+	if num_cards > 1:
+		# Calculate the proper rotation based on the card's position in the hand
+		var t = float(card_index) / float(num_cards - 1)
+		proper_rotation = -CARD_ANGLE * (num_cards - 1) / 2 + card_index * CARD_ANGLE
+	
+	# Create tween to animate back to original position
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	
+	# Get the original position
+	if "original_position" in card and card.original_position != Vector2.ZERO:
+		var target_pos = card.original_position
+		
+		# Animate card back to position with proper rotation
+		tween.tween_property(card, "position", target_pos, 0.3)
+		tween.parallel().tween_property(card, "rotation_degrees", proper_rotation, 0.3)
+		
+		# Save the proper rotation so the card remembers it
+		card.original_rotation = proper_rotation
+		
+		# After animation completes, select the card
+		tween.tween_callback(func(): card.select_card())
+	else:
+		# Fallback: just arrange all cards and select
+		arrange_cards()
+		card.select_card()
+	
+	# Update highlights
+	update_all_highlights()
+
+# Select the previous card (left)
+func select_previous_card():
+	if cards_in_hand.size() == 0:
+		return
+	
+	var current_selected = get_selected_card()
+	var current_index = -1
+	
+	# Find current selected card index
+	if current_selected:
+		current_index = cards_in_hand.find(current_selected)
+	
+	# Calculate previous index (wrap around)
+	var previous_index = current_index - 1
+	if previous_index < 0:
+		previous_index = cards_in_hand.size() - 1
+	
+	# If no card was selected, start with the last card
+	if current_index == -1:
+		previous_index = cards_in_hand.size() - 1
+	
+	# Deselect current and select previous
+	deselect_all_cards()
+	if previous_index >= 0 and previous_index < cards_in_hand.size():
+		cards_in_hand[previous_index].select_card()
+
+# Select the next card (right)
+func select_next_card():
+	if cards_in_hand.size() == 0:
+		return
+	
+	var current_selected = get_selected_card()
+	var current_index = -1
+	
+	# Find current selected card index
+	if current_selected:
+		current_index = cards_in_hand.find(current_selected)
+	
+	# Calculate next index (wrap around)
+	var next_index = current_index + 1
+	if next_index >= cards_in_hand.size():
+		next_index = 0
+	
+	# If no card was selected, start with the first card
+	if current_index == -1:
+		next_index = 0
+	
+	# Deselect current and select next
+	deselect_all_cards()
+	if next_index >= 0 and next_index < cards_in_hand.size():
+		cards_in_hand[next_index].select_card()
+
+# Play the currently selected card
+func play_selected_card():
+	var selected_card = get_selected_card()
+	if not selected_card:
+		print("Hand: No card selected to play")
+		return
+	
+	print("Hand: Playing selected card via keyboard/controller: ", selected_card.card_name)
+	
+	# Find a valid drop target - for now, let's find the first one
+	# Later you can expand this to cycle through multiple enemies
+	var targets = get_tree().get_nodes_in_group("drop_targets")
+	
+	if targets.size() > 0:
+		var target = targets[0]  # Play on first available target
+		
+		# Emit the card_played signal
+		if target.has_signal("card_played"):
+			target.emit_signal("card_played", selected_card)
+			
+			# After playing card, automatically select first remaining card
+			await get_tree().process_frame  # Wait one frame for card to be removed
+			auto_select_first_card()
+		else:
+			print("Hand: Target doesn't have card_played signal")
+	else:
+		print("Hand: No valid targets found for card")
+		# Give user feedback that card can't be played
+		selected_card.deselect_card()
+		shake_card(selected_card)
+		
+# Select first card
+func select_first_card():
+	if cards_in_hand.size() > 0:
+		deselect_all_cards()
+		cards_in_hand[0].select_card()
+
+# Select last card
+func select_last_card():
+	if cards_in_hand.size() > 0:
+		deselect_all_cards()
+		cards_in_hand[cards_in_hand.size() - 1].select_card()
+		
+# Deselect all cards (useful for canceling selection)
+func deselect_all_cards():
+	for card in cards_in_hand:
+		if card.has_method("deselect_card"):
+			card.deselect_card()
+
+# Handle card selection
+func on_card_selected(card):
+	# Deselect all other cards first
+	for c in cards_in_hand:
+		if c != card and c.has_method("deselect_card"):
+			c.deselect_card()
+	
+	print("Hand: Card selected - ", card.card_name)
+
+# Get the currently selected card
+func get_selected_card():
+	for card in cards_in_hand:
+		if card.has_method("is_card_selected") and card.is_card_selected():
+			return card
+	return null
+
+# End the current turn
+func end_turn():
+	print("Hand: Ending turn via keyboard")
+	
+	# Deselect all cards when ending turn
+	deselect_all_cards()
+	
+	# Find the battle manager to end the turn
+	var battle_manager = get_parent()
+	while battle_manager and not battle_manager.has_method("end_turn"):
+		battle_manager = battle_manager.get_parent()
+	
+	if battle_manager and battle_manager.has_method("end_turn"):
+		battle_manager.end_turn()
+	else:
+		print("Hand: Could not find battle manager to end turn")
+
+# Automatically select the first card in hand (for controller flow)
+func auto_select_first_card():
+	if cards_in_hand.size() > 0:
+		# Make sure no cards are selected first
+		deselect_all_cards()
+		
+		# Wait a tiny bit to ensure everything is updated
+		await get_tree().create_timer(0.1).timeout
+		
+		# Select the first card
+		if cards_in_hand.size() > 0:  # Check again in case hand changed
+			cards_in_hand[0].select_card()
+			print("Hand: Auto-selected first card for controller: ", cards_in_hand[0].card_name)
