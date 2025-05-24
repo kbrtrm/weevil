@@ -251,13 +251,13 @@ func apply_damage_effect(target, amount):
 		
 		# Add to scene
 		target.add_child(damage_popup)  # Add to the target node instead of scene root
-		damage_popup.global_position = target.global_position + Vector2(0, -20)
+		damage_popup.global_position = target.global_position + Vector2(20, -20)
 		
 		# Animate
 		var tween = create_tween()
 		tween.set_ease(Tween.EASE_OUT)
-		tween.tween_property(damage_popup, "global_position", target.global_position + Vector2(0, -40), 0.5)
-		tween.parallel().tween_property(damage_popup, "modulate", Color(damage_popup.modulate.r, damage_popup.modulate.g, damage_popup.modulate.b, 0), 0.5)
+		tween.tween_property(damage_popup, "global_position", target.global_position + Vector2(20, -40), 1.0)
+		tween.parallel().tween_property(damage_popup, "modulate", Color(damage_popup.modulate.r, damage_popup.modulate.g, damage_popup.modulate.b, 0), 1.0)
 		
 		# Remove after animation
 		tween.tween_callback(func(): damage_popup.queue_free())

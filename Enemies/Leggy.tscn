@@ -24,7 +24,7 @@ animations = [{
 [node name="Leggy" instance=ExtResource("1_vvkto")]
 enemy_data = {
 "base_damage": 12,
-"max_health": 32,
+"max_health": 20,
 "name": "Enemy"
 }
 MAX_SPEED = 50.0

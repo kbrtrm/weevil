@@ -42,8 +42,6 @@ func _ready():
 	update_block_display()
 	update_status_display()
 	
-	
-	
 	if health_bar:
 		health_bar.set_health(health, max_health)
 	
@@ -55,40 +53,46 @@ func take_damage(amount: int):
 	# Ensure amount is an integer
 	amount = int(amount)
 	print("Enemy.take_damage: Called with amount = " + str(amount))
-	print("Enemy.take_damage: Current block = " + str(block))
+	print("Enemy.take_damage: Current health = " + str(health) + ", Current block = " + str(block))
 	
 	# Apply vulnerable effect (50% more damage)
 	var actual_damage = amount
 	if vulnerable > 0:
 		var vulnerable_multiplier = 1.5
 		actual_damage = int(floor(actual_damage * vulnerable_multiplier))
-		print("Enemy.take_damage: Vulnerable applied! Damage increased to " + str(actual_damage))
+		print("Enemy.take_damage: Vulnerable applied! Damage increased from " + str(amount) + " to " + str(actual_damage))
+	
+	# Store original values for comparison
+	var original_damage = actual_damage
+	var original_block = block
+	var original_health = health
 	
 	# Apply damage reduction from block
+	var damage_to_health = actual_damage
 	if block > 0:
 		var block_reduction = min(block, actual_damage)
-		block_reduction = int(block_reduction)  # Ensure integer
-		actual_damage -= block_reduction
-		block -= block_reduction
-		print("Enemy.take_damage: Block absorbed " + str(block_reduction) + " damage. Remaining block: " + str(block))
-		print("Enemy.take_damage: Damage after block: " + str(actual_damage))
-		update_block_display()
+		damage_to_health = actual_damage - block_reduction
+		block = block - block_reduction
+		print("Enemy.take_damage: Block absorbed " + str(block_reduction) + " damage")
+		print("Enemy.take_damage: Remaining damage to health: " + str(damage_to_health))
+		print("Enemy.take_damage: Block remaining: " + str(block))
 	
 	# Apply the remaining damage to health
-	actual_damage = int(actual_damage)  # Ensure integer
-	var old_health = health
-	health = max(0, health - actual_damage)
-	print("Enemy.take_damage: Health reduced from " + str(old_health) + " to " + str(health) + " (damage taken: " + str(old_health - health) + ")")
+	if damage_to_health > 0:
+		health = max(0, health - damage_to_health)
+		print("Enemy.take_damage: Health reduced from " + str(original_health) + " to " + str(health))
 	
 	# Emit signal
 	emit_signal("health_changed", health, max_health)
 	
-	# Update UI
+	# Update UI - block first, then health
+	update_block_display()
 	update_health_display()
 	
-	# Add this after updating health_label
+	# Update health bar with proper values
 	if health_bar:
 		health_bar.set_health(health, max_health)
+		print("Enemy.take_damage: Updated health bar to " + str(health) + "/" + str(max_health))
 	
 	# Check for death
 	if health <= 0:
@@ -244,12 +248,12 @@ func execute_intent():
 			
 			damage_label.add_theme_font_size_override("font_size", 16)
 			player.add_child(damage_label)
-			damage_label.position = Vector2(0, -20)
+			damage_label.position = Vector2(20, -20)
 			
 			# Animate and remove
 			var tween = create_tween()
-			tween.tween_property(damage_label, "position", Vector2(0, -40), 1.0)
-			#tween.parallel().tween_property(damage_label, "modulate", damage_label.modulate.with_alpha(0), 0.5)
+			tween.tween_property(damage_label, "position", Vector2(20, -40), 1.0)
+			tween.parallel().tween_property(damage_label, "modulate", Color(damage_label.modulate.r, damage_label.modulate.g, damage_label.modulate.b, 0), 1.0)
 			tween.tween_callback(func(): damage_label.queue_free())
 			
 		"defend":
@@ -349,9 +353,11 @@ func update_status_display():
 
 # Helper function to add a status icon
 func add_status_icon(status_name, amount, color):
+	var custom_font = load("res://Themes/Tiny Click2.ttf")
 	var icon = Label.new()
 	icon.text = status_name.capitalize() + "\n" + str(amount)
 	icon.add_theme_color_override("font_color", color)
+	icon.add_theme_font_override("normal_font", custom_font)
 	icon.add_theme_font_size_override("font_size", 8)
 	icon.custom_minimum_size = Vector2(40, 25)
 	

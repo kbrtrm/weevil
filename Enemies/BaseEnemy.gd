@@ -20,8 +20,8 @@ const EnemyDeathEffect = preload("res://Enemies/EnemyDeathEffect.tscn")
 # Base enemy data - should be customized by inherited enemies
 @export var enemy_data: Dictionary = {
 	"name": "Enemy", 
-	"max_health": 10,
-	"base_damage": 4
+	"max_health": 12,
+	"base_damage": 5
 }
 
 # Movement parameters - can be adjusted per enemy type

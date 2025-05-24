@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://f4785n66umoe"]
+[gd_scene load_steps=20 format=3 uid="uid://f4785n66umoe"]
 
 [ext_resource type="Script" uid="uid://d3snmc607dybd" path="res://Battle/Enemy.gd" id="1_w44d8"]
 [ext_resource type="Texture2D" uid="uid://b7ygoyj2685ty" path="res://Images/big-cig.png" id="2_13415"]
 [ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_13415"]
 [ext_resource type="Texture2D" uid="uid://br8iu6bnl22p1" path="res://Images/big-cig-idle.png" id="3_oxexe"]
+[ext_resource type="Script" uid="uid://buxrlecsg0ems" path="res://Battle/IntentLabel.gd" id="4_kq2ar"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_nkp60"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nkp60"]
@@ -133,9 +134,14 @@ offset_bottom = 40.0
 [node name="IntentLabel" type="Label" parent="."]
 offset_left = -13.0
 offset_top = -54.0
-offset_right = 27.0
-offset_bottom = -32.0
+offset_right = 19.0
+offset_bottom = -43.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 8
+text = "5 DMG"
+horizontal_alignment = 1
+script = ExtResource("4_kq2ar")
 
 [node name="StatusContainer" type="HBoxContainer" parent="."]
 offset_top = 44.0
