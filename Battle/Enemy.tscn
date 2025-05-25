@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://f4785n66umoe"]
+[gd_scene load_steps=21 format=3 uid="uid://f4785n66umoe"]
 
 [ext_resource type="Script" uid="uid://d3snmc607dybd" path="res://Battle/Enemy.gd" id="1_w44d8"]
 [ext_resource type="Texture2D" uid="uid://b7ygoyj2685ty" path="res://Images/big-cig.png" id="2_13415"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://br8iu6bnl22p1" path="res://Images/big-cig-idle.png" id="3_oxexe"]
 [ext_resource type="Script" uid="uid://buxrlecsg0ems" path="res://Battle/IntentLabel.gd" id="4_kq2ar"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="5_nkp60"]
+[ext_resource type="Texture2D" uid="uid://dqxmvsvxjm1up" path="res://Images/block-bg.png" id="7_dddou"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nkp60"]
 atlas = ExtResource("3_oxexe")
@@ -184,10 +185,16 @@ theme_override_fonts/font = ExtResource("5_nkp60")
 theme_override_font_sizes/font_size = 8
 horizontal_alignment = 1
 
-[node name="BlockLabel" type="Label" parent="."]
-offset_left = -44.0
-offset_top = 30.0
-offset_right = -37.0
-offset_bottom = 41.0
+[node name="BlockBG" type="Sprite2D" parent="."]
+position = Vector2(-41, 35)
+texture = ExtResource("7_dddou")
+
+[node name="BlockLabel" type="Label" parent="BlockBG"]
+offset_left = -7.0
+offset_top = -5.0
+offset_right = 9.0
+offset_bottom = 6.0
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 8
 text = "5	"
+horizontal_alignment = 1

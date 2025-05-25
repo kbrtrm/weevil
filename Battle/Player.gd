@@ -19,7 +19,8 @@ var dexterity: int = 0
 # UI references
 @onready var health_label = $HealthLabel
 @onready var block_icon = $BlockIcon
-@onready var block_label = $BlockLabel
+@onready var block_label = $BlockBG/BlockLabel
+@onready var block_bg = $BlockBG
 @onready var status_container = $StatusContainer
 @onready var health_bar = $HealthBarContainer/HealthBar
 
@@ -184,9 +185,10 @@ func update_block_display():
 			block_label.text = str(int(block))
 			block_label.visible = true
 			# Show icon only if we have block
-			block_icon.visible = block > 0
+			block_bg.visible = block > 0
 		else:
 			block_label.visible = false
+			block_bg.visible = false
 	
 	update_health_bar_color()
 
