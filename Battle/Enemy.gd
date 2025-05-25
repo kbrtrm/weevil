@@ -6,6 +6,11 @@ signal block_changed(amount)
 signal status_applied(status_type, amount)
 signal enemy_died
 
+# At the top of your script
+@onready var custom_font = load("res://Themes/Tiny Click2.ttf") as FontFile
+
+const StatusIconScene = preload("res://Battle/StatusIcon.tscn")
+
 # Enemy stats
 @export var enemy_name: String = "Enemy"
 @export var max_health: int = 15
@@ -111,9 +116,15 @@ func add_block(amount: int):
 
 # Add weak status effect
 func add_weak(amount: int):
+	var old_weak = weak
 	weak += amount
 	emit_signal("status_applied", "weak", weak)
 	update_status_display()
+	
+	# Recalculate intent value if this affects damage
+	if intent == "attack":
+		recalculate_intent_value()
+		print("Enemy: Weak applied! Damage reduced from previous calculation")
 
 # Add vulnerable status effect
 func add_vulnerable(amount: int):
@@ -129,9 +140,15 @@ func add_bleed(amount: int):
 
 # Add strength status effect
 func add_strength(amount: int):
+	var old_strength = strength
 	strength += amount
 	emit_signal("status_applied", "strength", strength)
 	update_status_display()
+	
+	# Recalculate damage with new strength
+	if intent == "attack":
+		recalculate_damage_with_strength()
+		print("Enemy: Strength changed! New damage: ", intent_value)
 
 # Called at the start of the enemy's turn
 func start_turn():
@@ -176,11 +193,22 @@ func end_turn():
 	# DO NOT reset block here, keep it for player attacks
 	print("Enemy.end_turn: Block preserved for player attacks: " + str(block))
 	
+	# Store old values to see if they changed
+	var old_weak = weak
+	var old_strength = strength
+	
 	# Reduce duration of status effects
 	if weak > 0:
 		weak -= 1
+		print("Enemy: Weak reduced to ", weak)
 	if vulnerable > 0:
 		vulnerable -= 1
+		print("Enemy: Vulnerable reduced to ", vulnerable)
+	
+	# Recalculate intent if status effects that affect damage changed
+	if (old_weak != weak or old_strength != strength) and intent == "attack":
+		recalculate_intent_value()
+		print("Enemy: Status effects expired, recalculated damage")
 	
 	# Update status display
 	update_status_display()
@@ -351,15 +379,59 @@ func update_status_display():
 	if strength > 0:
 		add_status_icon("strength", strength, Color(0.9, 0.1, 0.3))  # Red
 
-# Helper function to add a status icon
+# Updated helper function to add a status icon
 func add_status_icon(status_name, amount, color):
-	var custom_font = load("res://Themes/Tiny Click2.ttf")
-	var icon = Label.new()
-	icon.text = status_name.capitalize() + "\n" + str(amount)
-	icon.add_theme_color_override("font_color", color)
-	icon.add_theme_font_override("normal_font", custom_font)
-	icon.add_theme_font_size_override("font_size", 8)
-	icon.custom_minimum_size = Vector2(40, 25)
+	var status_icon = StatusIconScene.instantiate()
+	
+	# Set up the status data
+	status_icon.setup_status(status_name, amount, color)
 	
 	# Add to status container
-	status_container.add_child(icon)
+	status_container.add_child(status_icon)
+	
+	# Optional: Animate the new status icon
+	status_icon.animate_update()
+
+# Recalculate the current intent value based on current status effects
+func recalculate_intent_value():
+	match intent:
+		"attack":
+			var base_attack = base_damage + strength
+			intent_value = int(base_attack)
+			
+			# Apply weak effect (25% less damage)
+			if weak > 0:
+				intent_value = int(floor(intent_value * 0.75))
+				
+		"defend":
+			# Defend value doesn't change with status effects usually
+			pass
+		"buff":
+			# Buff value doesn't change with status effects usually
+			pass
+	
+	# Update the UI to show the new intent value
+	update_intent_display()
+	print("Enemy: Recalculated intent value to ", intent_value, " (weak stacks: ", weak, ")")
+
+# Recalculate damage when strength changes
+func recalculate_damage_with_strength():
+	if intent == "attack":
+		var base_attack = base_damage + strength
+		intent_value = int(base_attack)
+		
+		# Still apply weak if present
+		if weak > 0:
+			intent_value = int(floor(intent_value * 0.75))
+		
+		update_intent_display()
+		print("Enemy: Recalculated damage with strength. New value: ", intent_value)
+		
+# Call this whenever a status effect changes that could affect current intent
+func on_status_effect_changed():
+	# Only recalculate if we have a current intent that could be affected
+	if intent == "attack":
+		recalculate_intent_value()
+	
+	# Update the display
+	update_status_display()

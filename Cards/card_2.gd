@@ -297,6 +297,10 @@ func apply_weak_effect(target, amount):
 		
 		# Apply the actual status
 		target.add_weak(amount)
+		
+		# If target has a method to recalculate, call it
+		if target.has_method("on_status_effect_changed"):
+			target.on_status_effect_changed()
 	else:
 		print("Warning: Target cannot be weakened")
 

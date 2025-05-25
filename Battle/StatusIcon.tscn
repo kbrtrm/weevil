@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckd22cqojps5b"]
+
+[ext_resource type="Script" uid="uid://cqkckk55layp8" path="res://StatusIcon.gd" id="1_vlub1"]
+[ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="2_kuw1s"]
+
+[node name="StatusIcon" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_vlub1")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+theme_override_fonts/font = ExtResource("2_kuw1s")
