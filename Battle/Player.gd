@@ -187,6 +187,8 @@ func update_block_display():
 			block_icon.visible = block > 0
 		else:
 			block_label.visible = false
+	
+	update_health_bar_color()
 
 # Player.gd - Updated update_status_display function
 func update_status_display():
@@ -217,3 +219,8 @@ func add_status_icon(status_name, amount, color):
 	
 	# Add to status container
 	status_container.add_child(icon)
+
+# Update health bar color based on block status
+func update_health_bar_color():
+	if health_bar and health_bar.has_method("set_block_status"):
+		health_bar.set_block_status(block)

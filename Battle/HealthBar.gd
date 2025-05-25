@@ -11,7 +11,12 @@ extends ProgressBar
 @export var normal_color: Color = Color(0.886275, 0.294118, 0.294118, 1)  # Default red
 @export var low_health_color: Color = Color(0.886275, 0.694118, 0.294118, 1)  # Orange-ish
 @export var critical_health_color: Color = Color(0.886275, 0.1, 0.1, 1)  # Deep red
-@export var damage_flash_color: Color = Color(1, 1, 1, 1)  # White flash
+@export var damage_flash_color: Color = Color(1, 1, 1, 1)  # White flash# Add this to the existing color settings section
+
+@export var block_color: Color = Color(0.4, 0.7, 1.0, 1)  # Blue when blocked
+
+# Add this to track block state
+var has_block: bool = false
 
 # Style references
 var fill_style: StyleBoxFlat
@@ -98,23 +103,44 @@ func find_battle_manager():
 		node = node.get_parent()
 	return null
 
-# Update the color based on current health percentage
+# Update the color based on current health percentage and block status
 func update_color():
 	if not fill_style:
 		return
 		
-	var health_percent = value / max_value
-	var new_color_state = "normal"
+	var target_color: Color
+	var new_color_state: String
 	
-	if health_percent <= critical_health_threshold:
-		fill_style.bg_color = critical_health_color
-		new_color_state = "critical"
-	elif health_percent <= low_health_threshold:
-		fill_style.bg_color = low_health_color
-		new_color_state = "low"
+	if has_block:
+		# Always use block color when character has block
+		target_color = block_color
+		new_color_state = "block"
 	else:
-		fill_style.bg_color = normal_color
-		new_color_state = "normal"
+		# Use normal health-based colors when no block
+		var health_percent = value / max_value
+		
+		if health_percent <= critical_health_threshold:
+			target_color = critical_health_color
+			new_color_state = "critical"
+		elif health_percent <= low_health_threshold:
+			target_color = low_health_color
+			new_color_state = "low"
+		else:
+			target_color = normal_color
+			new_color_state = "normal"
+	
+	# Apply the color
+	fill_style.bg_color = target_color
 	
 	# Update the current color state
 	current_color_state = new_color_state
+
+# Set whether the character currently has block
+func set_block_status(block_amount: int):
+	var old_has_block = has_block
+	has_block = block_amount > 0
+	
+	# Only update color if block status changed
+	if old_has_block != has_block:
+		update_color()
+		print("HealthBar: Block status changed to ", has_block, " (", block_amount, " block)")

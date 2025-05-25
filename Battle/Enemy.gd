@@ -335,6 +335,9 @@ func update_block_display():
 	
 	if block_icon:
 		block_icon.visible = block > 0
+	
+	# Update health bar color based on block status
+	update_health_bar_color()
 
 # Update intent display
 # Add to Enemy.gd update_intent_display function
@@ -435,3 +438,8 @@ func on_status_effect_changed():
 	
 	# Update the display
 	update_status_display()
+
+# Update health bar color based on block status
+func update_health_bar_color():
+	if health_bar and health_bar.has_method("set_block_status"):
+		health_bar.set_block_status(block)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://cfclpv7nguuy6"]
+[gd_scene load_steps=14 format=4 uid="uid://cfclpv7nguuy6"]
 
 [ext_resource type="PackedScene" uid="uid://bv1l6ncr2ys7m" path="res://Objects/FlowerForget.tscn" id="1_1aoan"]
 [ext_resource type="Script" uid="uid://bf8tqjj5uiprc" path="res://testing_ground.gd" id="1_alr7o"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="6_1phy5"]
 [ext_resource type="PackedScene" uid="uid://did8gsi1equgt" path="res://Objects/Grass.tscn" id="9_4n245"]
 [ext_resource type="TileSet" uid="uid://qjsutyvr8ytu" path="res://Tiles/CliffTiles.tres" id="9_mja7a"]
+[ext_resource type="PackedScene" uid="uid://debfi031l8823" path="res://Enemies/BaseEnemy.tscn" id="11_4n245"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4n245"]
 texture = ExtResource("2_ycv7h")
@@ -84,6 +85,9 @@ position = Vector2(424, 192)
 
 [node name="SpawnPoint" parent="." instance=ExtResource("5_ytm02")]
 position = Vector2(268, 186)
+
+[node name="BaseEnemy" parent="." instance=ExtResource("11_4n245")]
+position = Vector2(332, 56)
 
 [editable path="MushroomTall"]
 [editable path="Camera2D"]
