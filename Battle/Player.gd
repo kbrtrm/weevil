@@ -226,3 +226,27 @@ func add_status_icon(status_name, amount, color):
 func update_health_bar_color():
 	if health_bar and health_bar.has_method("set_block_status"):
 		health_bar.set_block_status(block)
+
+# Animate player entrance from the left
+func animate_entrance():
+	print("Player: Starting entrance animation")
+	
+	# Store the final position
+	var final_position = global_position
+	
+	# Move player off-screen to the left
+	global_position.x = final_position.x - 300  # Start 300 pixels to the left
+	
+	# Create entrance animation
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# Slide in from left with a bounce
+	tween.tween_property(self, "global_position", final_position, 0.8)
+	
+	# Optional: Add a slight scale effect
+	scale = Vector2(0.8, 0.8)  # Start smaller
+	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
+	
+	print("Player: Entrance animation started")

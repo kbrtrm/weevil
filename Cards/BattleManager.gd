@@ -18,6 +18,9 @@ func _ready():
 	# Set up enemies from Global data
 	setup_enemies()
 	
+	# Start entrance animations
+	animate_battle_start()
+	
 	# Wait for Global to initialize the deck
 	if not Global.deck_initialized:
 		print("BattleManager: Waiting for deck to be initialized...")
@@ -203,3 +206,46 @@ func get_player():
 			return child
 	
 	return null
+
+# Animate the start of battle (supports multiple enemies)
+func animate_battle_start():
+	print("BattleManager: Starting battle entrance animations")
+	
+	# Get player
+	var player = get_player()
+	
+	# Get all enemies
+	var enemies = get_all_enemies()
+	
+	# Start player animation
+	if player and player.has_method("animate_entrance"):
+		player.animate_entrance()
+	
+	# Start enemy animations with staggered delays
+	for i in range(enemies.size()):
+		var enemy = enemies[i]
+		if enemy and enemy.has_method("animate_entrance"):
+			# Pass the enemy index and total count for positioning
+			enemy.animate_entrance(i, enemies.size())
+	
+	print("BattleManager: Started animations for ", enemies.size(), " enemies")
+	
+# Get all enemies in the battle
+func get_all_enemies():
+	var enemies = []
+	
+	# First try to get enemies from the group
+	var enemy_group = get_tree().get_nodes_in_group("enemies")
+	for enemy in enemy_group:
+		# Make sure the enemy is a child of this battle scene
+		if is_ancestor_of(enemy):
+			enemies.append(enemy)
+	
+	# If no enemies found in group, search children manually
+	if enemies.size() == 0:
+		for child in get_children():
+			if child.name.begins_with("Enemy") or child.has_method("take_damage"):
+				enemies.append(child)
+	
+	print("BattleManager: Found ", enemies.size(), " enemies")
+	return enemies

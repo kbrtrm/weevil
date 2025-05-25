@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ci055lk3xgre8"]
+[gd_scene load_steps=18 format=3 uid="uid://ci055lk3xgre8"]
 
 [ext_resource type="Script" uid="uid://cltxpk31u7frt" path="res://Cards/CardManager.gd" id="1_4pxya"]
 [ext_resource type="Script" uid="uid://bcahcb1040btf" path="res://Cards/BattleManager.gd" id="1_aifkc"]
@@ -6,11 +6,14 @@
 [ext_resource type="Script" uid="uid://6o3owerqtyai" path="res://Cards/Hand.gd" id="4_4pxya"]
 [ext_resource type="Script" uid="uid://bgv0hfrekxq4q" path="res://Cards/DiscardPile.gd" id="4_44pfk"]
 [ext_resource type="Texture2D" uid="uid://e8plwoybv3m7" path="res://Cards/discard.png" id="4_yllga"]
-[ext_resource type="FontFile" uid="uid://dyitowryjv2n" path="res://Themes/chunkypeep.ttf" id="5_aus0a"]
 [ext_resource type="Texture2D" uid="uid://8e5scb54cfaa" path="res://Battle/drop-target.png" id="6_e3ex1"]
 [ext_resource type="Script" uid="uid://bad7tekpftsc6" path="res://Cards/EnergryManager.gd" id="6_jisrp"]
 [ext_resource type="Script" uid="uid://xoe3picbl4o2" path="res://Cards/DropTarget.gd" id="7_jisrp"]
+[ext_resource type="Texture2D" uid="uid://bgnqtmsfoyork" path="res://Images/medallion-string-top.png" id="8_r41ye"]
+[ext_resource type="Texture2D" uid="uid://dsjd028k2qt54" path="res://Images/energy-medallion.png" id="9_jdjj0"]
+[ext_resource type="FontFile" uid="uid://daln0igw8kye4" path="res://Themes/chunk-peep-3.ttf" id="10_r41ye"]
 [ext_resource type="PackedScene" uid="uid://bvd2l65i7q5l7" path="res://Battle/Player.tscn" id="11_eevyr"]
+[ext_resource type="Texture2D" uid="uid://vravmwicdaqr" path="res://Images/meddallion-string-bottom.png" id="11_uj7yp"]
 [ext_resource type="PackedScene" uid="uid://f4785n66umoe" path="res://Battle/Enemy.tscn" id="12_qiokm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jisrp"]
@@ -68,16 +71,32 @@ text = "0"
 [node name="EnergyManager" type="Node2D" parent="."]
 script = ExtResource("6_jisrp")
 
-[node name="Energy" type="Label" parent="EnergyManager"]
-offset_left = 18.0
-offset_top = 277.0
-offset_right = 58.0
-offset_bottom = 299.0
-theme_override_fonts/font = ExtResource("5_aus0a")
-theme_override_font_sizes/font_size = 8
+[node name="Sprite2D" type="Sprite2D" parent="EnergyManager"]
+position = Vector2(20, 238)
+texture = ExtResource("8_r41ye")
+
+[node name="Energy-medallion" type="Sprite2D" parent="EnergyManager"]
+position = Vector2(38, 248)
+texture = ExtResource("9_jdjj0")
+offset = Vector2(0.5, 19.5)
+
+[node name="Energy" type="Label" parent="EnergyManager/Energy-medallion"]
+texture_filter = 1
+offset_left = -19.0
+offset_top = 12.0
+offset_right = 21.0
+offset_bottom = 34.0
+theme_override_colors/font_outline_color = Color(0.545184, 0.334739, 0.0639389, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("10_r41ye")
+theme_override_font_sizes/font_size = 21
 text = "3/3"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Sprite2D2" type="Sprite2D" parent="EnergyManager"]
+position = Vector2(20, 245)
+texture = ExtResource("11_uj7yp")
 
 [node name="DropTarget" type="Area2D" parent="."]
 position = Vector2(316, 69)

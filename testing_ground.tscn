@@ -42,6 +42,11 @@ position = Vector2(311, 173)
 
 [node name="Cig" parent="." instance=ExtResource("3_71d8t")]
 position = Vector2(168, 195)
+enemy_data = {
+"base_damage": 6,
+"max_health": 14,
+"name": "Enemy"
+}
 
 [node name="Cig2" parent="." instance=ExtResource("3_71d8t")]
 position = Vector2(521, 183)
@@ -88,6 +93,11 @@ position = Vector2(268, 186)
 
 [node name="BaseEnemy" parent="." instance=ExtResource("11_4n245")]
 position = Vector2(332, 56)
+enemy_data = {
+"base_damage": 6,
+"max_health": 14,
+"name": "Enemy"
+}
 
 [editable path="MushroomTall"]
 [editable path="Camera2D"]

@@ -446,3 +446,41 @@ func on_status_effect_changed():
 func update_health_bar_color():
 	if health_bar and health_bar.has_method("set_block_status"):
 		health_bar.set_block_status(block)
+
+# Animate enemy entrance from the right (supports multiple enemies)
+func animate_entrance(enemy_index: int = 0, total_enemies: int = 1):
+	print("Enemy: Starting entrance animation (", enemy_index + 1, " of ", total_enemies, ")")
+	
+	# Store the final position
+	var final_position = global_position
+	
+	# Calculate staggered starting positions for multiple enemies
+	var base_offset = 400  # Base distance off-screen
+	var vertical_spread = 30  # Vertical spacing between enemies
+	var delay_per_enemy = 0.15  # Delay between each enemy
+	
+	# Start position calculation
+	var start_x = final_position.x + base_offset + (enemy_index * 50)  # Each enemy starts further right
+	var start_y = final_position.y - (vertical_spread * (total_enemies - 1) / 2) + (enemy_index * vertical_spread)
+	
+	# Move enemy to starting position
+	global_position = Vector2(start_x, start_y)
+	
+	# Calculate delay based on enemy index
+	var entrance_delay = 0.2 + (enemy_index * delay_per_enemy)
+	
+	# Wait for the calculated delay
+	await get_tree().create_timer(entrance_delay).timeout
+	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# Slide in from right with a bounce
+	tween.tween_property(self, "global_position", final_position, 0.8)
+	
+	# Optional: Add a slight scale effect
+	scale = Vector2(0.8, 0.8)  # Start smaller
+	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
+	
+	print("Enemy ", enemy_index + 1, ": Entrance animation started with ", entrance_delay, "s delay")

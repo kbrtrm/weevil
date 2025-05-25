@@ -46,3 +46,8 @@ spawn_point_name = "auto_from_2"
 
 [node name="Leggy" parent="." instance=ExtResource("6_is5ge")]
 position = Vector2(170, 13)
+enemy_data = {
+"base_damage": 14,
+"max_health": 64,
+"name": "Enemy"
+}

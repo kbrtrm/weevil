@@ -10,7 +10,7 @@ signal insufficient_energy
 var current_energy: int = max_energy
 
 # UI elements
-@onready var energy_label = $Energy
+@onready var energy_label = $"Energy-medallion/Energy"
 
 func _ready():
 	# Initialize energy display
@@ -28,6 +28,10 @@ func use_energy(amount: int) -> bool:
 	if current_energy >= amount:
 		current_energy -= amount
 		update_display()
+		
+		# Play skew animation when energy is successfully used
+		play_energy_used_effect()
+		
 		emit_signal("energy_changed", current_energy, max_energy)
 		return true
 	else:
@@ -66,3 +70,26 @@ func play_insufficient_energy_effect():
 		var original_color = energy_label.modulate
 		tween.parallel().tween_property(energy_label, "modulate", Color(1.0, 0.3, 0.3, 1.0), 0.1)
 		tween.tween_property(energy_label, "modulate", original_color, 0.1)
+
+# Play skew animation when energy is used
+func play_energy_used_effect():
+	# Get the energy medallion node for the skew effect
+	var energy_medallion = $"Energy-medallion"
+	
+	if energy_medallion:
+		# Store original transform
+		var original_skew = energy_medallion.skew
+		
+		# Create skew animation
+		var tween = create_tween()
+		tween.set_ease(Tween.EASE_OUT)
+		tween.set_trans(Tween.TRANS_BACK)
+		
+		# Skew left slightly, then return to normal
+		tween.tween_property(energy_medallion, "skew", -0.15, 0.1)
+		tween.tween_property(energy_medallion, "skew", original_skew, 0.2)
+		
+		# Optional: Add a slight scale pulse too
+		var original_scale = energy_medallion.scale
+		tween.parallel().tween_property(energy_medallion, "scale", original_scale * 0.95, 0.1)
+		tween.tween_property(energy_medallion, "scale", original_scale, 0.2)
