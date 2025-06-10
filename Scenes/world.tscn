@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -2390,6 +2390,9 @@ texture = ExtResource("20_f1fvu")
 [sub_resource type="TileSet" id="TileSet_2m5mm"]
 sources/0 = SubResource("TileSetAtlasSource_1vso6")
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_qebug"]
+polygon = PackedVector2Array(-54, -1, -55, -24, -48, -31, -10, -40, 12, -38, 47, -33, 54, -26, 54, -8, 53, 0, 33, 12, 13, 17, -15, 16, -39, 10)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5esn"]
 radius = 8.06226
 
@@ -2399,6 +2402,7 @@ radius = 8.06226
 script = ExtResource("1_nwgro")
 
 [node name="PuddleBG" type="ColorRect" parent="."]
+visible = false
 offset_left = 12.0
 offset_top = -28.0
 offset_right = 500.0
@@ -2445,13 +2449,11 @@ position = Vector2(-96, 68)
 position = Vector2(410, 101)
 
 [node name="PathTileMap" type="TileMap" parent="YSort"]
-visible = false
 tile_set = SubResource("TileSet_avqbg")
 format = 2
 layer_0/tile_data = PackedInt32Array(851989, 196608, 0, 917525, 196608, 1, 983061, 196608, 1, 1048597, 458752, 3, 1048596, 65536, 3, 1048595, 65536, 3, 1048594, 262144, 3, 983057, 65536, 3, 983056, 65536, 3, 983055, 65536, 3, 983054, 65536, 3, 983058, 458752, 0, 983053, 65536, 3, 983052, 262144, 3, 917516, 196608, 1, 851980, 196608, 1, 786444, 196608, 1, 720908, 262144, 0, 720909, 131072, 3, 327696, 0, 0, 327697, 65536, 0, 196625, 0, 3, 196626, 393216, 0, 196627, 131072, 0, 262163, 65536, 1, 262164, 65536, 0, 262165, 589824, 1, 196629, 0, 0, 196630, 327680, 0, 196631, 65536, 3, 196632, 65536, 3, 196633, 65536, 3, 196634, 458752, 0, 262170, 262144, 3, 262171, 458752, 0, 327707, 262144, 3, 327708, 458752, 0, 393244, 196608, 1, 458780, 196608, 1, 524316, 262144, 3, 524317, 458752, 0, 589853, 196608, 1, 655389, 196608, 1, 720925, 196608, 1, 786461, 196608, 1, 851997, 196608, 2, 983069, 131072, 3, 983068, 0, 3, 262162, 0, 1, 327698, 393216, 2, 327699, 327680, 1, 327700, 65536, 2, 327701, 131072, 2, 262166, 131072, 2, 393233, 65536, 2, 393234, 65536, 2, 393235, 131072, 2, 393232, 0, 2)
 
 [node name="PathTileMap2" type="TileMap" parent="YSort"]
-visible = false
 tile_set = SubResource("TileSet_avqbg")
 format = 2
 layer_0/tile_data = PackedInt32Array(851989, 196608, 0, 917525, 196608, 1, 983061, 196608, 1, 1048597, 458752, 3, 1048596, 65536, 3, 1048595, 65536, 3, 1048594, 262144, 3, 983057, 65536, 3, 983056, 65536, 3, 983055, 65536, 3, 983054, 65536, 3, 983058, 458752, 0, 983053, 65536, 3, 983052, 262144, 3, 917516, 196608, 1, 851980, 196608, 1, 786444, 196608, 1, 720908, 262144, 0, 720909, 131072, 3, 327696, 0, 0, 327697, 65536, 0, 196625, 0, 3, 196626, 393216, 0, 196627, 131072, 0, 262163, 65536, 1, 262164, 65536, 0, 262165, 589824, 1, 196629, 0, 0, 196630, 327680, 0, 196631, 65536, 3, 196632, 65536, 3, 196633, 65536, 3, 196634, 1572865, 27, 262170, 1572865, 28, 262171, 786433, 33, 327707, 1572865, 25, 327708, 786433, 33, 393244, 262145, 6, 458780, 196608, 1, 524316, 262145, 6, 524317, 458752, 0, 589853, 196608, 1, 655389, 196608, 1, 720925, 196608, 1, 786461, 196608, 1, 851997, 196608, 2, 983069, 131072, 3, 983068, 0, 3, 262162, 0, 1, 327698, 393216, 2, 327699, 327680, 1, 327700, 65536, 2, 327701, 131072, 2, 262166, 131072, 2, 393233, 65536, 2, 393234, 65536, 2, 393235, 131072, 2, 393232, 0, 2, 196635, 1638401, 27, 196636, 1703937, 27, 262172, 1703937, 28)
@@ -2465,7 +2467,6 @@ layer_0/y_sort_enabled = true
 layer_0/tile_data = PackedInt32Array(131088, 131072, 2, 131087, 0, 2, -65527, 327680, 1, -65526, 65536, 2, -65525, 65536, 2, -65524, 65536, 2, -65523, 65536, 2, -65522, 393216, 1, 14, 0, 1, 9, 131072, 1, 8, 65536, 1, 65545, 131072, 2, 65544, 327680, 1, 65550, 0, 2, 65551, 393216, 1, 15, 65536, 1, -65521, 65536, 1, -65520, 65536, 1, -131057, 65536, 1, -131058, 65536, 1, -131059, 65536, 1, -131060, 65536, 1, -131061, 65536, 1, -131062, 65536, 1, -131063, 65536, 1, -65528, 65536, 1, 7, 65536, 1, 65543, 393216, 1, 16, 327680, 1, 65552, 131072, 1, 131079, 0, 2, 131080, 131072, 2, 65542, 0, 2, -196595, 65536, 0, -65518, 131072, 2, -131054, 131072, 1, -196590, 131072, 0, -65519, 327680, 1, -131055, 65536, 1, -196591, 65536, 0, -131056, 65536, 1, -196592, 65536, 0, -196593, 65536, 0, -196594, 65536, 0, -196596, 65536, 0, -196597, 65536, 0, -196598, 65536, 0, -196599, 65536, 0, -131064, 65536, 1, -196600, 65536, 0, -65529, 65536, 1, -131065, 65536, 1, -196601, 65536, 0, -65530, 393216, 1, -131066, 65536, 1, -196602, 65536, 0, -65531, 65536, 2, -131067, 65536, 1, -196603, 65536, 0, -65532, 0, 2, -131068, 0, 1, -196604, 0, 0, 17, 131072, 2, 6, 0, 1)
 
 [node name="Stones" type="TileMap" parent="YSort"]
-visible = false
 y_sort_enabled = true
 tile_set = SubResource("TileSet_2m5mm")
 format = 2
@@ -2481,6 +2482,10 @@ offset = Vector2(0, -2)
 position = Vector2(384, 32)
 collision_mask = 3
 
+[node name="LightOccluder2D" type="LightOccluder2D" parent="YSort/Pot"]
+visible = false
+occluder = SubResource("OccluderPolygon2D_qebug")
+
 [node name="Door" type="Area2D" parent="YSort/Pot"]
 position = Vector2(0, -3)
 collision_layer = 3
@@ -2491,7 +2496,7 @@ position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_s5esn")
 
 [node name="Player2" parent="YSort" groups=["player"] instance=ExtResource("1_c3ret")]
-position = Vector2(354, 120)
+position = Vector2(311, 136)
 
 [node name="Stone1" type="Sprite2D" parent="YSort"]
 position = Vector2(416, 99)
@@ -3229,12 +3234,13 @@ position = Vector2(500, 133)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
-color = Color(0.364706, 0.458824, 0.470588, 1)
+color = Color(0.0980392, 0.137255, 0.196078, 1)
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
 visible = false
-energy = 0.0
-blend_mode = 2
+rotation = -0.785398
+enabled = false
+shadow_enabled = true
 shadow_color = Color(0.396889, 0.396889, 0.396889, 0)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

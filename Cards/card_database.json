@@ -40,14 +40,14 @@
 	{
 	  "id": "rubber_band",
 	  "name": "Rubber Band",
-	  "cost": 1,
-	  "description": "Deal 4 damage.\nApply 4 vulnerable.",
+	  "cost": 2,
+	  "description": "Deal 8 damage.\nApply 2 vulnerable.",
 	  "effects": [
-		{"type": "damage", "value": 4, "target": "enemy"},
-		{"type": "vulnerable", "value": 4, "target": "enemy"}
+		{"type": "damage", "value": 8, "target": "enemy"},
+		{"type": "vulnerable", "value": 2, "target": "enemy"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/cig.png",
+	  "artwork_path": "res://Images/press-on-nail.png",
 	  "type": "attack"
 	},
 	{

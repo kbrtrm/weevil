@@ -78,7 +78,7 @@ func initialize_deck():
 		if add_card_to_deck("pebble"):
 			success_count += 1
 	
-	# 3 Paperclips
+	# 1 Paperclips
 	for i in range(1):
 		if add_card_to_deck("paperclip"):
 			success_count += 1
@@ -97,9 +97,9 @@ func initialize_deck():
 	#if add_card_to_deck("gum"):
 		#success_count += 1
 		#
-	## 1 Rubber band
-	#if add_card_to_deck("rubber_band"):
-		#success_count += 1
+	# 1 Rubber band
+	if add_card_to_deck("rubber_band"):
+		success_count += 1
 #
 	## 1 Thumbtack
 	#if add_card_to_deck("thumbtack"):
