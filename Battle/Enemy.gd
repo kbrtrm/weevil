@@ -303,21 +303,15 @@ func die():
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color(1, 1, 1, 0), 1.0)
 	
-	# When animation is done, end the battle with our transition
+	# When animation is done, check if all enemies are defeated
 	tween.tween_callback(func():
-		# Find the battle manager to end the battle
+		# Find the battle manager to check battle status
 		var battle_manager = get_parent()
-		if battle_manager and battle_manager.has_method("end_battle"):
-			print("Enemy: Calling battle_manager.end_battle(true)")
-			battle_manager.end_battle(true)  # true = player won
+		if battle_manager and battle_manager.has_method("check_battle_end"):
+			print("Enemy: Calling battle_manager.check_battle_end()")
+			battle_manager.check_battle_end()
 		else:
-			# If we can't find the battle manager, call Global directly
-			print("Enemy: Could not find battle_manager, calling Global directly")
-			var global = get_node("/root/Global")
-			if global and global.has_method("return_to_overworld"):
-				global.return_to_overworld(true)  # true = player won
-			else:
-				print("ERROR: Could not find Global or return_to_overworld method!")
+			print("Enemy: Could not find battle_manager or check_battle_end method!")
 	)
 
 # Update the health display
@@ -482,5 +476,12 @@ func animate_entrance(enemy_index: int = 0, total_enemies: int = 1):
 	# Optional: Add a slight scale effect
 	scale = Vector2(0.8, 0.8)  # Start smaller
 	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
+	
+	# Emit signal when animation is complete
+	tween.finished.connect(func():
+		print("Enemy ", enemy_index + 1, ": Entrance animation finished")
+		# Emit a custom signal that BattleManager can listen for
+		get_tree().call_group("battle_managers", "on_enemy_entrance_complete", enemy_index)
+	)
 	
 	print("Enemy ", enemy_index + 1, ": Entrance animation started with ", entrance_delay, "s delay")

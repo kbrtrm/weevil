@@ -249,4 +249,11 @@ func animate_entrance():
 	scale = Vector2(0.8, 0.8)  # Start smaller
 	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
 	
+	# Emit signal when animation is complete
+	tween.finished.connect(func():
+		print("Player: Entrance animation finished")
+		# Emit a custom signal that BattleManager can listen for
+		get_tree().call_group("battle_managers", "on_player_entrance_complete")
+	)
+	
 	print("Player: Entrance animation started")

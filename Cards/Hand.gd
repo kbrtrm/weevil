@@ -29,16 +29,11 @@ var hovered_card = null
 
 # Called when the node enters the scene tree
 func _ready() -> void:
-	print("Hand: _ready() called")
-	
 	# Wait for Global.deck to be initialized
 	if not Global.deck_initialized:
-		print("Hand: Waiting for Global.deck to be initialized...")
 		await Global.deck_initialized_signal
 	
 	# Initialize and shuffle deck
-	print("Hand: Initializing deck with " + str(Global.deck.size()) + " cards")
-	
 	if Global.deck.size() == 0:
 		push_error("Hand: Global.deck is empty after initialization!")
 		# Create an emergency deck to avoid crashes
@@ -51,12 +46,9 @@ func _ready() -> void:
 	
 	# Update UI initially
 	update_ui()
-	
-	print("Hand: Ready complete, deck size: " + str(deck.size()))
 
 # Create an emergency deck if everything else fails
 func create_emergency_deck():
-	print("Hand: Creating emergency deck!")
 	deck = [
 		{
 			"name": "Emergency Card",
@@ -76,16 +68,12 @@ func create_emergency_deck():
 
 # Draw specified number of cards
 func draw_card(count: int = 1):
-	print("Hand: Drawing " + str(count) + " cards. Current deck size: " + str(deck.size()))
-	
 	# Check if we need to reshuffle before attempting to draw
 	if deck.size() == 0 and discard_pile and discard_pile.discarded_cards.size() > 0:
-		print("Hand: Draw pile is empty! Reshuffling discard pile before drawing...")
 		reshuffle_discard_pile()
 	
 	# Now proceed with drawing if possible
 	if deck.size() == 0:
-		print("Hand: Cannot draw cards - deck is empty and no cards in discard pile!")
 		return
 	
 	for i in range(count):
@@ -100,10 +88,8 @@ func draw_card(count: int = 1):
 		var card_data = deck.pop_front()
 		
 		if card_data == null:
-			print("Error: Tried to draw a card but card_data is null!")
 			continue
 			
-		print("Hand: Drawing card: " + card_data.name)
 		var card = CardScene.instantiate()
 		
 		# Set properties
@@ -204,7 +190,6 @@ func move_card_to_discard(card):
 # This is called by CardManager after the card_played signal
 func remove_card_from_hand(card):
 	if card in cards_in_hand:
-		print("Removing card from hand: ", card.card_name)
 		cards_in_hand.erase(card)
 		arrange_cards()
 		update_ui()
@@ -254,29 +239,111 @@ func _input(event: InputEvent) -> void:
 				if card_number < cards_in_hand.size():
 					deselect_all_cards()
 					cards_in_hand[card_number].select_card()
+			KEY_E:
+				# Debug key to reduce energy (for testing insufficient energy)
+				var battle_manager = get_battle_manager()
+				if battle_manager:
+					var energy_manager = battle_manager.get_node_or_null("EnergyManager")
+					if energy_manager and energy_manager.has_method("use_energy"):
+						energy_manager.use_energy(1)
+						print("Hand: DEBUG - Reduced energy by 1")
 
 # Handle card drag started
 func on_card_drag_started(card):
+	card_being_dragged = card
+	
 	# Clear highlights on other cards
 	for c in cards_in_hand:
 		if c != card and c.has_method("set_highlight"):
 			c.set_highlight(false)
+	
+	# Show targeting indicators
+	show_targeting_indicators()
 
-# Handle card drag ended
+# Handle card drag ended - SIMPLE VERSION
 func on_card_drag_ended(card, drop_position):
-	# Check if dropped on a valid target
+	card_being_dragged = null
+	
+	# Hide targeting indicators
+	hide_targeting_indicators()
+	
+	# Use simple targeting
 	var drop_target = get_drop_target_at_position(drop_position)
 	
 	if drop_target:
-		# Valid drop - emit signal on the drop target
-		if drop_target.has_signal("card_played"):
-			drop_target.emit_signal("card_played", card)
+		# Get target information from our simple system
+		var target_node = drop_target.target_node
+		var target_type = drop_target.target_type
+		
+		# Check if the card can be played (energy cost, etc.) - but don't remove it yet
+		if can_play_card(card):
+			# Play the card with targeting information
+			play_card_on_target(card, target_node, target_type, drop_target)
 		else:
-			# Fallback - return to hand and select
-			return_card_to_hand_and_select(card)
+			# Can't play card - return to hand with shake effect
+			return_card_to_hand(card, true)  # true = shake for insufficient energy
 	else:
 		# Invalid drop - return to hand and select
 		return_card_to_hand_and_select(card)
+
+# Check if a card can be played (energy requirements, etc.)
+func can_play_card(card) -> bool:
+	# Get the energy manager
+	var battle_manager = get_battle_manager()
+	var energy_manager = null
+	if battle_manager:
+		energy_manager = battle_manager.get_node_or_null("EnergyManager")
+	
+	if energy_manager and energy_manager.has_method("can_play_card"):
+		return energy_manager.can_play_card(card.card_cost)
+	elif energy_manager and energy_manager.has_method("get_current_energy"):
+		var current_energy = energy_manager.get_current_energy()
+		return current_energy >= card.card_cost
+	else:
+		return true
+
+# Play a card on a specific target
+func play_card_on_target(card, target_node, target_type, drop_target):
+	# Get the energy manager to check and deduct energy
+	var battle_manager = get_battle_manager()
+	var energy_manager = null
+	if battle_manager:
+		energy_manager = battle_manager.get_node_or_null("EnergyManager")
+	
+	# Try to use energy - the EnergyManager will handle the check and deduction
+	var energy_used_successfully = false
+	if energy_manager and energy_manager.has_method("use_energy"):
+		energy_used_successfully = energy_manager.use_energy(card.card_cost)
+		
+		if not energy_used_successfully:
+			# Return card to hand with shake effect
+			return_card_to_hand(card, true)  # true = shake for insufficient energy
+			return  # Exit early - don't play the card
+	else:
+		energy_used_successfully = true
+	
+	# Only proceed if energy was successfully used
+	if energy_used_successfully:
+		# Remove card from hand ONLY after energy is successfully used
+		cards_in_hand.erase(card)
+		
+		# Apply card effects with targeting
+		if card.has_method("play_effect"):
+			card.play_effect(target_node, target_type)
+		
+		# Move card to discard pile
+		move_card_to_discard(card)
+		
+		# Update hand arrangement
+		arrange_cards()
+		update_ui()
+
+# Helper function to get battle manager
+func get_battle_manager():
+	var node = get_parent()
+	while node and not node.has_method("get_player"):
+		node = node.get_parent()
+	return node
 
 # Helper function to return a card to its original position in hand
 # Added a parameter to control whether the card should shake
@@ -428,24 +495,37 @@ func get_top_card_at_position(position):
 	# Return the topmost card (first after sorting)
 	return candidates[0]
 
-# Get a drop target at position
+# Get a drop target at position - NEW VERSION using actual drop zones
 func get_drop_target_at_position(position):
-	var targets = get_tree().get_nodes_in_group("drop_targets")
+	# Get all drop zone Area2D nodes
+	var drop_zones = get_tree().get_nodes_in_group("drop_targets")
 	
-	for target in targets:
-		if target is Area2D and target.has_node("CollisionShape2D"):
-			var collision = target.get_node("CollisionShape2D")
-			var shape = collision.shape
+	# Check each drop zone to see if position is inside it
+	for drop_zone in drop_zones:
+		if not is_instance_valid(drop_zone):
+			continue
 			
-			if shape is RectangleShape2D:
-				# Make sure we're using Vector2 for all calculations
-				var global_pos = Vector2(target.global_position)
-				var extents = Vector2(shape.extents)
+		var collision_shape = drop_zone.get_node_or_null("CollisionShape2D")
+		if not collision_shape or not collision_shape.shape:
+			continue
+		
+		# Convert global position to drop zone's local space
+		var local_pos = drop_zone.to_local(position)
+		
+		# Check if position is inside the collision shape
+		if collision_shape.shape is RectangleShape2D:
+			var rect_shape = collision_shape.shape as RectangleShape2D
+			var rect = Rect2(-rect_shape.size/2, rect_shape.size)
+			
+			if rect.has_point(local_pos):
+				var target_node = drop_zone.get_meta("target_node", null)
+				var target_type = drop_zone.get_meta("target_type", "unknown")
 				
-				var rect = Rect2(global_pos - extents, extents * 2)
-				
-				if rect.has_point(position):
-					return target
+				return {
+					"target_node": target_node,
+					"target_type": target_type,
+					"drop_zone": drop_zone
+				}
 	
 	return null
 
@@ -574,11 +654,8 @@ func discard_card_to_pile(card):
 func reshuffle_discard_pile():
 	# First, check if we have a discard pile reference
 	if not discard_pile or discard_pile.discarded_cards.size() <= 0:
-		print("No cards in discard pile to reshuffle!")
 		return
 		
-	print("Reshuffling discard pile into deck...")
-	
 	# Create a temporary array to hold card data
 	var cards_to_add = []
 	
@@ -830,6 +907,46 @@ func end_turn():
 		battle_manager.end_turn()
 	else:
 		print("Hand: Could not find battle manager to end turn")
+
+# Show targeting indicators when dragging - TRANSPARENT VERSION
+func show_targeting_indicators():
+	# Get all drop zones
+	var drop_zones = get_tree().get_nodes_in_group("drop_targets")
+	
+	for drop_zone in drop_zones:
+		if not is_instance_valid(drop_zone):
+			continue
+			
+		# Keep drop zones transparent - no color changes
+		var visual_indicator = drop_zone.get_node_or_null("VisualIndicator")
+		if visual_indicator:
+			# Don't change color or visibility - keep them invisible
+			pass
+
+func create_targeting_indicator(target_node: Node2D, target_type: String, color: Color):
+	var indicator = ColorRect.new()
+	indicator.size = Vector2(80, 80)  # Match the targeting radius (80px)
+	indicator.color = color
+	indicator.position = target_node.global_position - Vector2(40, 40)  # Center it
+	indicator.name = "TargetIndicator_" + target_type
+	indicator.z_index = 500
+	
+	# Add to the scene root so it's visible over everything
+	get_tree().root.add_child(indicator)
+
+# Hide targeting indicators - TRANSPARENT VERSION
+func hide_targeting_indicators():
+	# Get all drop zones and ensure their indicators stay hidden
+	var drop_zones = get_tree().get_nodes_in_group("drop_targets")
+	
+	for drop_zone in drop_zones:
+		if not is_instance_valid(drop_zone):
+			continue
+			
+		var visual_indicator = drop_zone.get_node_or_null("VisualIndicator")
+		if visual_indicator:
+			# Keep indicators transparent and hidden
+			visual_indicator.visible = false
 
 # Automatically select the first card in hand (for controller flow)
 func auto_select_first_card():

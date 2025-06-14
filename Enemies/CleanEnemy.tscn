@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5hqioep5yqh2"]
+
+[ext_resource type="Script" uid="uid://cwm2h74mv5rj7" path="res://Enemies/EnemyAI.gd" id="1_0ds7v"]
+[ext_resource type="Script" uid="uid://bjauiqgqfygjd" path="res://Enemies/CleanEnemyDebugVisuals.gd" id="2_wcm4c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ds7v"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0ds7v"]
+radius = 120.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wcm4c"]
+radius = 60.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6dete"]
+radius = 25.0
+
+[node name="CleanEnemy" type="CharacterBody2D"]
+script = ExtResource("1_0ds7v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_0ds7v")
+
+[node name="VisionDetection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionDetection"]
+shape = SubResource("CircleShape2D_0ds7v")
+
+[node name="ProximityDetection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ProximityDetection"]
+shape = SubResource("CircleShape2D_wcm4c")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="DebugVisuals" type="Node2D" parent="."]
+script = ExtResource("2_wcm4c")
+
+[node name="CombatInitiationZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatInitiationZone"]
+shape = SubResource("CircleShape2D_6dete")

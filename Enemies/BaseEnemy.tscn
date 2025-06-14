@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://debfi031l8823"]
+[gd_scene load_steps=24 format=3 uid="uid://debfi031l8823"]
 
 [ext_resource type="Script" uid="uid://sssvemy665oo" path="res://Enemies/BaseEnemy.gd" id="1_nqv13"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_26bxb"]
@@ -9,7 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://ohip8s50m1p4" path="res://Enemies/PlayerDetectionZone.tscn" id="7_hognv"]
 [ext_resource type="PackedScene" uid="uid://cl1dof02i12ey" path="res://Enemies/CombatInitiationZone.tscn" id="8_80u5b"]
 [ext_resource type="PackedScene" uid="uid://d1roke5pysj1u" path="res://Overlap/SoftCollision.tscn" id="9_7hxor"]
+[ext_resource type="Script" uid="uid://b2qx2kw1hbbr1" path="res://Player/PlayerCombatZone.gd" id="9_g23w7"]
 [ext_resource type="PackedScene" uid="uid://fn8ny30lak10" path="res://Enemies/WanderController.tscn" id="10_10vgi"]
+[ext_resource type="Script" uid="uid://b01tbj4f0iwx0" path="res://Enemies/LineOfSightDetection.gd" id="11_dm783"]
+[ext_resource type="Script" uid="uid://bdhcncuikmme5" path="res://Enemies/EnemyDebugVisuals.gd" id="12_u3dmr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7txtk"]
 resource_local_to_scene = true
@@ -56,6 +59,9 @@ radius = 8.06226
 [sub_resource type="CircleShape2D" id="CircleShape2D_7tsep"]
 radius = 3.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_dm783"]
+radius = 120.0
+
 [node name="BaseEnemy" type="CharacterBody2D"]
 collision_layer = 16
 script = ExtResource("1_nqv13")
@@ -97,6 +103,9 @@ self_modulate = Color(1, 0.384314, 0.635294, 0.278431)
 shape = SubResource("CircleShape2D_tyo12")
 
 [node name="CombatInitiationZone" parent="." instance=ExtResource("8_80u5b")]
+script = ExtResource("9_g23w7")
+group_radius = 150.0
+coordination_time = 2.0
 
 [node name="CollisionShape2D" parent="CombatInitiationZone" index="0"]
 position = Vector2(0, -3)
@@ -109,6 +118,22 @@ position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_7tsep")
 
 [node name="WanderController" parent="." instance=ExtResource("10_10vgi")]
+
+[node name="LineOfSightDetection" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("11_dm783")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LineOfSightDetection"]
+shape = SubResource("CircleShape2D_dm783")
+
+[node name="DebugVisuals" type="Node2D" parent="."]
+visible = false
+script = ExtResource("12_u3dmr")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 4.0
+target_desired_distance = 8.0
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_hurtbox_invincibility_ended"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://bd8hnf38x5qp6"]
+[gd_scene load_steps=60 format=3 uid="uid://bd8hnf38x5qp6"]
 
 [ext_resource type="Script" uid="uid://btthinmkwp752" path="res://Player/Player.gd" id="1_py2js"]
 [ext_resource type="Texture2D" uid="uid://mde8wbx6gtlw" path="res://Images/terb-shadow.png" id="2_1i6o0"]
@@ -343,6 +343,9 @@ _data = {
 radius = 7.0
 height = 20.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0j2ni"]
+radius = 35.0
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(2.08165e-12, 2.08165e-12)
 collision_layer = 2
@@ -482,6 +485,11 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_of1wa")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+
+[node name="CombatInitiationZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatInitiationZone"]
+shape = SubResource("CircleShape2D_0j2ni")
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_hurtbox_invincibility_ended"]

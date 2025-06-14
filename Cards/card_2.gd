@@ -61,18 +61,8 @@ func _ready() -> void:
 	var area = get_node_or_null("Panel/Area2D")
 	if area:
 		area.input_pickable = true
-		print("Card: Found Area2D node and set input_pickable = true")
 	else:
 		print("Card: WARNING - Area2D node not found! Card will not be draggable.")
-
-	# Debug: Print what nodes we actually found
-	print("Card: Available nodes in card:")
-	print("  - cost_label: ", cost_label != null)
-	print("  - name_label: ", name_label != null)
-	print("  - description_label: ", description_label != null)
-	print("  - art_texture: ", art_texture != null)
-	print("  - type_texture: ", type_texture != null)
-	print("  - hover_highlight: ", hover_highlight != null)
 
 # Center the pivot point
 func center_pivot():
@@ -95,7 +85,6 @@ func set_highlight(state: bool, is_selection: bool = false):
 
 # Called when mouse enters the card
 func _on_area_2d_mouse_entered():
-	print("Card: Mouse entered card: ", card_name)
 	# Only highlight if not currently dragging AND not already selected
 	if not being_dragged and not is_selected:
 		set_highlight(true)
@@ -107,7 +96,6 @@ func _on_area_2d_mouse_entered():
 
 # Called when mouse exits the card
 func _on_area_2d_mouse_exited():
-	print("Card: Mouse exited card: ", card_name)
 	# Only turn off highlight if not being dragged AND not selected
 	if not being_dragged and not is_selected:
 		set_highlight(false)
@@ -121,7 +109,7 @@ func _on_area_2d_mouse_exited():
 func start_drag():
 	if not draggable:
 		return
-		
+	
 	# Store original state
 	original_position = global_position
 	original_rotation = rotation
@@ -161,15 +149,13 @@ func _process(delta):
 		global_position = get_global_mouse_position() - drag_offset
 		rotation_degrees = 0  # Keep card upright while dragging
 
-# Card effect when played
-func play_effect():
-	print("Playing card: ", card_name)
-	
+# Card effect when played - now supports targeting
+func play_effect(target_node = null, target_type = ""):
 	# Get card data from the database
 	var card_data = CardDatabase.get_card_by_name(card_name)
 	
 	if not card_data:
-		print("Warning: Card data not found for: ", card_name)
+		print("Card: WARNING - Card data not found for: ", card_name)
 		return
 	
 	# Find the battle scene/manager to apply effects
@@ -178,10 +164,11 @@ func play_effect():
 	if battle_manager:
 		# Apply each effect in sequence
 		if "effects" in card_data:
-			for effect in card_data.effects:
-				apply_effect(battle_manager, effect)
+			for i in range(card_data.effects.size()):
+				var effect = card_data.effects[i]
+				apply_effect(battle_manager, effect, target_node, target_type)
 	else:
-		print("Warning: Could not find battle manager to apply card effects")
+		print("Card: WARNING - Could not find battle manager to apply card effects")
 		
 # Find the battle manager to apply effects
 func find_battle_manager():
@@ -192,24 +179,29 @@ func find_battle_manager():
 	
 	return node
 	
-# Apply a specific effect from the JSON data
-func apply_effect(battle_manager, effect_data):
-	# Get needed references based on target
-	var target_node = null
+# Apply a specific effect from the JSON data - now supports targeting
+func apply_effect(battle_manager, effect_data, target_node = null, target_type = ""):
+	# Determine the actual target based on effect and targeting
+	var actual_target = null
 	
-	match effect_data.target:
-		"enemy":
-			target_node = battle_manager.get_enemy()
-		"player":
-			target_node = battle_manager.get_player()
-		"all_enemies":
-			# Handle area effects later
-			pass
-		_:
-			print("Warning: Unknown target type: ", effect_data.target)
-			return
+	# If we have a specific target from drag and drop, use that for compatible effects
+	if target_node and is_effect_compatible_with_target(effect_data, target_type):
+		actual_target = target_node
+	else:
+		# Use the effect's default target
+		match effect_data.target:
+			"enemy":
+				actual_target = battle_manager.get_enemy()
+			"player":
+				actual_target = battle_manager.get_player()
+			"all_enemies":
+				# Handle area effects later
+				pass
+			_:
+				print("Warning: Unknown target type: ", effect_data.target)
+				return
 	
-	if not target_node:
+	if not actual_target and effect_data.target != "all_enemies":
 		print("Warning: Target node not found for effect: ", effect_data.type)
 		return
 	
@@ -219,21 +211,46 @@ func apply_effect(battle_manager, effect_data):
 	
 	match effect_type:
 		"damage":
-			apply_damage_effect(target_node, value)
+			apply_damage_effect(actual_target, value)
 		"block":
-			apply_block_effect(target_node, value)
+			apply_block_effect(actual_target, value)
 		"weak":
-			apply_weak_effect(target_node, value)
+			apply_weak_effect(actual_target, value)
 		"vulnerable":
-			apply_vulnerable_effect(target_node, value)
+			apply_vulnerable_effect(actual_target, value)
 		"heal":
-			apply_heal_effect(target_node, value)
+			apply_heal_effect(actual_target, value)
 		"draw":
 			apply_draw_effect(battle_manager, value)
 		"bleed":
-			apply_bleed_effect(target_node, value)
+			apply_bleed_effect(actual_target, value)
 		_:
 			print("Warning: Unknown effect type: ", effect_type)
+
+# Check if an effect is compatible with a target type
+func is_effect_compatible_with_target(effect_data, target_type) -> bool:
+	var effect_type = effect_data.type
+	var effect_target = effect_data.target
+	
+	# Player-only effects
+	if effect_type in ["block", "heal"] and target_type == "player":
+		return true
+	
+	# Enemy-only effects  
+	if effect_type in ["damage", "weak", "vulnerable", "bleed"] and target_type.begins_with("enemy"):
+		return true
+	
+	# Effects that work on anyone
+	if effect_type in ["draw"]:
+		return true
+	
+	# Check if the effect's original target matches the drop target
+	if effect_target == "player" and target_type == "player":
+		return true
+	if effect_target == "enemy" and target_type.begins_with("enemy"):
+		return true
+		
+	return false
 
 # Apply damage to a target
 func apply_damage_effect(target, amount):
@@ -607,8 +624,6 @@ func select_card():
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_selected"):
 		hand.on_card_selected(self)
-	
-	print("Card selected: ", card_name)
 
 # Deselect the card
 func deselect_card():
@@ -618,8 +633,6 @@ func deselect_card():
 	is_selected = false
 	z_index = original_z_index
 	set_highlight(false)  # Turn off highlight when deselected
-	
-	print("Card deselected: ", card_name)
 
 # Check if this card is selected
 func is_card_selected() -> bool:

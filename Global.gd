@@ -10,6 +10,7 @@ var game_paused = false
 
 # Battle system variables
 var current_battle_enemies = []
+var current_battle_enemy_ids = []  # Array of all enemy IDs participating in current battle
 var player_position = Vector2.ZERO
 # With a more robust tracking system:
 var previous_scene_path = ""  # Scene before battle

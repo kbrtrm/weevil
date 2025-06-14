@@ -14,5 +14,3 @@ func _ready():
 
 func set_highlight(enabled: bool) -> void:
 	highlight.visible = enabled
-
-

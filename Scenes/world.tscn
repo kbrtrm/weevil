@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://b0kityejrtyxw"]
+[gd_scene load_steps=42 format=3 uid="uid://b0kityejrtyxw"]
 
 [ext_resource type="PackedScene" uid="uid://bd8hnf38x5qp6" path="res://Player/Player.tscn" id="1_c3ret"]
 [ext_resource type="Script" uid="uid://bjmrnwupwex3i" path="res://Scenes/world.gd" id="1_nwgro"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://1anxryrsiyvu" path="res://Objects/FlowerYellow.tscn" id="26_d4n0h"]
 [ext_resource type="PackedScene" uid="uid://cefaj3xu83cnx" path="res://Objects/FlowerWeed.tscn" id="26_fx2x1"]
 [ext_resource type="PackedScene" uid="uid://cwmac8dvyokld" path="res://PauseMenu.tscn" id="26_llsrg"]
+[ext_resource type="PackedScene" uid="uid://debfi031l8823" path="res://Enemies/BaseEnemy.tscn" id="27_o2rbt"]
 [ext_resource type="PackedScene" uid="uid://cbu62geg7l61q" path="res://SpawnPoint.tscn" id="27_qebug"]
 [ext_resource type="Texture2D" uid="uid://bbgofi6tyg4ww" path="res://Images/moss-clump-large.png" id="28_uwreq"]
 [ext_resource type="PackedScene" uid="uid://bvlk2ijkg2y1l" path="res://Camera/PlayerFollowCamera.tscn" id="29_qebug"]
@@ -3231,6 +3232,9 @@ texture = ExtResource("28_uwreq")
 
 [node name="Marker2D" parent="YSort" instance=ExtResource("27_qebug")]
 position = Vector2(500, 133)
+
+[node name="BaseEnemy" parent="YSort" instance=ExtResource("27_o2rbt")]
+position = Vector2(502, 178)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
