@@ -354,71 +354,72 @@ var entrance_animations_completed = 0
 var total_entrance_animations = 0
 var drop_zones_setup = false
 
-# Animate the start of battle (supports multiple enemies)
+# Animate the start of battle - enemies jump in first, then player slides in
 func animate_battle_start():
 	print("BattleManager: Starting battle entrance animations")
 	
-	# Get player
+	# Get player and enemies
 	var player = get_player()
-	print("BattleManager: Found player: ", player != null)
-	
-	# Get all enemies
 	var enemies = get_all_enemies()
+	
+	print("BattleManager: Found player: ", player != null)
 	print("BattleManager: Found enemies: ", enemies.size())
 	for i in range(enemies.size()):
 		print("BattleManager: Enemy ", i, " name: ", enemies[i].name, " position: ", enemies[i].position)
 	
-	# Calculate total animations
-	total_entrance_animations = 0
+	# Hide player during enemy entrance animations
+	if player and player.has_method("hide_for_enemy_entrance"):
+		player.hide_for_enemy_entrance()
+	
+	# Reset animation tracking
 	entrance_animations_completed = 0
-	drop_zones_setup = false  # Reset this flag
+	total_entrance_animations = enemies.size()  # Only count enemies for first phase
+	drop_zones_setup = false
 	
-	if player and player.has_method("animate_entrance"):
-		total_entrance_animations += 1
-		print("BattleManager: Player will animate")
-	
-	for enemy in enemies:
-		if enemy.has_method("animate_entrance"):
-			total_entrance_animations += 1
-			print("BattleManager: Enemy ", enemy.name, " will animate")
-	
-	print("BattleManager: Expecting ", total_entrance_animations, " entrance animations")
-	
-	# Start player animation
-	if player and player.has_method("animate_entrance"):
-		player.animate_entrance()
-		print("BattleManager: Started player animation")
-	
-	# Start enemy animations with staggered delays
+	# Phase 1: Start all enemy jump animations (they will be staggered internally)
+	print("BattleManager: Starting enemy jump animations...")
 	for i in range(enemies.size()):
 		var enemy = enemies[i]
 		if enemy and enemy.has_method("animate_entrance"):
 			enemy.animate_entrance(i, enemies.size())
-			print("BattleManager: Started enemy ", i, " (", enemy.name, ") animation")
+			print("BattleManager: Started enemy ", i, " (", enemy.name, ") jump animation")
 	
-	print("BattleManager: All animations started")
+	# Wait for all enemies to complete their animations
+	while entrance_animations_completed < total_entrance_animations:
+		await get_tree().process_frame
+	
+	print("BattleManager: All enemy jump animations complete! Starting player slide animation...")
+	
+	# Phase 2: Start player slide animation after enemies are done
+	if player and player.has_method("animate_entrance"):
+		# Reset tracking for player animation
+		entrance_animations_completed = 0
+		total_entrance_animations = 1  # Now just counting the player
+		
+		player.animate_entrance()
+		print("BattleManager: Started player slide animation")
+		
+		# Wait for player animation to complete
+		while entrance_animations_completed < total_entrance_animations:
+			await get_tree().process_frame
+	
+	print("BattleManager: All entrance animations complete! Setting up drop zones...")
+	
+	# Set up drop zones after all animations are complete
+	await get_tree().create_timer(0.1).timeout  # Small delay to ensure everything is settled
+	setup_drop_zones()
 
 # Called by Player when entrance animation completes
 func on_player_entrance_complete():
 	entrance_animations_completed += 1
 	print("BattleManager: Player entrance completed (", entrance_animations_completed, "/", total_entrance_animations, ")")
-	check_setup_drop_zones()
 
 # Called by Enemy when entrance animation completes
 func on_enemy_entrance_complete(enemy_index: int):
 	entrance_animations_completed += 1
 	print("BattleManager: Enemy ", enemy_index + 1, " entrance completed (", entrance_animations_completed, "/", total_entrance_animations, ")")
-	check_setup_drop_zones()
 
-# Check if we should setup drop zones
-func check_setup_drop_zones():
-	if not drop_zones_setup and entrance_animations_completed >= total_entrance_animations:
-		drop_zones_setup = true
-		print("BattleManager: All entrance animations complete! Setting up drop zones...")
-		# Add a tiny delay to ensure everything is settled
-		await get_tree().create_timer(0.1).timeout
-		setup_drop_zones()
-	
+
 # Get all enemies in the battle
 func get_all_enemies():
 	var enemies = []

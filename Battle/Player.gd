@@ -23,10 +23,15 @@ var dexterity: int = 0
 @onready var block_bg = $BlockBG
 @onready var status_container = $StatusContainer
 @onready var health_bar = $HealthBarContainer/HealthBar
+@onready var animated_sprite = $AnimatedSprite2D
+@onready var slide_sprite = $SlideSprite
 
 func _ready():
 	# Add to player group
 	add_to_group("player")
+	
+	# Set up sprites for entrance animation
+	setup_sprites_for_entrance()
 	
 	# Initialize UI
 	update_health_display()
@@ -227,15 +232,63 @@ func update_health_bar_color():
 	if health_bar and health_bar.has_method("set_block_status"):
 		health_bar.set_block_status(block)
 
-# Animate player entrance from the left
+# Set up sprites for entrance animation
+func setup_sprites_for_entrance():
+	if slide_sprite and animated_sprite:
+		# Load the slide sprite texture with the correct filename
+		var slide_texture = load("res://Battle/terb-slide-in.png")
+		if slide_texture:
+			slide_sprite.texture = slide_texture
+			print("Player: Loaded terb-slide-in.png successfully")
+		else:
+			# Fallback: Try other possible locations
+			slide_texture = load("res://Images/terb-slide-in.png")
+			if slide_texture:
+				slide_sprite.texture = slide_texture
+				print("Player: Loaded terb-slide-in.png from Images folder")
+			else:
+				print("Player: terb-slide-in.png not found in Battle or Images folders")
+		
+		# Initially show slide sprite, hide animated sprite
+		slide_sprite.visible = true
+		animated_sprite.visible = false
+		
+		print("Player: Sprites set up for entrance animation")
+
+# Hide player completely until entrance animation starts
+func hide_for_enemy_entrance():
+	visible = false
+	print("Player: Hidden for enemy entrance animations")
+
+# Show player when entrance animation starts
+func show_for_entrance():
+	visible = true
+	print("Player: Made visible for entrance animation")
+
+# Switch from slide sprite to animated sprite
+func switch_to_animated_sprite():
+	if slide_sprite and animated_sprite:
+		slide_sprite.visible = false
+		animated_sprite.visible = true
+		print("Player: Switched to animated sprite")
+
+# Animate player entrance from the left with sliding sprite
 func animate_entrance():
-	print("Player: Starting entrance animation")
+	print("Player: Starting entrance animation with slide sprite")
+	
+	# Make player visible when entrance animation starts
+	show_for_entrance()
 	
 	# Store the final position
 	var final_position = global_position
 	
-	# Move player off-screen to the left
-	global_position.x = final_position.x - 300  # Start 300 pixels to the left
+	# Move player completely off-screen to the left
+	# Get viewport width to ensure we're truly off-screen
+	var viewport_width = get_viewport().get_visible_rect().size.x
+	var off_screen_distance = viewport_width / 2 + 100  # Add extra margin to be completely off-screen
+	global_position.x = final_position.x - off_screen_distance
+	
+	print("Player: Starting position: ", global_position, " Final position: ", final_position)
 	
 	# Create entrance animation
 	var tween = create_tween()
@@ -249,11 +302,13 @@ func animate_entrance():
 	scale = Vector2(0.8, 0.8)  # Start smaller
 	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
 	
-	# Emit signal when animation is complete
+	# When animation completes, switch sprites and notify battle manager
 	tween.finished.connect(func():
-		print("Player: Entrance animation finished")
+		print("Player: Entrance animation finished, switching to animated sprite")
+		switch_to_animated_sprite()
+		
 		# Emit a custom signal that BattleManager can listen for
 		get_tree().call_group("battle_managers", "on_player_entrance_complete")
 	)
 	
-	print("Player: Entrance animation started")
+	print("Player: Entrance animation started with slide sprite")

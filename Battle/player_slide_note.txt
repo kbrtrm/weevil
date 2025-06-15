@@ -1,0 +1,2 @@
+# This file will hold the slide sprite image data
+# We'll need to manually copy the uploaded PNG to res://Battle/player_slide.png

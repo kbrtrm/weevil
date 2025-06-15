@@ -441,47 +441,70 @@ func update_health_bar_color():
 	if health_bar and health_bar.has_method("set_block_status"):
 		health_bar.set_block_status(block)
 
-# Animate enemy entrance from the right (supports multiple enemies)
+# Animate enemy entrance jumping from the top right corner (supports multiple enemies)
 func animate_entrance(enemy_index: int = 0, total_enemies: int = 1):
-	print("Enemy: Starting entrance animation (", enemy_index + 1, " of ", total_enemies, ")")
+	print("Enemy: Starting jump entrance animation (", enemy_index + 1, " of ", total_enemies, ")")
 	
 	# Store the final position
 	var final_position = global_position
 	
-	# Calculate staggered starting positions for multiple enemies
-	var base_offset = 400  # Base distance off-screen
-	var vertical_spread = 30  # Vertical spacing between enemies
-	var delay_per_enemy = 0.15  # Delay between each enemy
+	# Calculate staggered starting positions from top right corner
+	var viewport_size = get_viewport().get_visible_rect().size
+	var base_offset_x = 200  # Distance to the right of screen
+	var base_offset_y = 300  # Distance above the screen
+	var stagger_delay = 1.2  # Much longer delay between each enemy jump for clear visibility
 	
-	# Start position calculation
-	var start_x = final_position.x + base_offset + (enemy_index * 50)  # Each enemy starts further right
-	var start_y = final_position.y - (vertical_spread * (total_enemies - 1) / 2) + (enemy_index * vertical_spread)
+	# Calculate starting position from top right corner
+	var start_x = viewport_size.x + base_offset_x + (enemy_index * 80)  # Much more spacing between enemies
+	var start_y = -base_offset_y - (enemy_index * 50)  # Much more vertical stagger in the air
 	
-	# Move enemy to starting position
+	# Move enemy to starting position (off-screen top right)
 	global_position = Vector2(start_x, start_y)
 	
-	# Calculate delay based on enemy index
-	var entrance_delay = 0.2 + (enemy_index * delay_per_enemy)
+	# Calculate delay based on enemy index for staggered entrance
+	var entrance_delay = enemy_index * stagger_delay
 	
 	# Wait for the calculated delay
 	await get_tree().create_timer(entrance_delay).timeout
 	
+	# Create the jumping arc animation
 	var tween = create_tween()
+	
+	# Start smaller for impact effect
+	scale = Vector2(0.7, 0.7)
+	
+	# Create a parabolic jump trajectory
+	# We'll animate to an intermediate high point, then down to final position
+	var arc_height = final_position.y - 150  # Peak of the jump arc
+	var mid_x = (start_x + final_position.x) / 2  # Midpoint x position
+	var mid_point = Vector2(mid_x, arc_height)
+	
+	# First part of jump: from start to arc peak
 	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_BACK)
+	tween.set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(self, "global_position", mid_point, 0.4)
 	
-	# Slide in from right with a bounce
-	tween.tween_property(self, "global_position", final_position, 0.8)
+	# Scale up during first part of jump 
+	tween.parallel().tween_property(self, "scale", Vector2(1.1, 0.9), 0.4)
 	
-	# Optional: Add a slight scale effect
-	scale = Vector2(0.8, 0.8)  # Start smaller
-	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
-	
-	# Emit signal when animation is complete
-	tween.finished.connect(func():
-		print("Enemy ", enemy_index + 1, ": Entrance animation finished")
-		# Emit a custom signal that BattleManager can listen for
-		get_tree().call_group("battle_managers", "on_enemy_entrance_complete", enemy_index)
+	# Second part of jump: from arc peak to final position
+	tween.tween_callback(func():
+		var second_tween = create_tween()
+		second_tween.set_ease(Tween.EASE_IN)
+		second_tween.set_trans(Tween.TRANS_QUAD)
+		second_tween.tween_property(self, "global_position", final_position, 0.3)
+		
+		# Squash and stretch effect on landing
+		second_tween.parallel().tween_property(self, "scale", Vector2(1.2, 0.8), 0.15)
+		second_tween.tween_property(self, "scale", Vector2(0.9, 1.1), 0.1)
+		second_tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.05)
+		
+		# Emit signal when animation is complete
+		second_tween.finished.connect(func():
+			print("Enemy ", enemy_index + 1, ": Jump entrance animation finished")
+			# Emit a custom signal that BattleManager can listen for
+			get_tree().call_group("battle_managers", "on_enemy_entrance_complete", enemy_index)
+		)
 	)
 	
-	print("Enemy ", enemy_index + 1, ": Entrance animation started with ", entrance_delay, "s delay")
+	print("Enemy ", enemy_index + 1, ": Jump entrance animation started with ", entrance_delay, "s delay")
