@@ -45,6 +45,7 @@ window/canvas_textures/default_texture_filter=0
 
 movie_writer/mjpeg_quality=1.0
 movie_writer/movie_file="/Users/kb/Documents/weevil_clips/gameplay.avi"
+movie_writer/disable_vsync=true
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 

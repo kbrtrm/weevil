@@ -123,6 +123,14 @@ func start_drag():
 	# Show highlight during drag
 	set_highlight(true)
 	
+	# Animate to raised position and straightened rotation
+	var raised_position = original_position + Vector2(0, -20)
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.parallel().tween_property(self, "global_position", raised_position, 0.15)
+	tween.parallel().tween_property(self, "rotation_degrees", 0.0, 0.15)
+	
 	# Notify hand about drag start
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_drag_started"):
@@ -132,22 +140,31 @@ func start_drag():
 func end_drag():
 	being_dragged = false
 	
+	# Animate back to original position and rotation
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.parallel().tween_property(self, "global_position", original_position, 0.15)
+	tween.parallel().tween_property(self, "rotation", original_rotation, 0.15)
+	
+	# Restore z-index immediately
+	z_index = original_z_index
+	
 	# Notify hand about drag end
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_drag_ended"):
 		hand.on_card_drag_ended(self, get_global_mouse_position())
 	else:
-		# If no handler, just return to original position
-		global_position = original_position
-		rotation = original_rotation
-		z_index = original_z_index
+		# If no handler, just select the card
 		select_card()
 
 # Update position while dragging
 func _process(delta):
 	if being_dragged:
-		global_position = get_global_mouse_position() - drag_offset
-		rotation_degrees = 0  # Keep card upright while dragging
+		# Keep card at raised, straightened position
+		var raised_position = original_position + Vector2(0, -20)
+		global_position = raised_position
+		rotation_degrees = 0
 
 # Card effect when played - now supports targeting
 func play_effect(target_node = null, target_type = ""):

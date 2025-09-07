@@ -290,25 +290,178 @@ func animate_entrance():
 	
 	print("Player: Starting position: ", global_position, " Final position: ", final_position)
 	
-	# Create entrance animation
+	# Create dust particle effect
+	create_slide_dust_effect()
+	
+	# Create entrance animation with less extreme bounce
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_BACK)
+	tween.set_trans(Tween.TRANS_QUART)  # Changed from TRANS_BACK to TRANS_QUART for gentler bounce
 	
-	# Slide in from left with a bounce
+	# Slide in from left with a gentler bounce
 	tween.tween_property(self, "global_position", final_position, 0.8)
 	
-	# Optional: Add a slight scale effect
-	scale = Vector2(0.8, 0.8)  # Start smaller
-	tween.parallel().tween_property(self, "scale", Vector2(1.0, 1.0), 0.8)
+	# Reduce scale effect for less extreme bounce
+	scale = Vector2(0.9, 0.9)  # Changed from 0.8 to 0.9 - less dramatic
+	tween.parallel().tween_property(self, "scale", Vector2(1.05, 1.05), 0.6)  # Slight overshoot
+	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.2)  # Settle to normal
 	
 	# When animation completes, switch sprites and notify battle manager
 	tween.finished.connect(func():
 		print("Player: Entrance animation finished, switching to animated sprite")
 		switch_to_animated_sprite()
 		
+		# Stop dust effect
+		stop_slide_dust_effect()
+		
 		# Emit a custom signal that BattleManager can listen for
 		get_tree().call_group("battle_managers", "on_player_entrance_complete")
 	)
 	
 	print("Player: Entrance animation started with slide sprite")
+
+# Create dust particle effect for sliding entrance
+func create_slide_dust_effect():
+	# Create multiple dust particle systems for more realistic effect
+	create_main_dust_cloud()
+	create_small_dust_puffs()
+	create_ground_debris()
+
+# Main dust cloud - billowing behind the player
+func create_main_dust_cloud():
+	var main_dust = CPUParticles2D.new()
+	main_dust.name = "MainDustCloud"
+	add_child(main_dust)
+	
+	# Position at player's feet, slightly behind
+	main_dust.position = Vector2(-8, 8)
+	
+	# Configure main dust emission
+	main_dust.emitting = true
+	main_dust.amount = 20
+	main_dust.lifetime = 2.0
+	main_dust.one_shot = false
+	
+	# Dust has forward momentum from following player's motion, then spreads
+	main_dust.direction = Vector2(0.3, -0.4)  # Forward and upward momentum
+	main_dust.spread = 40.0
+	
+	# Varied particle speeds - some follow player momentum
+	main_dust.initial_velocity_min = 25.0
+	main_dust.initial_velocity_max = 55.0
+	main_dust.angular_velocity_min = -20.0  # Less rotation for cleaner look
+	main_dust.angular_velocity_max = 20.0
+	
+	# Dust scales up more dramatically as it spreads
+	main_dust.scale_amount_min = 0.4
+	main_dust.scale_amount_max = 2.0  # Much bigger scaling
+	
+	# Clean white dust
+	main_dust.color = Color(1.0, 1.0, 1.0, 0.8)  # Pure white, less transparent
+	
+	# Physics with forward momentum decay
+	main_dust.gravity = Vector2(0, 12)  # Slightly less gravity
+	main_dust.linear_accel_min = -20.0  # More air resistance to slow forward momentum
+	main_dust.linear_accel_max = -10.0
+	
+	print("Player: Created main dust cloud effect")
+
+# Small dust puffs - quick bursts
+func create_small_dust_puffs():
+	var small_dust = CPUParticles2D.new()
+	small_dust.name = "SmallDustPuffs"
+	add_child(small_dust)
+	
+	# Position closer to player
+	small_dust.position = Vector2(-4, 6)
+	
+	# Quick, small bursts
+	small_dust.emitting = true
+	small_dust.amount = 12
+	small_dust.lifetime = 1.2
+	small_dust.one_shot = false
+	
+	# Forward momentum with more upward spread
+	small_dust.direction = Vector2(0.5, -0.7)  # Forward and up
+	small_dust.spread = 50.0
+	
+	# Fast particles with forward momentum
+	small_dust.initial_velocity_min = 40.0
+	small_dust.initial_velocity_max = 80.0
+	small_dust.angular_velocity_min = -15.0  # Less sparkly rotation
+	small_dust.angular_velocity_max = 15.0
+	
+	# Smaller particles that still scale up nicely
+	small_dust.scale_amount_min = 0.2
+	small_dust.scale_amount_max = 1.5  # Bigger scaling
+	
+	# Clean white dust, slightly more transparent
+	small_dust.color = Color(1.0, 1.0, 1.0, 0.6)
+	
+	# Less gravity for longer float time
+	small_dust.gravity = Vector2(0, 6)
+	small_dust.linear_accel_min = -25.0  # More air resistance
+	small_dust.linear_accel_max = -15.0
+	
+	print("Player: Created small dust puffs effect")
+
+# Ground debris - heavier particles that fall quickly
+func create_ground_debris():
+	var debris = CPUParticles2D.new()
+	debris.name = "GroundDebris"
+	add_child(debris)
+	
+	# Position at ground level
+	debris.position = Vector2(-6, 10)
+	
+	# Sparse, heavier particles
+	debris.emitting = true
+	debris.amount = 6
+	debris.lifetime = 1.5
+	debris.one_shot = false
+	
+	# Forward momentum but heavier, so less upward
+	debris.direction = Vector2(0.2, -0.1)  # Slight forward, minimal up
+	debris.spread = 25.0
+	
+	# Heavier particles with some forward momentum
+	debris.initial_velocity_min = 20.0
+	debris.initial_velocity_max = 45.0
+	debris.angular_velocity_min = -30.0  # Less sparkly
+	debris.angular_velocity_max = 30.0
+	
+	# Chunkier particles that scale up
+	debris.scale_amount_min = 0.6
+	debris.scale_amount_max = 2.2  # Even bigger scaling
+	
+	# White but slightly gray for heavier chunks
+	debris.color = Color(0.9, 0.9, 0.9, 0.9)  # Off-white
+	
+	# Strong gravity but with initial forward momentum
+	debris.gravity = Vector2(0, 35)
+	debris.linear_accel_min = -8.0  # Less air resistance for heavier particles
+	debris.linear_accel_max = -2.0
+	
+	print("Player: Created ground debris effect")
+
+# Stop the dust particle effect
+func stop_slide_dust_effect():
+	# Stop all dust particle systems
+	var particle_systems = ["MainDustCloud", "SmallDustPuffs", "GroundDebris"]
+	
+	for system_name in particle_systems:
+		var particles = get_node_or_null(system_name)
+		if particles:
+			particles.emitting = false
+			print("Player: Stopped " + system_name)
+	
+	# Remove all systems after particles finish their lifetime
+	await get_tree().create_timer(2.5).timeout
+	
+	for system_name in particle_systems:
+		var particles = get_node_or_null(system_name)
+		if particles and is_instance_valid(particles):
+			particles.queue_free()
+			print("Player: Removed " + system_name)
+	
+	print("Player: All slide dust effects cleaned up")

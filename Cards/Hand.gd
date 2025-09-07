@@ -14,6 +14,7 @@ const SCREEN_MARGIN = 120
 
 # Card references
 const CardScene = preload("res://Cards/Card2.tscn")
+const TargetingSystemScene = preload("res://Cards/CardTargetingSystem.gd")
 var deck = []
 var cards_in_hand = []
 
@@ -22,6 +23,9 @@ var card_being_dragged = null
 var drag_offset = Vector2.ZERO
 var hovered_card = null
 
+# Targeting arrow
+var targeting_arrow: SimpleTargetingArrow
+
 # References to other nodes
 @onready var discard_pile = find_child("DiscardPile")
 @onready var deck_status = find_child("DeckStatus")
@@ -29,6 +33,11 @@ var hovered_card = null
 
 # Called when the node enters the scene tree
 func _ready() -> void:
+	# Create targeting arrow
+	targeting_arrow = SimpleTargetingArrow.new()
+	targeting_arrow.name = "TargetingArrow"
+	add_child(targeting_arrow)
+	
 	# Wait for Global.deck to be initialized
 	if not Global.deck_initialized:
 		await Global.deck_initialized_signal
@@ -131,8 +140,14 @@ func update_ui():
 # Process input for dragging cards
 func _process(delta: float) -> void:
 	if card_being_dragged:
-		card_being_dragged.position = get_global_mouse_position() - drag_offset
-		card_being_dragged.rotation_degrees = 0
+		# Update targeting arrow with raised card position
+		if targeting_arrow:
+			var mouse_pos = get_global_mouse_position()
+			# Arrow starts from top center of raised card position
+			var raised_card_position = card_being_dragged.original_position + Vector2(0, -20)
+			var card_top_center = raised_card_position + Vector2(0, -62)
+			targeting_arrow.start_position = card_top_center
+			targeting_arrow.update_arrow(mouse_pos)
 
 # Move a card to the discard pile with animation
 func move_card_to_discard(card):
@@ -257,17 +272,22 @@ func on_card_drag_started(card):
 		if c != card and c.has_method("set_highlight"):
 			c.set_highlight(false)
 	
-	# Show targeting indicators
-	show_targeting_indicators()
+	# Show targeting arrow from top center of raised card
+	if targeting_arrow:
+		# Card will be at raised position (original + 20 pixels up)
+		var raised_card_position = card.original_position + Vector2(0, -20)
+		var card_top_center = raised_card_position + Vector2(0, -62)
+		targeting_arrow.show_arrow(card_top_center)
 
-# Handle card drag ended - SIMPLE VERSION
+# Handle card drag ended - RESTORED ORIGINAL VERSION
 func on_card_drag_ended(card, drop_position):
 	card_being_dragged = null
 	
-	# Hide targeting indicators
-	hide_targeting_indicators()
+	# Hide targeting arrow
+	if targeting_arrow:
+		targeting_arrow.hide_arrow()
 	
-	# Use simple targeting
+	# Use simple targeting - restored original system
 	var drop_target = get_drop_target_at_position(drop_position)
 	
 	if drop_target:
