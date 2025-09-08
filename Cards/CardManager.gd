@@ -28,7 +28,7 @@ func _input(event: InputEvent) -> void:
 				print(card)
 				card_being_dragged = card
 				# Calculate and store the offset between mouse position and card position
-				drag_offset = get_global_mouse_position() - card.position
+				drag_offset = get_global_mouse_position() - Vector2(card.position)
 		else:
 			card_being_dragged = null
 

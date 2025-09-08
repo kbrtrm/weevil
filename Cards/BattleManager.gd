@@ -15,6 +15,16 @@ func _ready():
 	# Add to battle managers group so Player/Enemy can call us
 	add_to_group("battle_managers")
 	
+	# Create and set up the new component-based targeting system
+	var outline_manager = TargetOutlineManager.new()
+	add_child(outline_manager)
+	
+	var targeting_manager = CardTargetingManager.new()
+	targeting_manager.name = "CardTargetingManager"
+	targeting_manager.add_to_group("targeting_manager")
+	add_child(targeting_manager)
+	print("BattleManager: Created new component-based targeting system")
+	
 	# Connect end turn button
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	

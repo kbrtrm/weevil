@@ -23,6 +23,7 @@ var original_position = Vector2.ZERO
 var original_rotation = 0.0
 var original_z_index = 0
 var drag_offset = Vector2.ZERO
+var is_animating_to_drag = false  # Track if we're animating to drag position
 
 # Selection state
 var is_selected = false
@@ -117,6 +118,7 @@ func start_drag():
 	
 	# Set up dragging state
 	being_dragged = true
+	is_animating_to_drag = true
 	z_index = 1000
 	drag_offset = get_global_mouse_position() - global_position
 	
@@ -131,14 +133,20 @@ func start_drag():
 	tween.parallel().tween_property(self, "global_position", raised_position, 0.15)
 	tween.parallel().tween_property(self, "rotation_degrees", 0.0, 0.15)
 	
+	# After animation, allow free movement
+	tween.tween_callback(func(): is_animating_to_drag = false)
+	
 	# Notify hand about drag start
 	var hand = get_parent()
 	if hand and hand.has_method("on_card_drag_started"):
 		hand.on_card_drag_started(self)
+	else:
+		print("Card: ERROR - Hand not found or doesn't have on_card_drag_started method")
 
 # Stop dragging and handle drop
 func end_drag():
 	being_dragged = false
+	is_animating_to_drag = false
 	
 	# Animate back to original position and rotation
 	var tween = create_tween()
@@ -160,8 +168,8 @@ func end_drag():
 
 # Update position while dragging
 func _process(delta):
-	if being_dragged:
-		# Keep card at raised, straightened position
+	if being_dragged and not is_animating_to_drag:
+		# Keep card at raised, straightened position (don't follow mouse)
 		var raised_position = original_position + Vector2(0, -20)
 		global_position = raised_position
 		rotation_degrees = 0

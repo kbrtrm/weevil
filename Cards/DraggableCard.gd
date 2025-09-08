@@ -88,6 +88,7 @@ func start_drag(mouse_pos: Vector2):
 		return
 		
 	is_dragging = true
+	print("DraggableCard: Starting drag for card: ", card_name)
 	
 	# Store original state
 	original_position = global_position
@@ -114,6 +115,20 @@ func start_drag(mouse_pos: Vector2):
 	
 	# Highlight valid drop zones
 	highlight_drop_zones(true)
+	
+	# NEW: Start target highlighting
+	print("DraggableCard: Looking for targeting manager...")
+	var targeting_manager = get_tree().get_first_node_in_group("targeting_manager")
+	if targeting_manager and is_instance_valid(targeting_manager):
+		print("DraggableCard: Found targeting manager, starting targeting for: ", card_name)
+		targeting_manager.start_targeting(self)
+	else:
+		print("DraggableCard: NO TARGETING MANAGER FOUND or invalid!")
+		# Let's see what groups exist
+		var all_nodes = get_tree().get_nodes_in_group("targeting_manager")
+		print("DraggableCard: Nodes in targeting_manager group: ", all_nodes.size())
+		for node in all_nodes:
+			print("  - ", node.name, " valid: ", is_instance_valid(node))
 
 func update_drag(mouse_pos: Vector2):
 	"""Update card position while dragging"""
@@ -131,7 +146,16 @@ func end_drag():
 		return
 		
 	is_dragging = false
+	print("DraggableCard: Ending drag for card: ", card_name)
 	
+	# NEW: Stop target highlighting
+	print("DraggableCard: Looking for targeting manager to stop targeting...")
+	var targeting_manager = get_tree().get_first_node_in_group("targeting_manager")
+	if targeting_manager and is_instance_valid(targeting_manager):
+		print("DraggableCard: Stopping targeting")
+		targeting_manager.stop_targeting()
+	else:
+		print("DraggableCard: No valid targeting manager found for stop_targeting")	
 	# Remove drop zone highlights
 	highlight_drop_zones(false)
 	

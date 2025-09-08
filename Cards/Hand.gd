@@ -25,6 +25,7 @@ var hovered_card = null
 
 # Targeting arrow
 var targeting_arrow: SimpleTargetingArrow
+var targeting_manager: CardTargetingManager
 
 # References to other nodes
 @onready var discard_pile = find_child("DiscardPile")
@@ -37,6 +38,9 @@ func _ready() -> void:
 	targeting_arrow = SimpleTargetingArrow.new()
 	targeting_arrow.name = "TargetingArrow"
 	add_child(targeting_arrow)
+	
+	# Don't create targeting manager - use the one from BattleManager
+	# targeting_manager will be found dynamically
 	
 	# Wait for Global.deck to be initialized
 	if not Global.deck_initialized:
@@ -148,6 +152,11 @@ func _process(delta: float) -> void:
 			var card_top_center = raised_card_position + Vector2(0, -62)
 			targeting_arrow.start_position = card_top_center
 			targeting_arrow.update_arrow(mouse_pos)
+		
+		# Update target highlighting based on mouse position
+		var tm = get_targeting_manager()
+		if tm:
+			tm.update_hover_highlighting(get_global_mouse_position())
 
 # Move a card to the discard pile with animation
 func move_card_to_discard(card):
@@ -265,6 +274,7 @@ func _input(event: InputEvent) -> void:
 
 # Handle card drag started
 func on_card_drag_started(card):
+	print("Hand: on_card_drag_started called for: ", card.card_name)
 	card_being_dragged = card
 	
 	# Clear highlights on other cards
@@ -272,8 +282,19 @@ func on_card_drag_started(card):
 		if c != card and c.has_method("set_highlight"):
 			c.set_highlight(false)
 	
-	# Show targeting arrow from top center of raised card
-	if targeting_arrow:
+	# Start highlighting valid targets immediately using the shared targeting manager
+	var tm = get_targeting_manager()
+	if tm:
+		print("Hand: Found targeting manager, starting targeting")
+		tm.start_targeting(card)
+	else:
+		print("Hand: ERROR - No targeting manager available!")
+	
+	# Wait for the card's animation to complete before showing arrow
+	await get_tree().create_timer(0.15).timeout  # Match the animation duration
+	
+	# Only show arrow if card is still being dragged
+	if card_being_dragged == card and targeting_arrow:
 		# Card will be at raised position (original + 20 pixels up)
 		var raised_card_position = card.original_position + Vector2(0, -20)
 		var card_top_center = raised_card_position + Vector2(0, -62)
@@ -281,11 +302,20 @@ func on_card_drag_started(card):
 
 # Handle card drag ended - RESTORED ORIGINAL VERSION
 func on_card_drag_ended(card, drop_position):
+	print("Hand: on_card_drag_ended called for: ", card.card_name)
 	card_being_dragged = null
 	
 	# Hide targeting arrow
 	if targeting_arrow:
 		targeting_arrow.hide_arrow()
+	
+	# Stop target highlighting using the shared targeting manager
+	var tm = get_targeting_manager()
+	if tm:
+		print("Hand: Stopping targeting")
+		tm.stop_targeting()
+	else:
+		print("Hand: ERROR - No targeting manager for stop_targeting!")
 	
 	# Use simple targeting - restored original system
 	var drop_target = get_drop_target_at_position(drop_position)
@@ -358,12 +388,21 @@ func play_card_on_target(card, target_node, target_type, drop_target):
 		arrange_cards()
 		update_ui()
 
+# Get the targeting manager from the scene
+func get_targeting_manager():
+	if not targeting_manager:
+		# Look for targeting manager in the scene
+		targeting_manager = get_tree().get_first_node_in_group("targeting_manager")
+		if not targeting_manager:
+			print("Hand: WARNING - No targeting manager found in scene!")
+	return targeting_manager
+
 # Helper function to get battle manager
 func get_battle_manager():
-	var node = get_parent()
-	while node and not node.has_method("get_player"):
-		node = node.get_parent()
-	return node
+	var current_node = get_parent()
+	while current_node and not current_node.has_method("get_player"):
+		current_node = current_node.get_parent()
+	return current_node
 
 # Helper function to return a card to its original position in hand
 # Added a parameter to control whether the card should shake
