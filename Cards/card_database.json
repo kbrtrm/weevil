@@ -47,7 +47,7 @@
 		{"type": "vulnerable", "value": 2, "target": "enemy"}
 	  ],
 	  "rarity": "common",
-	  "artwork_path": "res://Images/press-on-nail.png",
+	  "artwork_path": "res://Images/rubber-band.png",
 	  "type": "attack"
 	},
 	{

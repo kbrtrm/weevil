@@ -88,7 +88,7 @@ script = ExtResource("1_winow")
 position = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_vu4i2")
 autoplay = "default"
-frame_progress = 0.554315
+frame_progress = 0.797491
 
 [node name="BlockIcon" type="TextureRect" parent="."]
 offset_left = -30.0

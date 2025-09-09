@@ -16,6 +16,11 @@ var vulnerable: int = 0
 var strength: int = 0
 var dexterity: int = 0
 
+# Animation state
+var original_position: Vector2
+var sprite_original_position: Vector2
+var is_lunging: bool = false
+
 # UI references
 @onready var health_label = $HealthLabel
 @onready var block_icon = $BlockIcon
@@ -29,6 +34,9 @@ var dexterity: int = 0
 func _ready():
 	# Add to player group
 	add_to_group("player")
+	
+	# Store original position for lunge attacks
+	original_position = position
 	
 	# Set up sprites for entrance animation
 	setup_sprites_for_entrance()
@@ -311,6 +319,10 @@ func animate_entrance():
 		print("Player: Entrance animation finished, switching to animated sprite")
 		switch_to_animated_sprite()
 		
+		# Update original position after entrance animation
+		original_position = global_position
+		sprite_original_position = animated_sprite.position
+		
 		# Stop dust effect
 		stop_slide_dust_effect()
 		
@@ -465,3 +477,69 @@ func stop_slide_dust_effect():
 			print("Player: Removed " + system_name)
 	
 	print("Player: All slide dust effects cleaned up")
+
+# Lunge attack animation - player lunges forward toward target
+func lunge_attack(target_node = null):
+	if is_lunging:
+		print("Player: Already lunging, ignoring new lunge request")
+		return
+		
+	is_lunging = true
+	print("Player: Starting lunge attack animation")
+	
+	# Calculate lunge distance and direction
+	var lunge_distance = 80  # How far to lunge forward
+	var lunge_direction = Vector2(1, 0)  # Default: lunge to the right
+	
+	# If we have a target, lunge toward it
+	if target_node:
+		lunge_direction = (target_node.global_position - global_position).normalized()
+		print("Player: Lunging toward target at ", target_node.global_position)
+	
+	var sprite_lunge_position = sprite_original_position + (lunge_direction * lunge_distance)
+	
+	# Create lunge animation - only animate the sprite
+	var tween = create_tween()
+	
+	# Phase 1: Quick lunge forward with anticipation
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# Slight anticipation backward first
+	var sprite_anticipation_pos = sprite_original_position - (lunge_direction * 15)
+	tween.tween_property(animated_sprite, "position", sprite_anticipation_pos, 0.1)
+	
+	# Quick lunge forward
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.tween_property(animated_sprite, "position", sprite_lunge_position, 0.2)
+	
+	# Squash and stretch during lunge
+	tween.parallel().tween_property(animated_sprite, "scale", Vector2(1.2, 0.8), 0.2)
+	
+	# Brief pause at full extension
+	tween.tween_interval(0.1)
+	
+	# Phase 2: Return to original position
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.tween_property(animated_sprite, "position", sprite_original_position, 0.3)
+	tween.parallel().tween_property(animated_sprite, "scale", Vector2(1.0, 1.0), 0.3)
+	
+	# Reset lunge state when complete
+	tween.finished.connect(func():
+		is_lunging = false
+		print("Player: Lunge attack animation completed")
+	)
+	
+	print("Player: Lunge attack animation started")
+
+# Convenience function to lunge attack toward the first enemy
+func lunge_attack_enemy():
+	var battle_manager = get_parent()
+	if battle_manager and battle_manager.has_method("get_enemy"):
+		var target = battle_manager.get_enemy()
+		lunge_attack(target)
+	else:
+		# Fallback: lunge forward without specific target
+		lunge_attack()

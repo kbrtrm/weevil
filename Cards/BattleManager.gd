@@ -130,12 +130,11 @@ func start_turn():
 			# Draw a card at the start of subsequent turns
 			hand.draw_card(5)
 	else:
-		# Enemy's turn
-		# Process enemy start_turn for all enemies
-		get_tree().call_group("enemies", "start_turn")
+		# Enemy's turn - process enemies sequentially, not simultaneously
+		await process_enemy_turns_sequentially()
 		
 		# Add a delay before automatically ending enemy turn
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(0.5).timeout
 		end_turn()  # Automatically end enemy turn after AI acts
 
 	# Emit signal
@@ -159,8 +158,11 @@ func end_turn():
 		# Wait for discard to complete before continuing
 		await discard_hand()
 	else:
-		# Call end_turn on all enemies
-		get_tree().call_group("enemies", "end_turn")
+		# Call end_turn on all ALIVE enemies only
+		var alive_enemies = get_alive_enemies()
+		for enemy in alive_enemies:
+			if enemy.health > 0:  # Double check health
+				enemy.end_turn()
 	
 	# Emit signal
 	turn_ended.emit(current_turn, is_player_turn)
@@ -243,14 +245,9 @@ func _on_end_turn_pressed():
 
 # Check if all enemies are defeated
 func check_battle_end():
-	var all_enemies = get_all_enemies()
-	var alive_enemies = []
+	var alive_enemies = get_alive_enemies()
 	
-	for enemy in all_enemies:
-		if enemy.health > 0:
-			alive_enemies.append(enemy)
-	
-	print("BattleManager: check_battle_end - ", alive_enemies.size(), " enemies still alive out of ", all_enemies.size(), " total")
+	print("BattleManager: check_battle_end - ", alive_enemies.size(), " enemies still alive")
 	
 	if alive_enemies.size() == 0:
 		print("BattleManager: All enemies defeated! Player wins!")
@@ -441,3 +438,38 @@ func get_all_enemies():
 	
 	print("BattleManager: Found ", enemies.size(), " enemies")
 	return enemies
+
+# Get only alive enemies (health > 0)
+func get_alive_enemies():
+	var all_enemies = get_all_enemies()
+	var alive_enemies = []
+	
+	for enemy in all_enemies:
+		if enemy.health > 0:
+			alive_enemies.append(enemy)
+	
+	print("BattleManager: Found ", alive_enemies.size(), " alive enemies out of ", all_enemies.size(), " total")
+	return alive_enemies
+
+# Process enemy turns one at a time for better visual flow
+func process_enemy_turns_sequentially():
+	var alive_enemies = get_alive_enemies()
+	print("BattleManager: Processing ", alive_enemies.size(), " enemy turns sequentially")
+	
+	for i in range(alive_enemies.size()):
+		var enemy = alive_enemies[i]
+		if enemy.health > 0:  # Double check health
+			print("BattleManager: Processing enemy ", i + 1, " turn: ", enemy.enemy_name)
+			
+			# Process this enemy's turn
+			enemy.start_turn()
+			
+			# Wait for enemy's action to complete (including lunge animation)
+			# Add extra time for lunge animation to complete
+			await get_tree().create_timer(1.5).timeout
+			
+			print("BattleManager: Enemy ", i + 1, " turn completed")
+		else:
+			print("BattleManager: Skipping dead enemy ", i + 1)
+	
+	print("BattleManager: All enemy turns completed")

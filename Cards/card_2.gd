@@ -111,10 +111,12 @@ func start_drag():
 	if not draggable:
 		return
 	
-	# Store original state
-	original_position = global_position
+	# Store original state (use position instead of global_position for consistency)
+	original_position = position
 	original_rotation = rotation
 	original_z_index = z_index
+	
+	print("Card: Starting drag for ", card_name, " from position ", original_position)
 	
 	# Set up dragging state
 	being_dragged = true
@@ -125,16 +127,21 @@ func start_drag():
 	# Show highlight during drag
 	set_highlight(true)
 	
-	# Animate to raised position and straightened rotation
+	# Animate to raised position and straightened rotation (using position, not global_position)
 	var raised_position = original_position + Vector2(0, -20)
+	print("Card: Animating to raised position ", raised_position)
+	
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUART)
-	tween.parallel().tween_property(self, "global_position", raised_position, 0.15)
+	tween.tween_property(self, "position", raised_position, 0.15)
 	tween.parallel().tween_property(self, "rotation_degrees", 0.0, 0.15)
 	
 	# After animation, allow free movement
-	tween.tween_callback(func(): is_animating_to_drag = false)
+	tween.tween_callback(func(): 
+		is_animating_to_drag = false
+		print("Card: Drag animation completed for ", card_name)
+	)
 	
 	# Notify hand about drag start
 	var hand = get_parent()
@@ -148,11 +155,11 @@ func end_drag():
 	being_dragged = false
 	is_animating_to_drag = false
 	
-	# Animate back to original position and rotation
+	# Animate back to original position and rotation (using position consistently)
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUART)
-	tween.parallel().tween_property(self, "global_position", original_position, 0.15)
+	tween.tween_property(self, "position", original_position, 0.15)
 	tween.parallel().tween_property(self, "rotation", original_rotation, 0.15)
 	
 	# Restore z-index immediately
@@ -168,10 +175,11 @@ func end_drag():
 
 # Update position while dragging
 func _process(delta):
+	# Only maintain position if we're fully in drag mode (not animating)
 	if being_dragged and not is_animating_to_drag:
 		# Keep card at raised, straightened position (don't follow mouse)
 		var raised_position = original_position + Vector2(0, -20)
-		global_position = raised_position
+		position = raised_position
 		rotation_degrees = 0
 
 # Card effect when played - now supports targeting
@@ -280,6 +288,15 @@ func is_effect_compatible_with_target(effect_data, target_type) -> bool:
 # Apply damage to a target
 func apply_damage_effect(target, amount):
 	if target.has_method("take_damage"):
+		# Get the player to perform lunge attack
+		var battle_manager = find_battle_manager()
+		var player = battle_manager.get_player() if battle_manager and battle_manager.has_method("get_player") else null
+		
+		# If the target is an enemy and we have a player, do a lunge attack
+		if player and target.is_in_group("enemies"):
+			print("Card: Player performing lunge attack toward enemy")
+			await player.lunge_attack(target)
+		
 		# Store original health to calculate actual damage taken
 		var original_health = target.health
 		var original_block = target.block

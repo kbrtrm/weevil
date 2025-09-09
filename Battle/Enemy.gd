@@ -26,6 +26,11 @@ var vulnerable: int = 0
 var bleed: int = 0
 var strength: int = 0
 
+# Animation state
+var original_position: Vector2
+var sprite_original_position: Vector2
+var is_lunging: bool = false
+
 # UI references
 @onready var health_label = $HealthLabel
 @onready var block_icon = $BlockIcon
@@ -35,10 +40,14 @@ var strength: int = 0
 @onready var intent_label = $IntentLabel
 @onready var status_container = $StatusContainer
 @onready var health_bar = $HealthBarContainer/HealthBar
+@onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	# Add to enemies group
 	add_to_group("enemies")
+	
+	# Store original position for lunge attacks
+	original_position = position
 	
 	# Initialize health to max at start
 	health = max_health
@@ -153,6 +162,11 @@ func add_strength(amount: int):
 
 # Called at the start of the enemy's turn
 func start_turn():
+	# Don't process turn if enemy is dead
+	if health <= 0:
+		print("Enemy.start_turn: Enemy is dead (health: ", health, "), skipping turn")
+		return
+		
 	# Reset block at START of turn (after player attack)
 	block = 0
 	update_block_display()
@@ -191,6 +205,11 @@ func start_turn():
 	update_status_display()
 
 func end_turn():
+	# Don't process turn if enemy is dead
+	if health <= 0:
+		print("Enemy.end_turn: Enemy is dead (health: ", health, "), skipping end turn")
+		return
+		
 	# DO NOT reset block here, keep it for player attacks
 	print("Enemy.end_turn: Block preserved for player attacks: " + str(block))
 	
@@ -242,6 +261,11 @@ func choose_intent():
 
 # Execute the current intent
 func execute_intent():
+	# Don't execute intent if enemy is dead
+	if health <= 0:
+		print("Enemy.execute_intent: Enemy is dead (health: ", health, "), skipping intent execution")
+		return
+		
 	# Get references
 	var battle_manager = get_parent()
 	var player = battle_manager.get_player() if battle_manager.has_method("get_player") else null
@@ -252,6 +276,9 @@ func execute_intent():
 	
 	match intent:
 		"attack":
+			# Lunge attack toward player
+			await lunge_attack(player)
+			
 			# Store original values to track what happened
 			var original_health = player.health
 			var original_block = player.block
@@ -298,6 +325,10 @@ func die():
 	# Handle death - rewards, animations, etc.
 	print(enemy_name + " defeated!")
 	emit_signal("enemy_died")
+	
+	# Remove from enemies group immediately so it won't be processed in enemy turns
+	remove_from_group("enemies")
+	print("Enemy: Removed from 'enemies' group to prevent further turn processing")
 	
 	# You could trigger an animation here and remove the enemy
 	var tween = create_tween()
@@ -502,9 +533,70 @@ func animate_entrance(enemy_index: int = 0, total_enemies: int = 1):
 		# Emit signal when animation is complete
 		second_tween.finished.connect(func():
 			print("Enemy ", enemy_index + 1, ": Jump entrance animation finished")
+			
+			# Update original position after entrance animation
+			original_position = global_position
+			sprite_original_position = animated_sprite.position
+			
 			# Emit a custom signal that BattleManager can listen for
 			get_tree().call_group("battle_managers", "on_enemy_entrance_complete", enemy_index)
 		)
 	)
 	
 	print("Enemy ", enemy_index + 1, ": Jump entrance animation started with ", entrance_delay, "s delay")
+
+# Lunge attack animation - enemy lunges forward toward target
+func lunge_attack(target_node = null):
+	if is_lunging:
+		print("Enemy: Already lunging, ignoring new lunge request")
+		return
+		
+	is_lunging = true
+	print("Enemy: Starting lunge attack animation")
+	
+	# Calculate lunge distance and direction
+	var lunge_distance = 80  # How far to lunge forward
+	var lunge_direction = Vector2(-1, 0)  # Default: lunge to the left (toward player)
+	
+	# If we have a target, lunge toward it
+	if target_node:
+		lunge_direction = (target_node.global_position - global_position).normalized()
+		print("Enemy: Lunging toward target at ", target_node.global_position)
+	
+	var sprite_lunge_position = sprite_original_position + (lunge_direction * lunge_distance)
+	
+	# Create lunge animation - only animate the sprite
+	var tween = create_tween()
+	
+	# Phase 1: Quick lunge forward with anticipation
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# Slight anticipation backward first
+	var sprite_anticipation_pos = sprite_original_position - (lunge_direction * 15)
+	tween.tween_property(animated_sprite, "position", sprite_anticipation_pos, 0.1)
+	
+	# Quick lunge forward
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.tween_property(animated_sprite, "position", sprite_lunge_position, 0.2)
+	
+	# Squash and stretch during lunge
+	tween.parallel().tween_property(animated_sprite, "scale", Vector2(1.2, 0.8), 0.2)
+	
+	# Brief pause at full extension
+	tween.tween_interval(0.1)
+	
+	# Phase 2: Return to original position
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	tween.tween_property(animated_sprite, "position", sprite_original_position, 0.3)
+	tween.parallel().tween_property(animated_sprite, "scale", Vector2(1.0, 1.0), 0.3)
+	
+	# Reset lunge state when complete
+	tween.finished.connect(func():
+		is_lunging = false
+		print("Enemy: Lunge attack animation completed")
+	)
+	
+	print("Enemy: Lunge attack animation started")
