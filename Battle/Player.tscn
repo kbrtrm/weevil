@@ -1,52 +1,43 @@
 [gd_scene load_steps=16 format=3 uid="uid://bvd2l65i7q5l7"]
 
 [ext_resource type="Script" uid="uid://bcmpuyx43x0s7" path="res://Battle/Player.gd" id="1_winow"]
-[ext_resource type="Texture2D" uid="uid://dnr07eb28kkqo" path="res://Images/big-terb-battle-idle-sheet-bob.png" id="2_cpcn0"]
+[ext_resource type="Texture2D" uid="uid://bo46ndkpbnbgr" path="res://Images/big-terb-battle-idle-bob-padding.png" id="2_s0ps1"]
 [ext_resource type="FontFile" uid="uid://bppc451fs64fn" path="res://Themes/Tiny Click2.ttf" id="3_3qo5y"]
 [ext_resource type="PackedScene" uid="uid://cubymfij3jg4j" path="res://Battle/HealthBar.tscn" id="3_cpcn0"]
 [ext_resource type="Texture2D" uid="uid://dqxmvsvxjm1up" path="res://Images/block-bg.png" id="5_do4v5"]
 [ext_resource type="Texture2D" uid="uid://baso7lnecule6" path="res://Battle/terb-slide-in.png" id="6_s0ps1"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3qo5y"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(0, 0, 34, 49)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_do4v5"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(34, 0, 34, 49)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s0ps1"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(68, 0, 34, 49)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_doo5m"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(102, 0, 34, 49)
+atlas = ExtResource("2_s0ps1")
+region = Rect2(0, 0, 48, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jt2v3"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(136, 0, 34, 49)
+atlas = ExtResource("2_s0ps1")
+region = Rect2(48, 0, 48, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wukul"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(170, 0, 34, 49)
+atlas = ExtResource("2_s0ps1")
+region = Rect2(96, 0, 48, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b1cto"]
-atlas = ExtResource("2_cpcn0")
-region = Rect2(204, 0, 34, 49)
+atlas = ExtResource("2_s0ps1")
+region = Rect2(144, 0, 48, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_bcyfd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bcyfd"]
+atlas = ExtResource("2_s0ps1")
+region = Rect2(192, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3ukm"]
+atlas = ExtResource("2_s0ps1")
+region = Rect2(240, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffllc"]
+atlas = ExtResource("2_s0ps1")
+region = Rect2(288, 0, 48, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vu4i2"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3qo5y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_do4v5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s0ps1")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_doo5m")
 }, {
@@ -58,6 +49,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_b1cto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bcyfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y3ukm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ffllc")
 }],
 "loop": true,
 "name": &"default",
@@ -86,9 +86,9 @@ script = ExtResource("1_winow")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -11)
-sprite_frames = SubResource("SpriteFrames_bcyfd")
+sprite_frames = SubResource("SpriteFrames_vu4i2")
 autoplay = "default"
-frame_progress = 0.737078
+frame_progress = 0.554315
 
 [node name="BlockIcon" type="TextureRect" parent="."]
 offset_left = -30.0

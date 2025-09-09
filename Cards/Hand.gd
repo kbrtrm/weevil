@@ -300,7 +300,7 @@ func on_card_drag_started(card):
 		var card_top_center = raised_card_position + Vector2(0, -62)
 		targeting_arrow.show_arrow(card_top_center)
 
-# Handle card drag ended - RESTORED ORIGINAL VERSION
+# Handle card drag ended - FIXED for multi-enemy targeting
 func on_card_drag_ended(card, drop_position):
 	print("Hand: on_card_drag_ended called for: ", card.card_name)
 	card_being_dragged = null
@@ -309,16 +309,17 @@ func on_card_drag_ended(card, drop_position):
 	if targeting_arrow:
 		targeting_arrow.hide_arrow()
 	
-	# Stop target highlighting using the shared targeting manager
+	# IMPORTANT: Get the drop target BEFORE stopping targeting
+	# This preserves the hover information needed for multi-enemy targeting
+	var drop_target = get_drop_target_at_position(drop_position)
+	
+	# Now stop target highlighting after we've determined the target
 	var tm = get_targeting_manager()
 	if tm:
 		print("Hand: Stopping targeting")
 		tm.stop_targeting()
 	else:
 		print("Hand: ERROR - No targeting manager for stop_targeting!")
-	
-	# Use simple targeting - restored original system
-	var drop_target = get_drop_target_at_position(drop_position)
 	
 	if drop_target:
 		# Get target information from our simple system
@@ -391,8 +392,20 @@ func play_card_on_target(card, target_node, target_type, drop_target):
 # Get the targeting manager from the scene
 func get_targeting_manager():
 	if not targeting_manager:
-		# Look for targeting manager in the scene
+		# First try to find it in the group
 		targeting_manager = get_tree().get_first_node_in_group("targeting_manager")
+		if not targeting_manager:
+			# If not found in group, look for it as a sibling (child of parent)
+			var parent = get_parent()
+			if parent:
+				targeting_manager = parent.get_node_or_null("CardTargetingManager")
+				if not targeting_manager:
+					# Search all children of parent
+					for child in parent.get_children():
+						if child is CardTargetingManager:
+							targeting_manager = child
+							break
+		
 		if not targeting_manager:
 			print("Hand: WARNING - No targeting manager found in scene!")
 	return targeting_manager
@@ -554,9 +567,21 @@ func get_top_card_at_position(position):
 	# Return the topmost card (first after sorting)
 	return candidates[0]
 
-# Get a drop target at position - NEW VERSION using actual drop zones
+# Get a drop target at position - UPDATED to use CardTargetingManager
 func get_drop_target_at_position(position):
-	# Get all drop zone Area2D nodes
+	# Use the targeting manager's drop detection
+	var tm = get_targeting_manager()
+	if tm:
+		var target = tm.get_target_at_position(position)
+		if target:
+			# Convert to the format expected by the rest of the function
+			return {
+				"target_node": target,
+				"target_type": target.name.to_lower(),  # Convert node name to type
+				"drop_zone": target
+			}
+	
+	# Fallback to old system if targeting manager not available
 	var drop_zones = get_tree().get_nodes_in_group("drop_targets")
 	
 	# Check each drop zone to see if position is inside it
